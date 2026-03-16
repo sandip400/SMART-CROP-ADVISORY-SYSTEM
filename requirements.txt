@@ -1,0 +1,14 @@
+django
+pandas
+tensorflow
+torch
+torchvision
+scikit-learn
+requests
+numpy
+pillow
+markdown
+google-generativeai
+h5py
+gunicorn
+matplotlib

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart - Crop Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #22c55e;
+            --primary-green-dark: #16a34a;
+            --light-green: #dcfce7;
+            --accent-green: #15803d;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --background: #ffffff;
+            --muted-bg: #f9fafb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text-dark);
+        }
+
+        .bg-primary-green {
+            background-color: var(--primary-green) !important;
+        }
+
+        .text-primary-green {
+            color: var(--primary-green) !important;
+        }
+
+        .btn-primary-green {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-primary-green:hover {
+            background-color: var(--primary-green-dark);
+            border-color: var(--primary-green-dark);
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-green);
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--muted-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .weather-info {
+            background-color: var(--muted-bg);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .crop-card {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .crop-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .crop-image {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .suitability-badge {
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .suitability-high {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .suitability-medium {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .suitability-low {
+            background-color: var(--text-muted);
+            color: white;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-green);
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+            color: white;
+        }
+
+        .calendar-item {
+            background-color: var(--muted-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .sticky-top {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .recommendation-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            background-color: var(--muted-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Input Form Section -->
+    <div id="inputSection">
+        <!-- Header -->
+        <header class="bg-primary-green text-white py-4">
+            <div class="container">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-leaf fs-2 me-3"></i>
+                    <div>
+                        <h1 class="h2 mb-0">AgriSmart</h1>
+                        <p class="mb-0 opacity-75">Intelligent Crop Recommendation System</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-flex align-items-center mb-0">
+                                <i class="fas fa-chart-line text-primary-green me-2"></i>
+                                Crop Analysis Input
+                            </h3>
+                            <p class="text-muted mb-0 mt-2">Provide your soil and location details to get personalized crop recommendations</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- Soil Information -->
+                                <div class="col-md-6">
+                                    <h4 class="text-primary-green mb-4">Soil Information</h4>
+
+                                    <div class="mb-3">
+                                        <label for="soilType" class="form-label">Soil Type</label>
+                                        <select class="form-select" id="soilType">
+                                            <option value="">Select soil type</option>
+                                            <option value="clay">Clay</option>
+                                            <option value="loamy">Loamy</option>
+                                            <option value="sandy">Sandy</option>
+                                            <option value="silt">Silt</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="soilPH" class="form-label">Soil pH (Optional)</label>
+                                        <input type="text" class="form-control" id="soilPH" placeholder="e.g., 6.5">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="moistureLevel" class="form-label">Moisture Level</label>
+                                        <select class="form-select" id="moistureLevel">
+                                            <option value="">Select moisture level</option>
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="organicMatter" class="form-label">Organic Matter</label>
+                                        <select class="form-select" id="organicMatter">
+                                            <option value="">Select organic matter level</option>
+                                            <option value="low">Low</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Location & Climate -->
+                                <div class="col-md-6">
+                                    <h4 class="text-primary-green mb-4">Location & Climate</h4>
+
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">Location</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="location" placeholder="Enter your location">
+                                            <button class="btn btn-outline-secondary" type="button">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="cropCategory" class="form-label">Preferred Crop Category</label>
+                                        <select class="form-select" id="cropCategory">
+                                            <option value="">Select crop category</option>
+                                            <option value="cereals">Cereals</option>
+                                            <option value="vegetables">Vegetables</option>
+                                            <option value="fruits">Fruits</option>
+                                            <option value="flowers">Flowers</option>
+                                            <option value="cash-crops">Cash Crops</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Weather Info Display -->
+                                    <div class="weather-info">
+                                        <h5 class="d-flex align-items-center mb-3">
+                                            <i class="fas fa-sun text-primary-green me-2"></i>
+                                            Current Weather Conditions
+                                        </h5>
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary-green" onclick="startLocationAndWeatherTracking()" id="trackBtn">
+                                                <i class="fas fa-map-marker-alt me-1"></i>
+                                                Track Location & Weather
+                                            </button>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-12 mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-map-marker-alt text-primary-green me-2"></i>
+                                                    <small>Location: <span id="address">Click 'Track Location & Weather' to get current data</span></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-thermometer-half text-primary-green me-2"></i>
+                                                    <span id="weather">Weather:---</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-crosshairs text-primary-green me-2"></i>
+                                                    <small>Lat: <span id="latitude">--</span></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-crosshairs text-primary-green me-2"></i>
+                                                    <small>Lon: <span id="longitude">--</span></small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-clock text-primary-green me-2"></i>
+                                                    <small id="timestamp">--</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <button class="btn btn-primary-green btn-lg px-5" onclick="analyzeAndRecommend()" id="analyzeBtn">
+                                    <i class="fas fa-chart-line me-2"></i>
+                                    Analyze & Get Recommendations
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="hidden">
+        <!-- Header -->
+        <header class="bg-primary-green text-white py-3">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-leaf me-2"></i>
+                        <h1 class="h4 mb-0">AgriSmart - Crop Recommendations</h1>
+                    </div>
+                    <button class="btn btn-light" onclick="showInputSection()">New Analysis</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="text-primary-green mb-4">AI-Generated Crop Recommendations</h2>
+                    <div id="recommendationsContainer">
+                        <!-- Recommendations will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Detailed View -->
+                <div class="col-lg-4">
+                    <div id="cropDetailsCard" class="card sticky-top">
+                        <div class="card-body text-center py-5">
+                            <i class="fas fa-leaf fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Click on a crop recommendation to view detailed information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let locationWatchId;
+        let weatherInterval;
+        let currentWeatherData = '';
+        let parsedCropData = [];
+
+        // Location and Weather Tracking Functions
+        function getWeather(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const weatherCode = data.current_weather.weathercode;
+                    const temp = data.current_weather.temperature;
+                    const windSpeed = data.current_weather.windspeed;
+                    const weatherDesc = mapWeatherCode(weatherCode);
+                    const weatherText = `${weatherDesc}, ${temp}°C, Wind: ${windSpeed} km/h`;
+                    document.getElementById("weather").innerText = weatherText;
+                    currentWeatherData = weatherText;
+                })
+                .catch(error => {
+                    console.error("Error fetching weather data:", error);
+                    document.getElementById("weather").innerText = "Weather data unavailable";
+                    currentWeatherData = "Weather data unavailable";
+                });
+        }
+
+        function mapWeatherCode(code) {
+            const weatherMapping = {
+                0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+                45: "Fog", 48: "Depositing rime fog", 51: "Drizzle: Light",
+                53: "Drizzle: Moderate", 55: "Drizzle: Dense", 61: "Rain: Slight",
+                63: "Rain: Moderate", 65: "Rain: Heavy", 71: "Snow fall: Slight",
+                73: "Snow fall: Moderate", 75: "Snow fall: Heavy", 80: "Rain showers: Slight",
+                81: "Rain showers: Moderate", 82: "Rain showers: Violent", 95: "Thunderstorm: Slight",
+                96: "Thunderstorm: Moderate", 99: "Thunderstorm: Heavy hail"
+            };
+            return weatherMapping[code] || "Unknown weather";
+        }
+
+        async function getAddress(lat, lon) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+                const data = await response.json();
+                document.getElementById("address").innerText = data.display_name || "Address not available";
+                
+                // Auto-fill location input field
+                const locationInput = document.getElementById("location");
+                if (locationInput && data.display_name) {
+                    locationInput.value = data.display_name.split(',').slice(0, 3).join(', ');
+                }
+            } catch (error) {
+                console.error("Error fetching address:", error);
+                document.getElementById("address").innerText = "Unable to fetch address";
+            }
+        }
+
+        function updatePosition(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            const timestamp = new Date(position.timestamp).toLocaleString();
+
+            document.getElementById("latitude").textContent = lat.toFixed(6);
+            document.getElementById("longitude").textContent = lon.toFixed(6);
+            document.getElementById("timestamp").textContent = timestamp;
+
+            getAddress(lat, lon);
+            // Refresh weather data when location updates
+            getWeather(lat, lon);
+        }
+
+        function startLocationAndWeatherTracking() {
+            if (navigator.geolocation) {
+                // Update button to show loading state
+                const trackBtn = document.getElementById("trackBtn");
+                trackBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Getting Location & Weather...';
+                trackBtn.disabled = true;
+
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+                    const timestamp = new Date(position.timestamp).toLocaleString();
+
+                    // Update location display
+                    document.getElementById("latitude").textContent = lat.toFixed(6);
+                    document.getElementById("longitude").textContent = lon.toFixed(6);
+                    document.getElementById("timestamp").textContent = timestamp;
+
+                    // Get address and weather
+                    getAddress(lat, lon);
+                    getWeather(lat, lon);
+
+                    // Start continuous tracking
+                    locationWatchId = navigator.geolocation.watchPosition(updatePosition, handleLocationError);
+                    
+                    // Set up weather updates every 5 minutes
+                    weatherInterval = setInterval(() => {
+                        getWeather(lat, lon);
+                    }, 300000);
+
+                    // Update button to show active tracking
+                    trackBtn.innerHTML = '<i class="fas fa-check me-1"></i>Tracking Active';
+                    trackBtn.classList.remove('btn-primary-green');
+                    trackBtn.classList.add('btn-success');
+                    
+                }, handleLocationError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function handleLocationError(error) {
+            let errorMessage = "Location access denied or unavailable";
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Location access denied by user";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Location information unavailable";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "Location request timed out";
+                    break;
+            }
+            
+            document.getElementById("address").innerText = errorMessage;
+            console.error("Location error:", error);
+            
+            // Reset button state on error
+            const trackBtn = document.getElementById("trackBtn");
+            trackBtn.innerHTML = '<i class="fas fa-map-marker-alt me-1"></i>Track Location & Weather';
+            trackBtn.disabled = false;
+            trackBtn.classList.remove('btn-success');
+            trackBtn.classList.add('btn-primary-green');
+        }
+
+        // Parse AI recommendations into structured data
+        function parseAIRecommendations(aiText) {
+            const crops = [];
+            const lines = aiText.split('\n');
+            let currentCrop = null;
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
+                
+                // Look for crop names (usually numbered or bolded)
+                if (line.match(/^\d+\.\s*\*?\*?([^*]+)\*?\*?/) || line.match(/^\*\*([^*]+)\*\*/)) {
+                    if (currentCrop) crops.push(currentCrop);
+                    
+                    const cropName = line.replace(/^\d+\.\s*/, '').replace(/\*\*/g, '').trim();
+                    currentCrop = {
+                        name: cropName,
+                        suitability: Math.floor(Math.random() * 30) + 70, // Random 70-100%
+                        reason: '',
+                        yield: 'Variable',
+                        waterNeed: 'Medium',
+                        fertilizer: 'NPK',
+                        sowingPeriod: 'Seasonal',
+                        harvestPeriod: 'Seasonal',
+                        duration: '90-120 days',
+                        image: `/placeholder.svg?height=96&width=96&query=${encodeURIComponent(cropName + ' crop field')}`
+                    };
+                }
+                
+                // Extract details for current crop
+                if (currentCrop) {
+                    if (line.toLowerCase().includes('suitability') && line.match(/(\d+)%/)) {
+                        currentCrop.suitability = parseInt(line.match(/(\d+)%/)[1]);
+                    }
+                    if (line.toLowerCase().includes('reason') || line.toLowerCase().includes('suitable')) {
+                        currentCrop.reason = line.replace(/^\d+\.\s*/, '').replace(/reason:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('yield')) {
+                        currentCrop.yield = line.replace(/yield:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('water')) {
+                        currentCrop.waterNeed = line.replace(/water.*?:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('fertilizer')) {
+                        currentCrop.fertilizer = line.replace(/fertilizer.*?:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('sowing')) {
+                        currentCrop.sowingPeriod = line.replace(/sowing.*?:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('harvest')) {
+                        currentCrop.harvestPeriod = line.replace(/harvest.*?:?/i, '').trim();
+                    }
+                    if (line.toLowerCase().includes('duration') || line.toLowerCase().includes('growing')) {
+                        currentCrop.duration = line.replace(/.*duration.*?:?/i, '').replace(/.*growing.*?:?/i, '').trim();
+                    }
+                }
+            }
+            
+            if (currentCrop) crops.push(currentCrop);
+            
+            // If parsing failed, create some default crops
+            if (crops.length === 0) {
+                crops.push({
+                    name: 'AI Recommended Crop',
+                    suitability: 85,
+                    reason: 'Based on your soil and climate conditions',
+                    yield: 'Variable based on conditions',
+                    waterNeed: 'Medium',
+                    fertilizer: 'As per soil test',
+                    sowingPeriod: 'Optimal season',
+                    harvestPeriod: 'After maturity',
+                    duration: '90-120 days',
+                    image: '/placeholder.svg?height=96&width=96'
+                });
+            }
+            
+            return crops;
+        }
+
+        function getSuitabilityClass(score) {
+            if (score >= 80) return 'suitability-high';
+            if (score >= 70) return 'suitability-medium';
+            return 'suitability-low';
+        }
+
+        function displayStructuredRecommendations(crops) {
+            const container = document.getElementById('recommendationsContainer');
+            container.innerHTML = '';
+
+            crops.forEach((crop, index) => {
+                const cropCard = `
+                    <div class="card crop-card mb-4" onclick="showCropDetails(${index})">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h4>${crop.name}</h4>
+                                        <span class="suitability-badge ${getSuitabilityClass(crop.suitability)}">
+                                            ${crop.suitability}% Suitable
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-3">${crop.reason}</p>
+                                    <div class="row g-3 small">
+                                        <div class="col-6">
+                                            <strong>Yield:</strong> ${crop.yield}
+                                        </div>
+                                        <div class="col-6">
+                                            <strong>Water Need:</strong> ${crop.waterNeed}
+                                        </div>
+                                        <div class="col-6">
+                                            <strong>Sowing:</strong> ${crop.sowingPeriod}
+                                        </div>
+                                        <div class="col-6">
+                                            <strong>Harvest:</strong> ${crop.harvestPeriod}
+                                        </div>
+                                    </div>
+                                    <div class="progress mt-3" style="height: 8px;">
+                                        <div class="progress-bar" style="width: ${crop.suitability}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cropCard;
+            });
+        }
+
+        function showCropDetails(index) {
+            const crop = parsedCropData[index];
+            const detailsCard = document.getElementById('cropDetailsCard');
+            
+            detailsCard.innerHTML = `
+                <div class="card-header">
+                    <h5 class="card-title d-flex align-items-center mb-0">
+                        <i class="fas fa-leaf text-primary-green me-2"></i>
+                        ${crop.name} Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview-${index}" type="button">Overview</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#calendar-${index}" type="button">Calendar</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane fade show active" id="overview-${index}">
+                            <div class="mb-4">
+                                <h6>Suitability Score</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar" style="width: ${crop.suitability}%"></div>
+                                    </div>
+                                    <strong class="text-primary-green">${crop.suitability}%</strong>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h6>Resources Needed</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Water:</span>
+                                    <span class="badge bg-light text-dark">${crop.waterNeed}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Fertilizer:</span>
+                                    <span class="badge bg-light text-dark">${crop.fertilizer}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Expected Yield:</span>
+                                    <span class="badge bg-light text-dark">${crop.yield}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="calendar-${index}">
+                            <div class="calendar-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-calendar text-primary-green me-3"></i>
+                                    <div>
+                                        <div class="fw-bold">Sowing Period</div>
+                                        <small class="text-muted">${crop.sowingPeriod}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="calendar-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-chart-line text-primary-green me-3"></i>
+                                    <div>
+                                        <div class="fw-bold">Growing Duration</div>
+                                        <small class="text-muted">${crop.duration}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="calendar-item">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-leaf text-primary-green me-3"></i>
+                                    <div>
+                                        <div class="fw-bold">Harvest Period</div>
+                                        <small class="text-muted">${crop.harvestPeriod}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary-green w-100 mt-3">Add to Crop Calendar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Gemini API Integration
+        async function getCropRecommendations(soilType, soilPH, moistureLevel, organicMatter, location, weather, cropCategory) {
+            const apiKey = "AIzaSyCgff-watIzlEHM6aJITVz82RoJPALpZ1A";
+            
+            if (!apiKey) {
+                throw new Error('API key not available');
+            }
+
+            const prompt = `
+Based on the following agricultural conditions:
+- Soil type: ${soilType}
+- Soil pH: ${soilPH || 'Not specified'}
+- Moisture level: ${moistureLevel}
+- Organic matter: ${organicMatter}
+- Location: ${location}
+- Weather: ${weather}
+- Crop category: ${cropCategory}
+
+Please recommend 5-7 suitable crops with detailed explanations. For each crop, provide:
+1. **Crop name**
+2. Suitability percentage (0-100%)
+3. Detailed reason why it's suitable
+4. Expected yield per acre
+5. Water requirements
+6. Fertilizer recommendations
+7. Sowing period
+8. Harvest period
+9. Growing duration
+
+Format your response clearly with each crop as a separate section. Use clear headings and bullet points for easy parsing. Make it less detailed and more to the point. **DO NOT INCLUDE ANY SUGGESTIVE NOTES IN THE END OR ANY HEADING IN THE BEGINNING**. Only list of crops nothing else.
+            `;
+
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: prompt
+                        }]
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+            }
+
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        async function analyzeAndRecommend() {
+            // Validate inputs
+            const soilType = document.getElementById('soilType').value;
+            const moistureLevel = document.getElementById('moistureLevel').value;
+            const organicMatter = document.getElementById('organicMatter').value;
+            const location = document.getElementById('location').value;
+            const cropCategory = document.getElementById('cropCategory').value;
+
+            if (!soilType || !moistureLevel || !organicMatter || !location || !cropCategory) {
+                alert('Please fill in all required fields (Soil Type, Moisture Level, Organic Matter, Location, and Crop Category)');
+                return;
+            }
+
+            // Show loading state
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const originalBtnText = analyzeBtn.innerHTML;
+            analyzeBtn.innerHTML = '<span class="loading-spinner me-2"></span>Getting AI Recommendations...';
+            analyzeBtn.disabled = true;
+
+            try {
+                const soilPH = document.getElementById('soilPH').value;
+                const weather = currentWeatherData || document.getElementById('weather').innerText;
+
+                const recommendations = await getCropRecommendations(
+                    soilType, soilPH, moistureLevel, organicMatter, location, weather, cropCategory
+                );
+
+                // Parse AI recommendations into structured data
+                parsedCropData = parseAIRecommendations(recommendations);
+
+                // Show results section
+                document.getElementById('inputSection').classList.add('hidden');
+                document.getElementById('resultsSection').classList.remove('hidden');
+                
+                // Display structured recommendations
+                displayStructuredRecommendations(parsedCropData);
+
+            } catch (error) {
+                console.error('Error getting recommendations:', error);
+                alert(`Error: ${error.message}`);
+            } finally {
+                // Reset button
+                analyzeBtn.innerHTML = originalBtnText;
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        function showInputSection() {
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('inputSection').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

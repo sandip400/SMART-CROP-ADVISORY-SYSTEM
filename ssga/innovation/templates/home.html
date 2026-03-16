@@ -1,0 +1,1081 @@
+<script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+    function filledCell(cell) {
+        return cell !== '' && cell != null;
+    }
+    function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                    row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                    headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+    }
+</script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% csrf_token %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #c8e6c9);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+
+        .navbar {
+            background-color: #2e7d32;
+            padding: 10px 20px;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: #c8e6c9 !important;
+        }
+
+        .btn-primary {
+            background-color: #2e7d32;
+            border: none;
+            padding: 10px 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #1b5e20;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+            color: #2e7d32;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .upload-section {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .upload-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-section,
+        .how-it-works,
+        .weather-section,
+        .cta-section,
+        .gov-section {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .feature-section h2,
+        .how-it-works h2,
+        .weather-section h2,
+        .cta-section h2,
+        .gov-section h2 {
+            color: #2e7d32;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card video {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .step-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-section,
+        .gov-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .gov-section a.btn {
+            background-color: #2e7d32;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .gov-section a.btn:hover {
+            background-color: #1b5e20;
+        }
+
+        .footer {
+            background-color: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header,
+        .modal-footer {
+            border: none;
+        }
+
+        .modal-title {
+            color: #2e7d32;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        #logoutBtn {
+            color: #dc3545;
+            cursor: pointer;
+            text-align: right;
+            padding: 5px 10px;
+        }
+
+        #logoutBtn:hover {
+            color: #b02a37;
+        }
+
+        /* Added chatbot styles */
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-icon:hover {
+            background: #1b5e20;
+            transform: scale(1.1);
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background: #2e7d32;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .chatbot-header h5 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 350px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #e3f2fd;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot-message {
+            background: #f5f5f5;
+            margin-right: auto;
+        }
+
+        .message p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .navigation-suggestion {
+            background: #e8f5e8;
+            border: 1px solid #2e7d32;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .navigation-suggestion:hover {
+            background: #d4edda;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 15px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #2e7d32;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chatbot-input-area {
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 15px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .input-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .input-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .input-btn:hover {
+            background: #1b5e20;
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-container {
+                width: 300px;
+                height: 450px;
+                right: 10px;
+                bottom: 80px;
+            }
+            
+            .chatbot-icon {
+                width: 50px;
+                height: 50px;
+                right: 15px;
+                bottom: 15px;
+            }
+        }
+        .message.bot-message table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 8px 0;
+        }
+        .message.bot-message th, 
+        .message.bot-message td {
+        border: 1px solid #ddd;
+        padding: 6px;
+        }
+        .message.bot-message h3, 
+        .message.bot-message h4 {
+        margin: 6px 0;
+        color: #2e7d32;
+}
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SCA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How it works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#weather">Weather</a></li>
+                     <li class="nav-item"><a class="nav-link" href="{% url "soiledu" %}">Edu</a></li>
+                    {% comment %} <li class="nav-item"><a class="nav-link" href="#guidance">Guidance</a></li>  {% endcomment %}
+                    <li class="nav-item"><a class="nav-link" href="#get-started">Get started</a></li>
+                </ul>
+                <div class="d-flex ms-3">
+                    <button class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Sign
+                        In</button>
+                    <a href="#explore" class="btn btn-primary">Explore</a>
+                    <a href="#start-free" class="btn btn-success">Start Free</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Sign In</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login"
+                                type="button" role="tab" aria-controls="login" aria-selected="true">Sign In</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup"
+                                type="button" role="tab" aria-controls="signup" aria-selected="false">Sign Up</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <form>
+                                <div class="form-group">
+                                    <label for="loginEmail">Email or Username</label>
+                                    <input type="text" class="form-control" id="loginEmail"
+                                        placeholder="Enter email or username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loginPassword">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword"
+                                        placeholder="Password">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mt-3">Sign In</button>
+                                <a href="#" class="d-block mt-2 text-muted">Forgot Password?</a>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+                            <form>
+                                <div class="form-group">
+                                    <label for="signupUsername">Username</label>
+                                    <input type="text" class="form-control" id="signupUsername"
+                                        placeholder="Choose a username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signupEmail">Email</label>
+                                    <input type="email" class="form-control" id="signupEmail" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signupPassword">Password</label>
+                                    <input type="password" class="form-control" id="signupPassword"
+                                        placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signupConfirmPassword">Confirm Password</label>
+                                    <input type="password" class="form-control" id="signupConfirmPassword"
+                                        placeholder="Confirm password">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mt-3">Sign Up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h1>Green • AI • Insight</h1>
+        <p>No IoT Needed</p>
+        <p class="lead">Grow smarter with AI. Green, precise, and farmer-friendly.</p>
+        <p class="lead">One hub for soil insights, crop recommendations, weather advisory, farm calendar, irrigation &
+            fertilizer guidance, pest/disease detection, and yield prediction — all in a clean, fast interface.</p>
+    </div>
+
+    <div class="upload-section">
+        <h3>Upload Soil Photo</h3>
+        <p>Get instant soil analysis with a single upload.</p>
+        <a href="#features" class="btn btn-primary">See all features</a>
+    </div>
+
+
+    <div class="feature-section" id="features">
+        <h2>Features</h2>
+        <p>Everything your farm needs, one landing to reach it all</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source
+                            src="https://media.istockphoto.com/id/1154931750/video/soil-and-fertilizer.mp4?s=mp4-640x640-is&k=20&c=3tJ6o4LpMKHxdzn_Fgv-cNxWb4ZJHrKIUqYhse__kpg="
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Image-based Soil Quality</h4>
+                    <p>Upload a soil photo to infer texture, moisture, and fertility. Extensible for nutrient
+                        deficiency.</p>
+                    <a href="{% url "soil_predictor" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://cdn.pixabay.com/video/2020/06/17/42420-431511648_tiny.mp4"
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Plant Growth Analysis</h4>
+                    <p>Upload a plant picture to see its growth analysis and see the magic. </p>
+                    <a href="{% url "growth" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source
+                            src="https://media.istockphoto.com/id/2220396321/video/young-corn-plants.mp4?s=mp4-640x640-is&k=20&c=JBJ3WVvyCVAJCUzFdKz99BZYTnuh6dhTZmJqz4cypWM="
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Crop Recommendation</h4>
+                    <p>Suggests best crops by soil, pH, season, and region. Uses official agriculture datasets.</p>
+                    <a href="{% url "croprecom3" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://cdn.pixabay.com/video/2024/07/01/218951_tiny.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Routine Tracker / Calendar</h4>
+                    <p>Smart reminders for irrigation, fertilizer, pesticide, and harvesting dates.</p>
+                    <a href="{% url "routinetrack4" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://cdn.pixabay.com/video/2019/03/18/22070-325253460_large.mp4"
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Weather-based Advisory</h4>
+                    <p>Real-time forecasts and alerts for rainfall, drought, floods, and extreme temps.</p>
+                    <a href="{% url "advisory5" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://cdn.pixabay.com/video/2020/07/15/44765-440000959_large.mp4"
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Fertilizer & Irrigation Guidance</h4>
+                    <p>Right water and nutrient usage to prevent overuse and keep crops sustainable.</p>
+                    <a href="{% url "fertilizer" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source
+                            src="https://media.istockphoto.com/id/1388655247/video/farmer-checking-for-grapevine-leaf-disease.mp4?s=mp4-640x640-is&k=20&c=GGMJUTPHZs3HTpA3Jc0Vd7EwqRjec9TeLmtkjTmC1qY="
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Pest & Disease Detection</h4>
+                    <p>Upload plant/leaf photos. AI detects common pests/diseases and suggests remedies.</p>
+                    <a href="{% url "pltdis" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://cdn.pixabay.com/video/2017/11/04/12752-241674243_large.mp4"
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>AI Yield Prediction</h4>
+                    <p>Predicts expected yield using soil, climate, and input history to plan ahead.</p>
+                    <a href="{% url "aiyield" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://media.istockphoto.com/id/2149186601/video/after-the-harvest-the-organic-soybean-plantations-are-tied-into-piles-and-ready-to-be-taken.mp4?s=mp4-640x640-is&k=20&c=hJWWhNfV6tWt1wh-nGhoSmyLKywM9qfO9wSVhwYBsDM="
+                            type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h4>Waste Disposal Prediction</h4>
+                    <p>Predicts expected yield using soil, climate, and input history to plan ahead.</p>
+                    <a href="{% url "wastedis" %}" class="btn btn-outline-success btn-sm">Open</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="how-it-works" id="how-it-works">
+        <h2>How it works</h2>
+        <p>Simple workflow, deep intelligence</p>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="step-card">
+                    <img src="https://images.unsplash.com/photo-1618212624319-3cd9681707e2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Q2FwdHVyZSUyMCUyNiUyMEltcG9ydCUyMFVwbG9hZCUyMHNvaWwlMkZsZWFmJTIwcGhvdG9zJTIwb3IlMjBlbnRlciUyMHZhbHVlc3xlbnwwfHwwfHx8MA%3D%3D"
+                        alt="Beautiful Landscape" width="300">
+                    <h4>Step 1: Capture & Import</h4>
+                    <p>Upload soil/leaf photos or enter values. Optionally attach lab reports.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="step-card">
+                    <img src="https://plus.unsplash.com/premium_photo-1678509112838-3412ba938a52?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Beautiful Landscape" width="300">
+                    <h4>Step 2: Analyze</h4>
+                    <p>ML infers soil texture, moisture, fertility and detects pests/diseases if provided.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="step-card">
+                    <img src="https://plus.unsplash.com/premium_photo-1661963051410-e155d32a7c38?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8UGxhbiUyMEdldCUyMGNyb3AlMjByZWNvbW1lbmRhdGlvbnMlMkMlMjBjYWxlbmRhciUyMHJlbWluZGVycyUyQyUyMGFuZCUyMHdlYXRoZXIlMjBiYXNlZCUyMGFkdmlzb3JpZXMufGVufDB8fDB8fHww"
+                        alt="Beautiful Landscape" width="300">
+                    <h4>Step 3: Plan</h4>
+                    <p>Get crop recommendations, calendar reminders, and weather-based advisories.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="step-card">
+                    <img src="https://images.unsplash.com/photo-1743742566156-f1745850281a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8T3B0aW1pemUlMjBHdWlkYW5jZSUyMGZvciUyMHdhdGVyJTJGZmVydGlsaXplciUyMHVzYWdlJTIwYW5kJTIwcHJlZGljdGVkJTIweWllbGRzJTIwaGVscHMlQzIlQTByZWR1Y2UlQzIlQTB3YXN0ZS58ZW58MHx8MHx8fDA%3D"
+                        alt="Beautiful Landscape" width="300">
+                    <h4>Step 4: Optimize</h4>
+                    <p>Guidance for water/fertilizer usage and predicted yields helps reduce waste.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weather-section" id="weather">
+        <h2>Live Weather & Risk Alerts</h2>
+        <p>Plan irrigation and protection with granular rainfall, wind, and temperature insights.</p>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="{% url "advisory5" %}">
+                    <div class="weather-card">
+                        <img src="https://images.unsplash.com/photo-1669741249119-b6cc3b2b498e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Q29uZGl0aW9uJTIwQ2xvdWR5JTJDJTIwMjglQzIlQjBDfGVufDB8fDB8fHww"
+                            alt="Beautiful Landscape" width="300" height="200">
+                        <h5>Condition</h5>
+                        {% comment %} <p>Cloudy, 28°C</p> {% endcomment %}
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url "fertilizer" %}">
+                    <div class="weather-card">
+                        <img src="https://images.unsplash.com/photo-1588852403298-8ff02541431f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fElycmlnYXRpb24lMjBTa2lwJTIwdG9kYXl8ZW58MHx8MHx8fDA%3D"
+                            alt="Beautiful Landscape" width="300">
+
+                        <h5>Irrigation</h5>
+                        {% comment %} <p>Skip today</p> {% endcomment %}
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url "aiyield" %}">
+                    <div class="weather-card">
+                        <img src="https://media.istockphoto.com/id/1394457932/photo/global-and-european-grain-and-wheat-crisis-after-russias-invasion-of-ukraine.jpg?s=2048x2048&w=is&k=20&c=q8hdpwaSdRV9Om9h1wxbISrj7iME2DIRyf4EBevuO5g="
+                            alt="Beautiful Landscape" width="300" height="200">
+                        <h5>Yield trend</h5>
+                        {% comment %} <p>Stable</p> {% endcomment %}
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="{% url "pltdis" %}">
+                    <div class="weather-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIL_K5qPEq9Qac8VaIDXNSN7rjrXAULAy6sA&s"
+                            alt="Beautiful Landscape" width="300">
+                        <h5>Pest risk</h5>
+                        {% comment %} <p>Low</p> {% endcomment %}
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="mt-3">
+            <a href="{% url "advisory5" %}" class="btn btn-outline-success me-2">Open Weather</a>
+            <a href="{% url "routinetrack4" %}" class="btn btn-outline-success me-2">Sync Calendar</a>
+            <a href="{% url "croprecom3" %}" class="btn btn-outline-success">See full forecast</a>
+        </div>
+    </div>
+
+    <div class="cta-section" id="get-started">
+        <h2>Ready to grow greener and smarter?</h2>
+        <p>Connect soil, weather, and crop intelligence in one place. Your feature pages are one click away.</p>
+        <a href="#start-free" class="btn btn-primary me-2">Start Free</a>
+        <a href="#features" class="btn btn-outline-success">Browse Features</a>
+    </div>
+
+    <div class="gov-section">
+        <h2>Government Schemes & Support</h2>
+        <p>Access government schemes, subsidies, and support tailored for farmers. Check eligibility and apply directly.
+        </p>
+        <a href="{% url "gov" %}" class="btn">Explore Schemes</a>
+    </div>
+
+    <!-- Added chatbot interface -->
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbotIcon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+        </svg>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <h5>🌱 Agriculture Assistant</h5>
+            <p style="margin: 0; font-size: 12px; opacity: 0.9;">Ask me about soil, crops, and farming!</p>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot-message">
+                <p>Hello! I'm your agriculture assistant. I can help you with:</p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Soil analysis and recommendations</li>
+                    <li>Crop selection and farming tips</li>
+                    <li>Pest and disease identification</li>
+                    <li>Weather-based farming advice</li>
+                    <li>Navigate to different features</li>
+                </ul>
+                <p>You can ask questions, upload images, or use voice input!</p>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <div class="chatbot-input-area">
+            <div class="input-group">
+                <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Ask about soil, crops, farming...">
+                <div class="input-buttons">
+                    <button class="input-btn" id="voiceBtn" title="Voice Input">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                        </svg>
+                    </button>
+                    <button class="input-btn" id="imageBtn" title="Upload Image">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                    </button>
+                    <button class="input-btn" id="sendBtn" title="Send Message">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="white">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>SCA</p>
+        <p>© SCA. YOUR PERSONALISED SMART CROP ADVISORY.</p>
+        <p><a href="#how-it-works" class="text-white">How it works</a> · <a href="#" class="text-white">Contact</a> · <a
+                href="#" class="text-white">Privacy</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function () {
+                alert('Logged out successfully!');
+                // Add logout logic here
+            });
+        }
+
+        class ChatBot {
+            constructor() {
+                this.isOpen = false;
+                this.isListening = false;
+                this.recognition = null;
+                this.initializeElements();
+                this.initializeEventListeners();
+                this.initializeSpeechRecognition();
+            }
+
+            initializeElements() {
+                this.chatbotIcon = document.getElementById('chatbotIcon');
+                this.chatbotContainer = document.getElementById('chatbotContainer');
+                this.chatbotMessages = document.getElementById('chatbotMessages');
+                this.chatbotInput = document.getElementById('chatbotInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.voiceBtn = document.getElementById('voiceBtn');
+                this.imageBtn = document.getElementById('imageBtn');
+                this.imageInput = document.getElementById('imageInput');
+                this.typingIndicator = document.getElementById('typingIndicator');
+            }
+
+            initializeEventListeners() {
+                this.chatbotIcon.addEventListener('click', () => this.toggleChatbot());
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                this.voiceBtn.addEventListener('click', () => this.toggleVoiceInput());
+                this.imageBtn.addEventListener('click', () => this.imageInput.click());
+                this.imageInput.addEventListener('change', (e) => this.handleImageUpload(e));
+                
+                this.chatbotInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (this.isOpen && !this.chatbotContainer.contains(e.target) && !this.chatbotIcon.contains(e.target)) {
+                        this.closeChatbot();
+                    }
+                });
+            }
+
+            initializeSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+                    this.recognition.lang = 'en-US';
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        this.chatbotInput.value = transcript;
+                        this.sendMessage();
+                    };
+
+                    this.recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        this.stopVoiceInput();
+                    };
+
+                    this.recognition.onend = () => {
+                        this.stopVoiceInput();
+                    };
+                }
+            }
+
+            toggleChatbot() {
+                if (this.isOpen) {
+                    this.closeChatbot();
+                } else {
+                    this.openChatbot();
+                }
+            }
+
+            openChatbot() {
+                this.chatbotContainer.style.display = 'flex';
+                this.isOpen = true;
+                this.chatbotInput.focus();
+            }
+
+            closeChatbot() {
+                this.chatbotContainer.style.display = 'none';
+                this.isOpen = false;
+            }
+
+            toggleVoiceInput() {
+                if (!this.recognition) {
+                    alert('Speech recognition is not supported in your browser.');
+                    return;
+                }
+
+                if (this.isListening) {
+                    this.stopVoiceInput();
+                } else {
+                    this.startVoiceInput();
+                }
+            }
+
+            startVoiceInput() {
+                this.isListening = true;
+                this.voiceBtn.style.background = '#f44336';
+                this.recognition.start();
+            }
+
+            stopVoiceInput() {
+                this.isListening = false;
+                this.voiceBtn.style.background = '#2e7d32';
+                if (this.recognition) {
+                    this.recognition.stop();
+                }
+            }
+
+            async handleImageUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const imageData = e.target.result;
+                    const message = this.chatbotInput.value.trim() || "What can you tell me about this image?";
+                    
+                    this.addMessage(message, 'user', imageData);
+                    this.chatbotInput.value = '';
+                    
+                    await this.sendToBackend(message, 'image', imageData);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            async sendMessage() {
+                const message = this.chatbotInput.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.chatbotInput.value = '';
+                
+                await this.sendToBackend(message, 'text');
+            }
+
+            async sendToBackend(message, type, imageData = null) {
+                this.showTypingIndicator();
+
+                try {
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                                    document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+                    const payload = {
+                        message: message,
+                        type: type
+                    };
+
+                    if (imageData) {
+                        payload.image = imageData;
+                    }
+
+                    const response = await fetch('/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+                    
+                    this.hideTypingIndicator();
+
+                    if (data.ok) {
+                        this.addMessage(data.response, 'bot');
+                        
+                        if (data.navigation) {
+                            this.addNavigationSuggestion(data.navigation);
+                        }
+                    } else {
+                        this.addMessage(`Sorry, I encountered an error: ${data.error}`, 'bot');
+                    }
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    this.addMessage('Sorry, I\'m having trouble connecting. Please try again.', 'bot');
+                    console.error('Chatbot error:', error);
+                }
+            }
+
+            addMessage(text, sender, imageData = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                let content = text; // ✅ trust server to return clean HTML
+                if (imageData && sender === 'user') {
+                    content = `<img src="${imageData}" class="image-preview" alt="Uploaded image"><p>${text}</p>`;
+                }
+
+                messageDiv.innerHTML = content;  // ✅ allow HTML rendering (headings, lists, tables)
+
+                this.chatbotMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            addNavigationSuggestion(navigation) {
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.className = 'navigation-suggestion';
+                suggestionDiv.innerHTML = `
+                    <p style="margin: 0; font-weight: 600;">🔗 Navigate to ${navigation.page}</p>
+                    <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Click here to go to ${navigation.page}</p>
+                `;
+                
+                suggestionDiv.addEventListener('click', () => {
+                    window.location.href = navigation.url;
+                });
+
+                this.chatbotMessages.appendChild(suggestionDiv);
+                this.scrollToBottom();
+            }
+
+            showTypingIndicator() {
+                this.typingIndicator.style.display = 'block';
+                this.scrollToBottom();
+            }
+
+            hideTypingIndicator() {
+                this.typingIndicator.style.display = 'none';
+            }
+
+            scrollToBottom() {
+                this.chatbotMessages.scrollTop = this.chatbotMessages.scrollHeight;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new ChatBot();
+        });
+    </script>
+</body>
+
+</html>
+</correct_response>

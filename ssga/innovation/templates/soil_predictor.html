@@ -1,0 +1,659 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Soil Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous"
+  />
+  <style>
+    body { 
+      background: linear-gradient(135deg, #e0f7fa, #c8e6c9);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+    
+    .main-container {
+      animation: fadeIn 0.8s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card { 
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.9) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .navbar-brand {
+      color: #2e7d32 !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .btn-primary {
+      background-color: #2e7d32;
+      border: none;
+      padding: 10px 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+    
+    .btn-primary:hover {
+      background-color: #1b5e20;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+    }
+    
+    .form-control {
+      border: 2px solid rgba(46, 125, 50, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+      background: #fff;
+    }
+    
+    #image-result, #soil-details, #stats, #charts, #composition {
+      animation: slideIn 0.6s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    #image-error {
+      animation: shake 0.5s ease;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(46, 125, 50, 0.2);
+      border-top-color: #2e7d32;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .description h3, .description h4 { 
+      margin-top: 1rem;
+      color: #2e7d32;
+    }
+    
+    .stat { 
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(46, 125, 50, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    
+    .stat:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .stat .label { 
+      color: #6b7280; 
+      font-size: .875rem; 
+      font-weight: 500;
+    }
+    
+    .stat .value { 
+      font-weight: 700;
+      color: #2e7d32;
+      font-size: 1.1rem;
+    }
+    
+    .card-title {
+      color: #2e7d32;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    #image-result {
+      color: #1b5e20;
+      font-weight: 600;
+      padding: 15px;
+      background: rgba(232, 245, 233, 0.8);
+      border-radius: 8px;
+      border-left: 4px solid #2e7d32;
+    }
+    
+    #image-status {
+      color: #2e7d32;
+      font-weight: 500;
+    }
+
+    .composition-card h6 {
+      color: #2e7d32;
+      font-weight: 600;
+    }
+
+    .region-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.35rem 0.85rem;
+      background: rgba(46, 125, 50, 0.12);
+      color: #1b5e20;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.25rem;
+      border: 1px solid rgba(46, 125, 50, 0.2);
+    }
+
+    .composition-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #495057;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid rgba(46, 125, 50, 0.15);
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(46, 125, 50, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="#">🌱 Soil Predictor</a>
+    </div>
+  </nav>
+
+  <main class="container py-4 main-container">
+    {% csrf_token %}
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">🔬 Soil Analysis & Prediction</h5>
+            <p class="text-muted mb-3">
+              Upload a soil image to predict its type and get comprehensive analysis with detailed charts and recommendations.
+            </p>
+
+            <form id="image-form" class="vstack gap-3" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div>
+                <label class="form-label fw-semibold" for="image">📸 Soil Image</label>
+                <input class="form-control" type="file" id="image" name="image" accept="image/*" required />
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <button id="image-submit" type="submit" class="btn btn-primary">🧪 Analyze Soil</button>
+                <div id="image-status" class="text-muted small"></div>
+              </div>
+            </form>
+
+            <hr />
+            <div id="image-result" class="fw-medium"></div>
+            <div id="image-error" class="text-danger"></div>
+
+            <div id="stats" class="mt-3" style="display:none;">
+              <div class="row g-3">
+                <div class="col-12 col-md-4">
+                  <div class="stat">
+                    <img id="preview" class="img-fluid mb-3" alt="Uploaded Plant">
+                    <div class="label">Soil Type</div>
+                    <div class="value" id="stat-soiltype">—</div>
+                  </div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="stat">
+                    <div class="label">pH Range</div>
+                    <div class="value"><span id="stat-ph-min">—</span> – <span id="stat-ph-max">—</span></div>
+                  </div>
+                </div>
+                <div class="col-6 col-md-4">
+                  <div class="stat">
+                    <div class="label">CEC (cmol(+)/kg)</div>
+                    <div class="value" id="stat-cec">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="charts" class="mt-4" style="display:none;">
+              <div class="row g-4">
+                <div class="col-12 col-lg-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h6 class="mb-2">Soil Property Scores (1–10)</h6>
+                      <canvas id="radarChart" height="260"></canvas>
+                      <p class="text-muted small mt-2 mb-0">
+                        Scale: water holding (higher = more water retained), drainage (higher = faster drainage),
+                        fertility (higher = more fertile), erosion risk (higher = riskier).
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h6 class="mb-2">CEC Indicator</h6>
+                      <canvas id="cecBar" height="260"></canvas>
+                      <p class="text-muted small mt-2 mb-0">
+                        CEC is a proxy for nutrient-holding capacity. Values above ~25 are considered high.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h6 class="mb-2">pH Min/Max</h6>
+                      <canvas id="phBar" height="140"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="composition" class="mt-4" style="display:none;">
+              <div class="row g-4">
+                <div class="col-12 col-lg-6">
+                  <div class="card composition-card">
+                    <div class="card-body">
+                      <h6 class="mb-2">Element & Mineral Composition (%)</h6>
+                      <canvas id="compositionChart" height="240"></canvas>
+                      <p class="text-muted small mt-2 mb-0">
+                        Percent share of dominant nutrients and minerals present in the predicted soil sample.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="card composition-card h-100">
+                    <div class="card-body d-flex flex-column">
+                      <h6 class="mb-2">Most Prevalent in India</h6>
+                      <p class="text-muted small mb-3">
+                        Regions and agro-climatic zones across India where this soil type is most commonly found.
+                      </p>
+                      <div id="regionList" class="mb-3"></div>
+                      <div id="compositionLegend" class="composition-legend mt-auto"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="soil-details" class="description mt-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    // CSRF cookie helper
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    const imageForm = document.getElementById('image-form');
+    const imageSubmit = document.getElementById('image-submit');
+    const imageStatus = document.getElementById('image-status');
+    const imageResult = document.getElementById('image-result');
+    const imageError = document.getElementById('image-error');
+    const detailsBox = document.getElementById('soil-details');
+
+    const statsWrap = document.getElementById('stats');
+    const statSoil = document.getElementById('stat-soiltype');
+    const statPhMin = document.getElementById('stat-ph-min');
+    const statPhMax = document.getElementById('stat-ph-max');
+    const statCec = document.getElementById('stat-cec');
+
+    const chartsWrap = document.getElementById('charts');
+    const compositionWrap = document.getElementById('composition');
+    const regionList = document.getElementById('regionList');
+    const compositionLegend = document.getElementById('compositionLegend');
+
+    let radarInstance = null;
+    let cecBarInstance = null;
+    let phBarInstance = null;
+    let compositionChartInstance = null;
+
+    function renderCharts(metrics) {
+      const radarCtx = document.getElementById('radarChart').getContext('2d');
+      const cecCtx = document.getElementById('cecBar').getContext('2d');
+      const phCtx = document.getElementById('phBar').getContext('2d');
+
+      if (radarInstance) radarInstance.destroy();
+      if (cecBarInstance) cecBarInstance.destroy();
+      if (phBarInstance) phBarInstance.destroy();
+
+      radarInstance = new Chart(radarCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Water Holding', 'Drainage', 'Fertility', 'Erosion Risk'],
+          datasets: [{
+            label: metrics.soil_type + ' (1–10)',
+            data: [
+              metrics.water_holding_score,
+              metrics.drainage_score,
+              metrics.fertility_score,
+              metrics.erosion_risk_score
+            ],
+            backgroundColor: 'rgba(13,110,253,0.2)',
+            borderColor: 'rgba(13,110,253,1)',
+            pointBackgroundColor: 'rgba(13,110,253,1)',
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: { suggestedMin: 0, suggestedMax: 10, ticks: { stepSize: 2 } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      cecBarInstance = new Chart(cecCtx, {
+        type: 'bar',
+        data: {
+          labels: ['CEC'],
+          datasets: [{
+            label: 'cmol(+)/kg',
+            data: [metrics.cec_cmol_per_kg],
+            backgroundColor: 'rgba(25,135,84,0.3)',
+            borderColor: 'rgba(25,135,84,1)',
+            borderWidth: 1
+          }, {
+            label: 'High Fertility Threshold (25)',
+            data: [25],
+            backgroundColor: 'rgba(220,53,69,0.1)',
+            borderColor: 'rgba(220,53,69,0.6)',
+            borderDash: [6,3],
+            type: 'line',
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } },
+          plugins: { legend: { display: true } }
+        }
+      });
+
+      phBarInstance = new Chart(phCtx, {
+        type: 'bar',
+        data: {
+          labels: ['pH min', 'pH max'],
+          datasets: [{
+            label: 'pH',
+            data: [metrics.ph_min, metrics.ph_max],
+            backgroundColor: ['rgba(13,110,253,0.5)','rgba(13,110,253,0.25)'],
+            borderColor: 'rgba(13,110,253,1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true, suggestedMax: 10 } },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function normalizeComposition(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) {
+        return raw
+          .map((item, idx) => {
+            const label = item.label || item.name || `Component ${idx + 1}`;
+            const value = Number(item.percentage ?? item.value ?? item.share ?? 0);
+            return value > 0 ? { label, value } : null;
+          })
+          .filter(Boolean);
+      }
+      if (typeof raw === 'object') {
+        return Object.entries(raw)
+          .map(([label, value]) => ({ label, value: Number(value) }))
+          .filter(item => !Number.isNaN(item.value) && item.value > 0);
+      }
+      return [];
+    }
+
+    function normalizeRegionsData(regions) {
+      if (!regions) return [];
+      if (Array.isArray(regions)) {
+        return regions.map(region => region && region.trim()).filter(Boolean);
+      }
+      if (typeof regions === 'string') {
+        return regions.split(',').map(region => region.trim()).filter(Boolean);
+      }
+      if (typeof regions === 'object') {
+        return Object.values(regions)
+          .flat()
+          .map(region => region && region.trim())
+          .filter(Boolean);
+      }
+      return [];
+    }
+
+    function renderComposition(compositionData) {
+      const ctx = document.getElementById('compositionChart').getContext('2d');
+
+      if (compositionChartInstance) compositionChartInstance.destroy();
+
+      const palette = [
+        'rgba(46,125,50,0.85)',
+        'rgba(38,166,91,0.85)',
+        'rgba(102,187,106,0.85)',
+        'rgba(156,204,101,0.85)',
+        'rgba(217,255,179,0.85)'
+      ];
+
+      compositionChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: compositionData.map(item => item.label),
+          datasets: [{
+            data: compositionData.map(item => item.value),
+            backgroundColor: compositionData.map((_, idx) => palette[idx % palette.length]),
+            borderColor: '#ffffff',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: context => `${context.label}: ${context.parsed}%` } }
+          },
+          cutout: '60%'
+        }
+      });
+
+      compositionLegend.innerHTML = '';
+      compositionData.forEach((item, idx) => {
+        const legendItem = document.createElement('div');
+        legendItem.className = 'legend-item';
+        legendItem.innerHTML = `
+          <span class="legend-swatch" style="background:${palette[idx % palette.length]};"></span>
+          <span>${item.label}: <strong>${item.value}%</strong></span>
+        `;
+        compositionLegend.appendChild(legendItem);
+      });
+    }
+
+    function renderRegions(regionsArray) {
+      regionList.innerHTML = '';
+      if (!regionsArray.length) return 0;
+
+      regionsArray.forEach(region => {
+        const chip = document.createElement('span');
+        chip.className = 'region-chip';
+        chip.textContent = region;
+        regionList.appendChild(chip);
+      });
+
+      return regionsArray.length;
+    }
+
+    // Show uploaded image preview
+    const imageInput = document.getElementById('image');
+    const previewImg = document.getElementById('preview');
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          previewImg.src = e.target.result;
+          previewImg.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewImg.src = '';
+        previewImg.style.display = 'none';
+      }
+    });
+
+    imageForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      imageResult.textContent = '';
+      imageError.textContent = '';
+      detailsBox.innerHTML = '';
+      statsWrap.style.display = 'none';
+      chartsWrap.style.display = 'none';
+      compositionWrap.style.display = 'none';
+      compositionLegend.innerHTML = '';
+      regionList.innerHTML = '';
+      imageStatus.innerHTML = '<span class="spinner"></span> Predicting...';
+      imageSubmit.disabled = true;
+
+      const formData = new FormData(imageForm);
+
+      try {
+        const resp = await fetch("{% url 'soil_image_predict' %}", {
+          method: 'POST',
+          body: formData,
+          credentials: 'same-origin',
+          headers: { 'X-CSRFToken': csrftoken },
+        });
+
+        const data = await resp.json();
+        if (!data.ok) {
+          previewImg.style.display = 'block';
+          imageError.textContent = data.error || 'Something went wrong.';
+        } else {
+          const soilType = data.prediction.soil_type;
+          const descHTML = data.prediction.description_html || '';
+          const metrics = data.prediction.metrics || {};
+          const compositionData = normalizeComposition(data.prediction.mineral_composition);
+          const normalizedRegions = normalizeRegionsData(data.prediction.prevalent_regions);
+
+          imageResult.textContent = `Predicted Soil Type: ${soilType}`;
+          detailsBox.innerHTML = descHTML;
+
+          // Stats
+          statSoil.textContent = soilType;
+          statPhMin.textContent = (metrics.ph_min ?? '—');
+          statPhMax.textContent = (metrics.ph_max ?? '—');
+          statCec.textContent = (metrics.cec_cmol_per_kg ?? '—');
+          statsWrap.style.display = 'block';
+
+          // Charts
+          if (metrics && typeof metrics.water_holding_score !== 'undefined') {
+            renderCharts(metrics);
+            chartsWrap.style.display = 'block';
+          }
+
+          // Composition & regions
+          const compositionHasData = compositionData.length > 0;
+          const regionCount = normalizedRegions.length;
+          const shouldShowComposition = compositionHasData || regionCount > 0;
+
+          if (shouldShowComposition) {
+            if (compositionHasData) {
+              renderComposition(compositionData);
+            } else {
+              compositionLegend.innerHTML = '<p class="text-muted small mb-0">Composition data not available.</p>';
+            }
+
+            if (regionCount > 0) {
+              renderRegions(normalizedRegions);
+            } else {
+              regionList.innerHTML = '<p class="text-muted small mb-0">Region insights not available.</p>';
+            }
+
+            compositionWrap.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        imageError.textContent = 'Network error. Please try again.';
+      } finally {
+        imageStatus.textContent = '';
+        imageSubmit.disabled = false;
+      }
+    });
+  </script>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"
+  ></script>
+</body>
+</html>

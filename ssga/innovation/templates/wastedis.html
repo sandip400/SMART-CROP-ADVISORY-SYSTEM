@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainable Crop-Waste Disposal in Punjab | Pollution-Free Farming Solutions</title>
+    <meta name="description" content="Learn sustainable crop-waste disposal techniques for Punjab farmers. Discover pollution-free alternatives to stubble burning with practical solutions and government support.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Sustainable Crop-Waste Disposal in Punjab">
+    <meta property="og:description" content="Educational resource for Punjab farmers on pollution-free crop-waste disposal methods and sustainable farming practices.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/placeholder.svg?height=630&width=1200">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables for Design System */
+        :root {
+            --background: #ffffff;
+            --foreground: #475569;
+            --card: #f1f5f9;
+            --card-foreground: #475569;
+            --primary: #059669;
+            --primary-foreground: #ffffff;
+            --secondary: #10b981;
+            --secondary-foreground: #ffffff;
+            --muted: #f1f5f9;
+            --muted-foreground: #4b5563;
+            --accent: #10b981;
+            --accent-foreground: #ffffff;
+            --border: #d1d5db;
+            --input: #f9fafb;
+            --ring: #059669;
+            --radius: 0.5rem;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--foreground);
+            background-color: var(--background);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+        /* Header */
+        header {
+            background: var(--background);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--foreground);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .language-toggle:hover {
+            background: var(--secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(5, 150, 105, 0.8), rgba(5, 150, 105, 0.8)), 
+                        url('/placeholder.svg?height=600&width=1200') center/cover;
+            color: white;
+            text-align: center;
+            padding: 8rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--card-foreground);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Stats */
+        .stats {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        /* Techniques Grid */
+        .technique-card {
+            background: var(--background);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .technique-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .technique-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Accordion */
+        .accordion-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: var(--card);
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .accordion-header:hover {
+            background: var(--muted);
+        }
+
+        .accordion-content {
+            padding: 0 1rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--background);
+            border-radius: var(--radius);
+            padding: 2rem;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--input);
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ring);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles */
+        *:focus {
+            outline: 2px solid var(--ring);
+            outline-offset: 2px;
+        }
+
+        /* Hidden content for language toggle */
+        .punjabi-content {
+            display: none;
+        }
+
+        body.punjabi .english-content {
+            display: none;
+        }
+
+        body.punjabi .punjabi-content {
+            display: block;
+        }
+
+        /* Modal Header */
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <span class="english-content">Punjab Green Farming</span>
+                <span class="punjabi-content">ਪੰਜਾਬ ਹਰਿਆਲੀ ਖੇਤੀ</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#overview" class="english-content">Overview</a><a href="#overview" class="punjabi-content">ਸੰਖੇਪ</a></li>
+                <li><a href="#techniques" class="english-content">Techniques</a><a href="#techniques" class="punjabi-content">ਤਕਨੀਕਾਂ</a></li>
+                <li><a href="#benefits" class="english-content">Benefits</a><a href="#benefits" class="punjabi-content">ਫਾਇਦੇ</a></li>
+                <li><a href="#resources" class="english-content">Resources</a><a href="#resources" class="punjabi-content">ਸਰੋਤ</a></li>
+                <li><a href="#contact" class="english-content">Contact</a><a href="#contact" class="punjabi-content">ਸੰਪਰਕ</a></li>
+            </ul>
+            <button class="language-toggle" onclick="toggleLanguage()" aria-label="Toggle language">
+                <span class="english-content">ਪੰਜਾਬੀ</span>
+                <span class="punjabi-content">English</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>
+                    <span class="english-content">Sustainable Crop-Residue Disposal in Punjab</span>
+                    <span class="punjabi-content">ਪੰਜਾਬ ਵਿੱਚ ਟਿਕਾਊ ਫਸਲ-ਰਹਿੰਦ-ਖੂੰਹਦ ਨਿਪਟਾਰਾ</span>
+                </h1>
+                <p>
+                    <span class="english-content">Solutions without pollution — Protecting our environment while maintaining agricultural productivity</span>
+                    <span class="punjabi-content">ਪ੍ਰਦੂਸ਼ਣ ਤੋਂ ਬਿਨਾਂ ਹੱਲ — ਖੇਤੀਬਾੜੀ ਉਤਪਾਦਕਤਾ ਬਣਾਈ ਰੱਖਦੇ ਹੋਏ ਸਾਡੇ ਵਾਤਾਵਰਣ ਦੀ ਰੱਖਿਆ</span>
+                </p>
+                <a href="#techniques" class="btn btn-primary">
+                    <span class="english-content">Learn Techniques</span>
+                    <span class="punjabi-content">ਤਕਨੀਕਾਂ ਸਿੱਖੋ</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">The Challenge in Punjab</span>
+                    <span class="punjabi-content">ਪੰਜਾਬ ਵਿੱਚ ਚੁਣੌਤੀ</span>
+                </h2>
+                <div class="grid grid-2">
+                    <div>
+                        <p class="english-content">
+                            Punjab produces over 20 million tonnes of crop residue annually, with rice straw being the major component. 
+                            Traditional burning practices contribute significantly to air pollution, affecting public health and 
+                            contributing to climate change. Sustainable alternatives are not just environmentally necessary—they're 
+                            economically beneficial for farmers.
+                        </p>
+                        <p class="punjabi-content">
+                            ਪੰਜਾਬ ਸਾਲਾਨਾ 20 ਮਿਲੀਅਨ ਟਨ ਤੋਂ ਵੱਧ ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਪੈਦਾ ਕਰਦਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਚਾਵਲ ਦਾ ਤੂੜੀ ਮੁੱਖ ਹਿੱਸਾ ਹੈ। 
+                            ਪਰੰਪਰਾਗਤ ਸਾੜਨ ਦੇ ਅਭਿਆਸ ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ ਵਿੱਚ ਮਹੱਤਵਪੂਰਨ ਯੋਗਦਾਨ ਪਾਉਂਦੇ ਹਨ, ਜਨਤਕ ਸਿਹਤ ਨੂੰ ਪ੍ਰਭਾਵਿਤ ਕਰਦੇ ਹਨ 
+                            ਅਤੇ ਜਲਵਾਯੂ ਤਬਦੀਲੀ ਵਿੱਚ ਯੋਗਦਾਨ ਪਾਉਂਦੇ ਹਨ।
+                        </p>
+                    </div>
+                    <div>
+                        <img src="/placeholder.svg?height=300&width=400" 
+                             alt="Punjab farmer dealing with crop residue" class="card">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats section">
+            <div class="container">
+                <div class="grid grid-3">
+                    <div class="stat-item">
+                        <span class="stat-number">23M</span>
+                        <p class="english-content">Tonnes of crop residue annually</p>
+                        <p class="punjabi-content">ਟਨ ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਸਾਲਾਨਾ</p>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">70%</span>
+                        <p class="english-content">Reduction in air pollution possible</p>
+                        <p class="punjabi-content">ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ ਵਿੱਚ ਕਮੀ ਸੰਭਵ</p>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">₹15K</span>
+                        <p class="english-content">Average additional income per hectare</p>
+                        <p class="punjabi-content">ਪ੍ਰਤੀ ਹੈਕਟੇਅਰ ਔਸਤ ਵਾਧੂ ਆਮਦਨ</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Techniques Section -->
+        <section id="techniques" class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Sustainable Disposal Techniques</span>
+                    <span class="punjabi-content">ਟਿਕਾਊ ਨਿਪਟਾਰਾ ਤਕਨੀਕਾਂ</span>
+                </h2>
+                <div class="grid grid-3">
+                    <!-- On-field Incorporation -->
+                    <div class="technique-card" onclick="openModal('incorporation-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">On-field Incorporation</h3>
+                        <h3 class="punjabi-content">ਖੇਤ ਵਿੱਚ ਮਿਲਾਉਣਾ</h3>
+                        <p class="english-content">Direct mixing of crop residue into soil using rotavator or disc harrow</p>
+                        <p class="punjabi-content">ਰੋਟਾਵੇਟਰ ਜਾਂ ਡਿਸਕ ਹੈਰੋ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਨੂੰ ਮਿੱਟੀ ਵਿੱਚ ਸਿੱਧਾ ਮਿਲਾਉਣਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+
+                    <!-- Composting -->
+                    <div class="technique-card" onclick="openModal('composting-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">Composting</h3>
+                        <h3 class="punjabi-content">ਖਾਦ ਬਣਾਉਣਾ</h3>
+                        <p class="english-content">Converting crop residue into nutrient-rich organic compost</p>
+                        <p class="punjabi-content">ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਨੂੰ ਪੋਸ਼ਕ ਤੱਤਾਂ ਨਾਲ ਭਰਪੂਰ ਜੈਵਿਕ ਖਾਦ ਵਿੱਚ ਬਦਲਣਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+
+                    <!-- Biochar Production -->
+                    <div class="technique-card" onclick="openModal('biochar-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M9 11H7v9a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9h-2v11H9v-9z"/>
+                                <path d="M13 2L8 7h3v4h4V7h3l-5-5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">Biochar Production</h3>
+                        <h3 class="punjabi-content">ਬਾਇਓਚਾਰ ਉਤਪਾਦਨ</h3>
+                        <p class="english-content">Creating carbon-rich biochar through controlled pyrolysis</p>
+                        <p class="punjabi-content">ਨਿਯੰਤਰਿਤ ਪਾਇਰੋਲਿਸਿਸ ਦੁਆਰਾ ਕਾਰਬਨ-ਭਰਪੂਰ ਬਾਇਓਚਾਰ ਬਣਾਉਣਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+
+                    <!-- Mulching -->
+                    <div class="technique-card" onclick="openModal('mulching-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">Mulching & Zero-Till</h3>
+                        <h3 class="punjabi-content">ਮਲਚਿੰਗ ਅਤੇ ਜ਼ੀਰੋ-ਟਿਲ</h3>
+                        <p class="english-content">Using crop residue as protective soil cover</p>
+                        <p class="punjabi-content">ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਨੂੰ ਮਿੱਟੀ ਦੇ ਸੁਰੱਖਿਆਤਮਕ ਢੱਕਣ ਵਜੋਂ ਵਰਤਣਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+
+                    <!-- Biogas -->
+                    <div class="technique-card" onclick="openModal('biogas-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">Biogas Production</h3>
+                        <h3 class="punjabi-content">ਬਾਇਓਗੈਸ ਉਤਪਾਦਨ</h3>
+                        <p class="english-content">Generating clean energy through anaerobic digestion</p>
+                        <p class="punjabi-content">ਐਨਾਰੋਬਿਕ ਪਾਚਨ ਦੁਆਰਾ ਸਾਫ਼ ਊਰਜਾ ਪੈਦਾ ਕਰਨਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+
+                    <!-- Mechanical Collection -->
+                    <div class="technique-card" onclick="openModal('collection-modal')">
+                        <div class="technique-icon">
+                            <svg width="30" height="30" fill="white" viewBox="0 0 24 24">
+                                <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="english-content">Mechanical Collection</h3>
+                        <h3 class="punjabi-content">ਮਸ਼ੀਨੀ ਇਕੱਠਾ ਕਰਨਾ</h3>
+                        <p class="english-content">Collecting and baling residue for various commercial uses</p>
+                        <p class="punjabi-content">ਵੱਖ-ਵੱਖ ਵਪਾਰਕ ਵਰਤੋਂ ਲਈ ਰਹਿੰਦ-ਖੂੰਹਦ ਇਕੱਠਾ ਕਰਨਾ ਅਤੇ ਗੱਠੜੀ ਬਣਾਉਣਾ</p>
+                        <button class="btn btn-secondary" style="margin-top: 1rem;">
+                            <span class="english-content">Learn More</span>
+                            <span class="punjabi-content">ਹੋਰ ਜਾਣੋ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section id="benefits" class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Environmental & Economic Benefits</span>
+                    <span class="punjabi-content">ਵਾਤਾਵਰਣੀ ਅਤੇ ਆਰਥਿਕ ਫਾਇਦੇ</span>
+                </h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 class="english-content">Environmental Impact</h3>
+                        <h3 class="punjabi-content">ਵਾਤਾਵਰਣੀ ਪ੍ਰਭਾਵ</h3>
+                        <ul class="english-content">
+                            <li>Reduces air pollution by up to 70%</li>
+                            <li>Improves soil health and fertility</li>
+                            <li>Increases carbon sequestration</li>
+                            <li>Conserves water and reduces erosion</li>
+                            <li>Supports biodiversity in agricultural systems</li>
+                        </ul>
+                        <ul class="punjabi-content">
+                            <li>ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ ਨੂੰ 70% ਤੱਕ ਘਟਾਉਂਦਾ ਹੈ</li>
+                            <li>ਮਿੱਟੀ ਦੀ ਸਿਹਤ ਅਤੇ ਉਪਜਾਊਤਾ ਵਿੱਚ ਸੁਧਾਰ</li>
+                            <li>ਕਾਰਬਨ ਸੀਕਵੈਸਟ੍ਰੇਸ਼ਨ ਵਧਾਉਂਦਾ ਹੈ</li>
+                            <li>ਪਾਣੀ ਦੀ ਸੰਭਾਲ ਅਤੇ ਮਿੱਟੀ ਦੇ ਕਟਾਅ ਨੂੰ ਘਟਾਉਂਦਾ ਹੈ</li>
+                            <li>ਖੇਤੀਬਾੜੀ ਪ੍ਰਣਾਲੀਆਂ ਵਿੱਚ ਜੈਵ ਵਿਭਿੰਨਤਾ ਦਾ ਸਮਰਥਨ</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="english-content">Economic Returns</h3>
+                        <h3 class="punjabi-content">ਆਰਥਿਕ ਵਾਪਸੀ</h3>
+                        <ul class="english-content">
+                            <li>Additional income: ₹10,000-20,000 per hectare</li>
+                            <li>Reduced fertilizer costs by 20-30%</li>
+                            <li>Lower irrigation requirements</li>
+                            <li>Government subsidies and incentives available</li>
+                            <li>Long-term soil productivity improvement</li>
+                        </ul>
+                        <ul class="punjabi-content">
+                            <li>ਵਾਧੂ ਆਮਦਨ: ਪ੍ਰਤੀ ਹੈਕਟੇਅਰ ₹10,000-20,000</li>
+                            <li>ਖਾਦ ਦੀ ਲਾਗਤ ਵਿੱਚ 20-30% ਕਮੀ</li>
+                            <li>ਘੱਟ ਸਿੰਚਾਈ ਦੀ ਲੋੜ</li>
+                            <li>ਸਰਕਾਰੀ ਸਬਸਿਡੀ ਅਤੇ ਪ੍ਰੋਤਸਾਹਨ ਉਪਲਬਧ</li>
+                            <li>ਲੰਬੇ ਸਮੇਂ ਲਈ ਮਿੱਟੀ ਦੀ ਉਤਪਾਦਕਤਾ ਵਿੱਚ ਸੁਧਾਰ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Steps -->
+        <section class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Implementation Guide for Punjab Villages</span>
+                    <span class="punjabi-content">ਪੰਜਾਬ ਦੇ ਪਿੰਡਾਂ ਲਈ ਲਾਗੂ ਕਰਨ ਦੀ ਗਾਈਡ</span>
+                </h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 class="english-content">Step-by-Step Process</h3>
+                        <h3 class="punjabi-content">ਕਦਮ-ਦਰ-ਕਦਮ ਪ੍ਰਕਿਰਿਆ</h3>
+                        <ol class="english-content">
+                            <li>Form village cooperative or farmer group</li>
+                            <li>Contact local agriculture extension officer</li>
+                            <li>Apply for government schemes and subsidies</li>
+                            <li>Arrange training sessions for farmers</li>
+                            <li>Procure necessary equipment and materials</li>
+                            <li>Start with pilot implementation</li>
+                            <li>Monitor and evaluate results</li>
+                            <li>Scale up successful techniques</li>
+                        </ol>
+                        <ol class="punjabi-content">
+                            <li>ਪਿੰਡ ਸਹਿਕਾਰੀ ਜਾਂ ਕਿਸਾਨ ਸਮੂਹ ਬਣਾਓ</li>
+                            <li>ਸਥਾਨਕ ਖੇਤੀਬਾੜੀ ਵਿਸਤਾਰ ਅਧਿਕਾਰੀ ਨਾਲ ਸੰਪਰਕ ਕਰੋ</li>
+                            <li>ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ ਅਤੇ ਸਬਸਿਡੀ ਲਈ ਅਰਜ਼ੀ ਦਿਓ</li>
+                            <li>ਕਿਸਾਨਾਂ ਲਈ ਸਿਖਲਾਈ ਸੈਸ਼ਨ ਦਾ ਪ੍ਰਬੰਧ ਕਰੋ</li>
+                            <li>ਲੋੜੀਂਦੇ ਸਾਜ਼ੋ-ਸਾਮਾਨ ਅਤੇ ਸਮੱਗਰੀ ਦੀ ਖਰੀਦ ਕਰੋ</li>
+                            <li>ਪਾਇਲਟ ਲਾਗੂਕਰਨ ਨਾਲ ਸ਼ੁਰੂਆਤ ਕਰੋ</li>
+                            <li>ਨਤੀਜਿਆਂ ਦੀ ਨਿਗਰਾਨੀ ਅਤੇ ਮੁਲਾਂਕਣ ਕਰੋ</li>
+                            <li>ਸਫਲ ਤਕਨੀਕਾਂ ਨੂੰ ਵਧਾਓ</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <!-- Placeholder for map -->
+                        <div class="card" style="height: 300px; display: flex; align-items: center; justify-content: center; background: var(--muted);">
+                            <div style="text-align: center;">
+                                <h4 class="english-content">Interactive Map</h4>
+                                <h4 class="punjabi-content">ਇੰਟਰਐਕਟਿਵ ਨਕਸ਼ਾ</h4>
+                                <p class="english-content">Map integration placeholder - showing successful implementation sites across Punjab</p>
+                                <p class="punjabi-content">ਨਕਸ਼ਾ ਏਕੀਕਰਣ ਪਲੇਸਹੋਲਡਰ - ਪੰਜਾਬ ਭਰ ਵਿੱਚ ਸਫਲ ਲਾਗੂਕਰਨ ਸਾਈਟਾਂ ਦਿਖਾ ਰਿਹਾ ਹੈ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources" class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Resources & Support</span>
+                    <span class="punjabi-content">ਸਰੋਤ ਅਤੇ ਸਹਾਇਤਾ</span>
+                </h2>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h3 class="english-content">Government Schemes</h3>
+                        <h3 class="punjabi-content">ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ</h3>
+                        <ul class="english-content">
+                            <li>Central Sector Scheme on Promotion of Agricultural Mechanization</li>
+                            <li>National Mission for Sustainable Agriculture</li>
+                            <li>Pradhan Mantri Krishi Sinchayee Yojana</li>
+                            <li>State-specific subsidies for crop residue management</li>
+                        </ul>
+                        <ul class="punjabi-content">
+                            <li>ਖੇਤੀਬਾੜੀ ਮਸ਼ੀਨੀਕਰਨ ਦੇ ਪ੍ਰਚਾਰ ਲਈ ਕੇਂਦਰੀ ਸੈਕਟਰ ਸਕੀਮ</li>
+                            <li>ਟਿਕਾਊ ਖੇਤੀਬਾੜੀ ਲਈ ਰਾਸ਼ਟਰੀ ਮਿਸ਼ਨ</li>
+                            <li>ਪ੍ਰਧਾਨ ਮੰਤਰੀ ਕ੍ਰਿਸ਼ੀ ਸਿੰਚਾਈ ਯੋਜਨਾ</li>
+                            <li>ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਪ੍ਰਬੰਧਨ ਲਈ ਰਾਜ-ਵਿਸ਼ੇਸ਼ ਸਬਸਿਡੀਆਂ</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="english-content">Contact Information</h3>
+                        <h3 class="punjabi-content">ਸੰਪਰਕ ਜਾਣਕਾਰੀ</h3>
+                        <div class="english-content">
+                            <p><strong>Punjab Agriculture Department:</strong><br>
+                            Phone: [INSERT LOCAL PHONE NUMBER]<br>
+                            Email: [INSERT EMAIL ADDRESS]</p>
+                            
+                            <p><strong>Krishi Vigyan Kendra:</strong><br>
+                            Helpline: [INSERT HELPLINE NUMBER]</p>
+                            
+                            <p><strong>Emergency Reporting:</strong><br>
+                            Stubble Burning: [INSERT EMERGENCY NUMBER]</p>
+                        </div>
+                        <div class="punjabi-content">
+                            <p><strong>ਪੰਜਾਬ ਖੇਤੀਬਾੜੀ ਵਿਭਾਗ:</strong><br>
+                            ਫੋਨ: [ਸਥਾਨਕ ਫੋਨ ਨੰਬਰ ਪਾਓ]<br>
+                            ਈਮੇਲ: [ਈਮੇਲ ਪਤਾ ਪਾਓ]</p>
+                            
+                            <p><strong>ਕ੍ਰਿਸ਼ੀ ਵਿਗਿਆਨ ਕੇਂਦਰ:</strong><br>
+                            ਹੈਲਪਲਾਈਨ: [ਹੈਲਪਲਾਈਨ ਨੰਬਰ ਪਾਓ]</p>
+                            
+                            <p><strong>ਐਮਰਜੈਂਸੀ ਰਿਪੋਰਟਿੰਗ:</strong><br>
+                            ਤੂੜੀ ਸਾੜਨਾ: [ਐਮਰਜੈਂਸੀ ਨੰਬਰ ਪਾਓ]</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="english-content">Download Resources</h3>
+                        <h3 class="punjabi-content">ਸਰੋਤ ਡਾਊਨਲੋਡ ਕਰੋ</h3>
+                        <ul class="english-content">
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">Farmer's Guide PDF</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">Equipment Specifications</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">Subsidy Application Forms</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">Training Materials</a></li>
+                        </ul>
+                        <ul class="punjabi-content">
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">ਕਿਸਾਨ ਗਾਈਡ PDF</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">ਸਾਜ਼ੋ-ਸਾਮਾਨ ਦੀ ਵਿਸ਼ੇਸ਼ਤਾ</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">ਸਬਸਿਡੀ ਅਰਜ਼ੀ ਫਾਰਮ</a></li>
+                            <li><a href="#" class="btn btn-secondary" style="display: block; margin-bottom: 0.5rem;">ਸਿਖਲਾਈ ਸਮੱਗਰੀ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Frequently Asked Questions</span>
+                    <span class="punjabi-content">ਅਕਸਰ ਪੁੱਛੇ ਜਾਣ ਵਾਲੇ ਸਵਾਲ</span>
+                </h2>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="english-content">What is the cost of implementing these techniques?</span>
+                            <span class="punjabi-content">ਇਹਨਾਂ ਤਕਨੀਕਾਂ ਨੂੰ ਲਾਗੂ ਕਰਨ ਦੀ ਲਾਗਤ ਕੀ ਹੈ?</span>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p class="english-content">
+                                Implementation costs vary by technique. On-field incorporation requires ₹2,000-3,000 per hectare, 
+                                while composting setups range from ₹15,000-50,000 depending on scale. Government subsidies can 
+                                cover 50-80% of equipment costs.
+                            </p>
+                            <p class="punjabi-content">
+                                ਲਾਗੂਕਰਨ ਦੀ ਲਾਗਤ ਤਕਨੀਕ ਅਨੁਸਾਰ ਵੱਖਰੀ ਹੁੰਦੀ ਹੈ। ਖੇਤ ਵਿੱਚ ਮਿਲਾਉਣ ਲਈ ਪ੍ਰਤੀ ਹੈਕਟੇਅਰ ₹2,000-3,000 ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, 
+                                ਜਦਕਿ ਖਾਦ ਬਣਾਉਣ ਦਾ ਸੈਟਅਪ ਪੈਮਾਨੇ ਅਨੁਸਾਰ ₹15,000-50,000 ਤੱਕ ਹੋ ਸਕਦਾ ਹੈ।
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="english-content">How long does it take to see results?</span>
+                            <span class="punjabi-content">ਨਤੀਜੇ ਦਿਖਣ ਵਿੱਚ ਕਿੰਨਾ ਸਮਾਂ ਲੱਗਦਾ ਹੈ?</span>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p class="english-content">
+                                Immediate benefits include reduced air pollution and compliance with regulations. 
+                                Soil health improvements are visible within 1-2 seasons, while economic benefits 
+                                typically manifest within the first year of implementation.
+                            </p>
+                            <p class="punjabi-content">
+                                ਤੁਰੰਤ ਫਾਇਦਿਆਂ ਵਿੱਚ ਹਵਾ ਪ੍ਰਦੂਸ਼ਣ ਵਿੱਚ ਕਮੀ ਅਤੇ ਨਿਯਮਾਂ ਦੀ ਪਾਲਣਾ ਸ਼ਾਮਲ ਹੈ। 
+                                ਮਿੱਟੀ ਦੀ ਸਿਹਤ ਵਿੱਚ ਸੁਧਾਰ 1-2 ਸੀਜ਼ਨ ਵਿੱਚ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ।
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span class="english-content">What government support is available?</span>
+                            <span class="punjabi-content">ਕੀ ਸਰਕਾਰੀ ਸਹਾਇਤਾ ਉਪਲਬਧ ਹੈ?</span>
+                            <span class="accordion-icon">+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p class="english-content">
+                                Multiple schemes provide financial support including subsidies for equipment purchase, 
+                                training programs, and technical assistance. Contact your local agriculture extension 
+                                officer for specific scheme details and application procedures.
+                            </p>
+                            <p class="punjabi-content">
+                                ਕਈ ਯੋਜਨਾਵਾਂ ਵਿੱਤੀ ਸਹਾਇਤਾ ਪ੍ਰਦਾਨ ਕਰਦੀਆਂ ਹਨ ਜਿਸ ਵਿੱਚ ਸਾਜ਼ੋ-ਸਾਮਾਨ ਖਰੀਦਣ ਲਈ ਸਬਸਿਡੀ, 
+                                ਸਿਖਲਾਈ ਪ੍ਰੋਗਰਾਮ, ਅਤੇ ਤਕਨੀਕੀ ਸਹਾਇਤਾ ਸ਼ਾਮਲ ਹੈ।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Report Form Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2>
+                    <span class="english-content">Report Stubble Burning / Get Help</span>
+                    <span class="punjabi-content">ਤੂੜੀ ਸਾੜਨ ਦੀ ਰਿਪੋਰਟ ਕਰੋ / ਮਦਦ ਲਓ</span>
+                </h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <form id="reportForm" onsubmit="handleFormSubmit(event)">
+                            <div class="form-group">
+                                <label for="name" class="form-label">
+                                    <span class="english-content">Name</span>
+                                    <span class="punjabi-content">ਨਾਮ</span>
+                                </label>
+                                <input type="text" id="name" name="name" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="village" class="form-label">
+                                    <span class="english-content">Village</span>
+                                    <span class="punjabi-content">ਪਿੰਡ</span>
+                                </label>
+                                <input type="text" id="village" name="village" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">
+                                    <span class="english-content">Phone Number</span>
+                                    <span class="punjabi-content">ਫੋਨ ਨੰਬਰ</span>
+                                </label>
+                                <input type="tel" id="phone" name="phone" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="gps" class="form-label">
+                                    <span class="english-content">GPS Coordinates (Optional)</span>
+                                    <span class="punjabi-content">GPS ਕੋਆਰਡੀਨੇਟਸ (ਵਿਕਲਪਿਕ)</span>
+                                </label>
+                                <input type="text" id="gps" name="gps" class="form-input" placeholder="Latitude, Longitude">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="issue" class="form-label">
+                                    <span class="english-content">Issue Description</span>
+                                    <span class="punjabi-content">ਸਮੱਸਿਆ ਦਾ ਵਰਣਨ</span>
+                                </label>
+                                <textarea id="issue" name="issue" class="form-input" rows="4" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="image" class="form-label">
+                                    <span class="english-content">Upload Image (Optional)</span>
+                                    <span class="punjabi-content">ਤਸਵੀਰ ਅਪਲੋਡ ਕਰੋ (ਵਿਕਲਪਿਕ)</span>
+                                </label>
+                                <input type="file" id="image" name="image" class="form-input" accept="image/*">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <span class="english-content">Submit Report</span>
+                                <span class="punjabi-content">ਰਿਪੋਰਟ ਜਮ੍ਹਾਂ ਕਰੋ</span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3 class="english-content">Quick Help</h3>
+                        <h3 class="punjabi-content">ਤੁਰੰਤ ਮਦਦ</h3>
+                        <div class="english-content">
+                            <p><strong>Emergency Helpline:</strong><br>
+                            Call: [INSERT EMERGENCY NUMBER]</p>
+                            
+                            <p><strong>Technical Support:</strong><br>
+                            WhatsApp: [INSERT WHATSAPP NUMBER]<br>
+                            Email: support@punjabgreen.gov.in</p>
+                            
+                            <p><strong>Equipment Rental:</strong><br>
+                            Find nearby equipment rental services and cooperative societies.</p>
+                        </div>
+                        <div class="punjabi-content">
+                            <p><strong>ਐਮਰਜੈਂਸੀ ਹੈਲਪਲਾਈਨ:</strong><br>
+                            ਕਾਲ ਕਰੋ: [ਐਮਰਜੈਂਸੀ ਨੰਬਰ ਪਾਓ]</p>
+                            
+                            <p><strong>ਤਕਨੀਕੀ ਸਹਾਇਤਾ:</strong><br>
+                            WhatsApp: [WhatsApp ਨੰਬਰ ਪਾਓ]<br>
+                            ਈਮੇਲ: support@punjabgreen.gov.in</p>
+                            
+                            <p><strong>ਸਾਜ਼ੋ-ਸਾਮਾਨ ਕਿਰਾਏ 'ਤੇ:</strong><br>
+                            ਨੇੜਲੇ ਸਾਜ਼ੋ-ਸਾਮਾਨ ਕਿਰਾਇਆ ਸੇਵਾਵਾਂ ਅਤੇ ਸਹਿਕਾਰੀ ਸਮਾਜ ਲੱਭੋ।</p>
+                        </div>
+                        
+                        <button class="btn btn-secondary" onclick="getCurrentLocation()" style="margin-top: 1rem;">
+                            <span class="english-content">Get My Location</span>
+                            <span class="punjabi-content">ਮੇਰਾ ਸਥਾਨ ਲਓ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals for Techniques -->
+    <!-- Adding detailed modals for each technique -->
+    <!-- On-field Incorporation Modal -->
+    <div id="incorporation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">On-field Incorporation</span>
+                    <span class="punjabi-content">ਖੇਤ ਵਿੱਚ ਮਿਲਾਉਣਾ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('incorporation-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Process & Equipment</h4>
+                    <ul>
+                        <li><strong>Equipment:</strong> Rotavator, disc harrow, or cultivator</li>
+                        <li><strong>Timing:</strong> Within 10-15 days after harvest</li>
+                        <li><strong>Depth:</strong> 15-20 cm soil incorporation</li>
+                        <li><strong>Moisture:</strong> Adequate soil moisture required</li>
+                    </ul>
+                    
+                    <h4>Benefits</h4>
+                    <ul>
+                        <li>Improves soil organic matter by 0.5-1%</li>
+                        <li>Enhances soil structure and water retention</li>
+                        <li>Reduces fertilizer requirement by 25%</li>
+                        <li>Cost-effective: ₹2,000-3,000 per hectare</li>
+                    </ul>
+                    
+                    <h4>Best Practices</h4>
+                    <ul>
+                        <li>Chop residue to 5-10 cm pieces before incorporation</li>
+                        <li>Add nitrogen fertilizer to aid decomposition</li>
+                        <li>Maintain proper soil moisture during decomposition</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਪ੍ਰਕਿਰਿਆ ਅਤੇ ਸਾਜ਼ੋ-ਸਾਮਾਨ</h4>
+                    <ul>
+                        <li><strong>ਸਾਜ਼ੋ-ਸਾਮਾਨ:</strong> ਰੋਟਾਵੇਟਰ, ਡਿਸਕ ਹੈਰੋ, ਜਾਂ ਕਲਟੀਵੇਟਰ</li>
+                        <li><strong>ਸਮਾਂ:</strong> ਵਾਢੀ ਤੋਂ 10-15 ਦਿਨ ਦੇ ਅੰਦਰ</li>
+                        <li><strong>ਡੂੰਘਾਈ:</strong> 15-20 ਸੈਂਟੀਮੀਟਰ ਮਿੱਟੀ ਵਿੱਚ ਮਿਲਾਉਣਾ</li>
+                        <li><strong>ਨਮੀ:</strong> ਮਿੱਟੀ ਵਿੱਚ ਢੁਕਵੀਂ ਨਮੀ ਲੋੜੀਂਦੀ</li>
+                    </ul>
+                    
+                    <h4>ਫਾਇਦੇ</h4>
+                    <ul>
+                        <li>ਮਿੱਟੀ ਦੇ ਜੈਵਿਕ ਪਦਾਰਥ ਵਿੱਚ 0.5-1% ਸੁਧਾਰ</li>
+                        <li>ਮਿੱਟੀ ਦੀ ਬਣਤਰ ਅਤੇ ਪਾਣੀ ਸੰਭਾਲਣ ਦੀ ਸਮਰੱਥਾ ਵਧਾਉਂਦਾ ਹੈ</li>
+                        <li>ਖਾਦ ਦੀ ਲੋੜ 25% ਘਟਾਉਂਦਾ ਹੈ</li>
+                        <li>ਲਾਗਤ-ਪ੍ਰਭਾਵਸ਼ਾਲੀ: ਪ੍ਰਤੀ ਹੈਕਟੇਅਰ ₹2,000-3,000</li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Detailed Guide (PDF)</span>
+                    <span class="punjabi-content">ਵਿਸਤ੍ਰਿਤ ਗਾਈਡ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Composting Modal -->
+    <div id="composting-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">Composting</span>
+                    <span class="punjabi-content">ਖਾਦ ਬਣਾਉਣਾ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('composting-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Windrow Composting Process</h4>
+                    <ol>
+                        <li>Collect and chop crop residue to 2-5 cm pieces</li>
+                        <li>Mix with animal manure (1:3 ratio)</li>
+                        <li>Form windrows 1.5m wide, 1m high</li>
+                        <li>Turn every 15 days for proper aeration</li>
+                        <li>Maintain 50-60% moisture content</li>
+                        <li>Ready in 90-120 days</li>
+                    </ol>
+                    
+                    <h4>In-Vessel Composting</h4>
+                    <ul>
+                        <li>Faster process: 30-45 days</li>
+                        <li>Better temperature and moisture control</li>
+                        <li>Higher quality compost output</li>
+                        <li>Suitable for community-level operations</li>
+                    </ul>
+                    
+                    <h4>Economic Returns</h4>
+                    <ul>
+                        <li>Compost value: ₹3-5 per kg</li>
+                        <li>Revenue potential: ₹15,000-25,000 per hectare</li>
+                        <li>Reduces fertilizer costs by 30-40%</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਵਿੰਡਰੋ ਖਾਦ ਬਣਾਉਣ ਦੀ ਪ੍ਰਕਿਰਿਆ</h4>
+                    <ol>
+                        <li>ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਇਕੱਠਾ ਕਰੋ ਅਤੇ 2-5 ਸੈਂਟੀਮੀਟਰ ਦੇ ਟੁਕੜੇ ਕਰੋ</li>
+                        <li>ਪਸ਼ੂਆਂ ਦੀ ਖਾਦ ਨਾਲ ਮਿਲਾਓ (1:3 ਅਨੁਪਾਤ)</li>
+                        <li>1.5 ਮੀਟਰ ਚੌੜੇ, 1 ਮੀਟਰ ਉੱਚੇ ਢੇਰ ਬਣਾਓ</li>
+                        <li>ਸਹੀ ਹਵਾਦਾਰੀ ਲਈ ਹਰ 15 ਦਿਨ ਬਾਅਦ ਪਲਟੋ</li>
+                        <li>50-60% ਨਮੀ ਬਣਾਈ ਰੱਖੋ</li>
+                        <li>90-120 ਦਿਨਾਂ ਵਿੱਚ ਤਿਆਰ</li>
+                    </ol>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Composting Manual (PDF)</span>
+                    <span class="punjabi-content">ਖਾਦ ਬਣਾਉਣ ਦੀ ਮੈਨੁਅਲ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biochar Modal -->
+    <div id="biochar-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">Biochar Production</span>
+                    <span class="punjabi-content">ਬਾਇਓਚਾਰ ਉਤਪਾਦਨ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('biochar-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Small-Scale Kiln Process</h4>
+                    <ul>
+                        <li><strong>Equipment:</strong> Simple metal drum or brick kiln</li>
+                        <li><strong>Temperature:</strong> 400-600°C controlled pyrolysis</li>
+                        <li><strong>Time:</strong> 4-8 hours processing time</li>
+                        <li><strong>Yield:</strong> 20-30% biochar from crop residue</li>
+                    </ul>
+                    
+                    <h4>Carbon Sequestration Benefits</h4>
+                    <ul>
+                        <li>Stores carbon in soil for 100+ years</li>
+                        <li>Reduces greenhouse gas emissions</li>
+                        <li>Improves soil pH and nutrient retention</li>
+                        <li>Increases crop yields by 10-20%</li>
+                    </ul>
+                    
+                    <h4>Safety Considerations</h4>
+                    <ul>
+                        <li>Proper ventilation required</li>
+                        <li>Fire safety measures essential</li>
+                        <li>Training needed for safe operation</li>
+                        <li>Environmental permits may be required</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਛੋਟੇ ਪੈਮਾਨੇ ਦੀ ਭੱਠੀ ਪ੍ਰਕਿਰਿਆ</h4>
+                    <ul>
+                        <li><strong>ਸਾਜ਼ੋ-ਸਾਮਾਨ:</strong> ਸਾਧਾ ਧਾਤੂ ਡਰਮ ਜਾਂ ਇੱਟ ਦੀ ਭੱਠੀ</li>
+                        <li><strong>ਤਾਪਮਾਨ:</strong> 400-600°C ਨਿਯੰਤਰਿਤ ਪਾਇਰੋਲਿਸਿਸ</li>
+                        <li><strong>ਸਮਾਂ:</strong> 4-8 ਘੰਟੇ ਪ੍ਰੋਸੈਸਿੰਗ ਸਮਾਂ</li>
+                        <li><strong>ਉਤਪਾਦਨ:</strong> ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਤੋਂ 20-30% ਬਾਇਓਚਾਰ</li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Biochar Production Guide (PDF)</span>
+                    <span class="punjabi-content">ਬਾਇਓਚਾਰ ਉਤਪਾਦਨ ਗਾਈਡ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mulching Modal -->
+    <div id="mulching-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">Mulching & Zero-Till Farming</span>
+                    <span class="punjabi-content">ਮਲਚਿੰਗ ਅਤੇ ਜ਼ੀਰੋ-ਟਿਲ ਖੇਤੀ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('mulching-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Mulching Process</h4>
+                    <ul>
+                        <li>Spread crop residue evenly across field</li>
+                        <li>Maintain 5-10 cm thick layer</li>
+                        <li>Use zero-till seed drill for next crop</li>
+                        <li>No soil disturbance required</li>
+                    </ul>
+                    
+                    <h4>Equipment Required</h4>
+                    <ul>
+                        <li>Zero-till seed drill</li>
+                        <li>Straw spreader (optional)</li>
+                        <li>Happy seeder for wheat after rice</li>
+                    </ul>
+                    
+                    <h4>Soil Benefits</h4>
+                    <ul>
+                        <li>Reduces soil erosion by 80%</li>
+                        <li>Conserves soil moisture by 40%</li>
+                        <li>Suppresses weed growth</li>
+                        <li>Improves soil temperature regulation</li>
+                        <li>Enhances beneficial soil organisms</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਮਲਚਿੰਗ ਪ੍ਰਕਿਰਿਆ</h4>
+                    <ul>
+                        <li>ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ ਨੂੰ ਖੇਤ ਵਿੱਚ ਬਰਾਬਰ ਫੈਲਾਓ</li>
+                        <li>5-10 ਸੈਂਟੀਮੀਟਰ ਮੋਟੀ ਪਰਤ ਬਣਾਈ ਰੱਖੋ</li>
+                        <li>ਅਗਲੀ ਫਸਲ ਲਈ ਜ਼ੀਰੋ-ਟਿਲ ਸੀਡ ਡ੍ਰਿਲ ਵਰਤੋ</li>
+                        <li>ਮਿੱਟੀ ਨੂੰ ਪਰੇਸ਼ਾਨ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ</li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Zero-Till Guide (PDF)</span>
+                    <span class="punjabi-content">ਜ਼ੀਰੋ-ਟਿਲ ਗਾਈਡ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Biogas Modal -->
+    <div id="biogas-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">Biogas Production</span>
+                    <span class="punjabi-content">ਬਾਇਓਗੈਸ ਉਤਪਾਦਨ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('biogas-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Community Digesters</h4>
+                    <ul>
+                        <li><strong>Capacity:</strong> 50-100 cubic meter digesters</li>
+                        <li><strong>Input:</strong> Crop residue + animal waste</li>
+                        <li><strong>Gas production:</strong> 200-400 cubic meters/day</li>
+                        <li><strong>Retention time:</strong> 30-40 days</li>
+                    </ul>
+                    
+                    <h4>Energy & Slurry Benefits</h4>
+                    <ul>
+                        <li>Clean cooking gas for 20-30 families</li>
+                        <li>Electricity generation potential</li>
+                        <li>Nutrient-rich liquid fertilizer (slurry)</li>
+                        <li>Reduces dependency on LPG/firewood</li>
+                    </ul>
+                    
+                    <h4>Economic Viability</h4>
+                    <ul>
+                        <li>Initial investment: ₹3-5 lakhs for community plant</li>
+                        <li>Payback period: 3-5 years</li>
+                        <li>Annual savings: ₹1-2 lakhs per village</li>
+                        <li>Government subsidies available up to 50%</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਕਮਿਊਨਿਟੀ ਡਾਇਜੈਸਟਰ</h4>
+                    <ul>
+                        <li><strong>ਸਮਰੱਥਾ:</strong> 50-100 ਘਣ ਮੀਟਰ ਡਾਇਜੈਸਟਰ</li>
+                        <li><strong>ਇਨਪੁਟ:</strong> ਫਸਲ ਰਹਿੰਦ-ਖੂੰਹਦ + ਪਸ਼ੂਆਂ ਦਾ ਰਹਿੰਦ-ਖੂੰਹਦ</li>
+                        <li><strong>ਗੈਸ ਉਤਪਾਦਨ:</strong> 200-400 ਘਣ ਮੀਟਰ/ਦਿਨ</li>
+                        <li><strong>ਰੋਕਣ ਦਾ ਸਮਾਂ:</strong> 30-40 ਦਿਨ</li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Biogas Setup Guide (PDF)</span>
+                    <span class="punjabi-content">ਬਾਇਓਗੈਸ ਸੈਟਅਪ ਗਾਈਡ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mechanical Collection Modal -->
+    <div id="collection-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <span class="english-content">Mechanical Collection & Baling</span>
+                    <span class="punjabi-content">ਮਸ਼ੀਨੀ ਇਕੱਠਾ ਕਰਨਾ ਅਤੇ ਗੱਠੜੀ ਬਣਾਉਣਾ</span>
+                </h3>
+                <span class="modal-close" onclick="closeModal('collection-modal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="english-content">
+                    <h4>Collection Equipment</h4>
+                    <ul>
+                        <li><strong>Straw reaper:</strong> Cuts and collects straw</li>
+                        <li><strong>Rake:</strong> Gathers scattered residue</li>
+                        <li><strong>Baler:</strong> Compresses into bales</li>
+                        <li><strong>Bale wrapper:</strong> Weather protection</li>
+                    </ul>
+                    
+                    <h4>Commercial Uses</h4>
+                    <ul>
+                        <li><strong>Mushroom substrate:</strong> ₹3-4 per kg</li>
+                        <li><strong>Animal fodder:</strong> ₹2-3 per kg</li>
+                        <li><strong>Packaging material:</strong> ₹1-2 per kg</li>
+                        <li><strong>Construction material:</strong> Straw bale construction</li>
+                        <li><strong>Paper industry:</strong> Raw material supply</li>
+                    </ul>
+                    
+                    <h4>Revenue Potential</h4>
+                    <ul>
+                        <li>Straw value: ₹1,500-3,000 per ton</li>
+                        <li>Collection cost: ₹800-1,200 per ton</li>
+                        <li>Net profit: ₹700-1,800 per ton</li>
+                        <li>Per hectare income: ₹8,000-15,000</li>
+                    </ul>
+                </div>
+                <div class="punjabi-content">
+                    <h4>ਇਕੱਠਾ ਕਰਨ ਦਾ ਸਾਜ਼ੋ-ਸਾਮਾਨ</h4>
+                    <ul>
+                        <li><strong>ਤੂੜੀ ਰੀਪਰ:</strong> ਤੂੜੀ ਕੱਟਦਾ ਅਤੇ ਇਕੱਠਾ ਕਰਦਾ ਹੈ</li>
+                        <li><strong>ਰੇਕ:</strong> ਖਿੰਡੇ ਹੋਏ ਰਹਿੰਦ-ਖੂੰਹਦ ਨੂੰ ਇਕੱਠਾ ਕਰਦਾ ਹੈ</li>
+                        <li><strong>ਬੇਲਰ:</strong> ਗੱਠੜੀਆਂ ਵਿੱਚ ਦਬਾਉਂਦਾ ਹੈ</li>
+                        <li><strong>ਬੇਲ ਰੈਪਰ:</strong> ਮੌਸਮ ਤੋਂ ਸੁਰੱਖਿਆ</li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-primary" style="margin-top: 1rem;">
+                    <span class="english-content">Download Collection Guide (PDF)</span>
+                    <span class="punjabi-content">ਇਕੱਠਾ ਕਰਨ ਦੀ ਗਾਈਡ ਡਾਊਨਲੋਡ ਕਰੋ (PDF)</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="grid grid-3">
+                <div>
+                    <h4 class="english-content">Punjab Green Farming Initiative</h4>
+                    <h4 class="punjabi-content">ਪੰਜਾਬ ਹਰਿਆਲੀ ਖੇਤੀ ਪਹਿਲਕਦਮੀ</h4>
+                    <p class="english-content">
+                        Promoting sustainable agriculture practices for a cleaner, healthier Punjab.
+                    </p>
+                    <p class="punjabi-content">
+                        ਇੱਕ ਸਾਫ਼, ਸਿਹਤਮੰਦ ਪੰਜਾਬ ਲਈ ਟਿਕਾਊ ਖੇਤੀਬਾੜੀ ਅਭਿਆਸਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
+                    </p>
+                </div>
+                <div>
+                    <h4 class="english-content">Quick Links</h4>
+                    <h4 class="punjabi-content">ਤੁਰੰਤ ਲਿੰਕ</h4>
+                    <ul style="list-style: none;">
+                        <li><a href="#overview" class="english-content">Overview</a><a href="#overview" class="punjabi-content">ਸੰਖੇਪ</a></li>
+                        <li><a href="#techniques" class="english-content">Techniques</a><a href="#techniques" class="punjabi-content">ਤਕਨੀਕਾਂ</a></li>
+                        <li><a href="#benefits" class="english-content">Benefits</a><a href="#benefits" class="punjabi-content">ਫਾਇਦੇ</a></li>
+                        <li><a href="#resources" class="english-content">Resources</a><a href="#resources" class="punjabi-content">ਸਰੋਤ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="english-content">Accessibility</h4>
+                    <h4 class="punjabi-content">ਪਹੁੰਚਯੋਗਤਾ</h4>
+                    <p class="english-content">
+                        This website is designed to be accessible to all users. 
+                        For assistance, contact our support team.
+                    </p>
+                    <p class="punjabi-content">
+                        ਇਹ ਵੈਬਸਾਈਟ ਸਾਰੇ ਉਪਭੋਗਤਾਵਾਂ ਲਈ ਪਹੁੰਚਯੋਗ ਬਣਾਈ ਗਈ ਹੈ। 
+                        ਸਹਾਇਤਾ ਲਈ, ਸਾਡੀ ਸਹਾਇਤਾ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।
+                    </p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <p class="english-content">
+                    © 2024 Punjab Green Farming Initiative. All rights reserved. 
+                    | <a href="#" style="color: var(--primary);">Privacy Policy</a> 
+                    | <a href="#" style="color: var(--primary);">Terms of Service</a>
+                </p>
+                <p class="punjabi-content">
+                    © 2024 ਪੰਜਾਬ ਹਰਿਆਲੀ ਖੇਤੀ ਪਹਿਲਕਦਮੀ। ਸਾਰੇ ਅਧਿਕਾਰ ਸੁਰੱਖਿਤ। 
+                    | <a href="#" style="color: var(--primary);">ਗੋਪਨੀਯਤਾ ਨੀਤੀ</a> 
+                    | <a href="#" style="color: var(--primary);">ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Adding complete JavaScript functionality -->
+    <script>
+        // Language toggle functionality
+        let currentLanguage = 'english';
+        
+        function toggleLanguage() {
+            const englishElements = document.querySelectorAll('.english-content');
+            const punjabiElements = document.querySelectorAll('.punjabi-content');
+            
+            if (currentLanguage === 'english') {
+                englishElements.forEach(el => el.style.display = 'none');
+                punjabiElements.forEach(el => el.style.display = 'block');
+                currentLanguage = 'punjabi';
+                document.documentElement.lang = 'pa';
+            } else {
+                englishElements.forEach(el => el.style.display = 'block');
+                punjabiElements.forEach(el => el.style.display = 'none');
+                currentLanguage = 'english';
+                document.documentElement.lang = 'en';
+            }
+        }
+
+        // Initialize language display
+        function initializeLanguage() {
+            const punjabiElements = document.querySelectorAll('.punjabi-content');
+            punjabiElements.forEach(el => el.style.display = 'none');
+        }
+
+        // Modal functionality
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                
+                // Focus management for accessibility
+                const firstFocusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                if (firstFocusable) {
+                    firstFocusable.focus();
+                }
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Keyboard navigation for modals
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal[style*="block"]');
+                openModals.forEach(modal => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        }
+
+        // Accordion functionality
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+            const isOpen = content.style.display === 'block';
+            
+            // Close all accordions
+            document.querySelectorAll('.accordion-content').forEach(item => {
+                item.style.display = 'none';
+            });
+            document.querySelectorAll('.accordion-icon').forEach(icon => {
+                icon.textContent = '+';
+            });
+            
+            // Open clicked accordion if it was closed
+            if (!isOpen) {
+                content.style.display = 'block';
+                icon.textContent = '−';
+            }
+        }
+
+        // Form handling
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Basic validation
+            if (!data.name || !data.village || !data.phone || !data.issue) {
+                alert(currentLanguage === 'english' ? 
+                    'Please fill in all required fields.' : 
+                    'ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਲੋੜੀਂਦੇ ਖੇਤਰ ਭਰੋ।');
+                return;
+            }
+            
+            // Phone validation
+            const phoneRegex = /^[6-9]\d{9}$/;
+            if (!phoneRegex.test(data.phone)) {
+                alert(currentLanguage === 'english' ? 
+                    'Please enter a valid 10-digit phone number.' : 
+                    'ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਵੈਧ 10-ਅੰਕ ਫੋਨ ਨੰਬਰ ਦਾਖਲ ਕਰੋ।');
+                return;
+            }
+            
+            // Simulate form submission
+            console.log('[v0] Form submitted with data:', data);
+            
+            alert(currentLanguage === 'english' ? 
+                'Thank you! Your report has been submitted successfully. We will contact you soon.' : 
+                'ਧੰਨਵਾਦ! ਤੁਹਾਡੀ ਰਿਪੋਰਟ ਸਫਲਤਾਪੂਰਵਕ ਜਮ੍ਹਾਂ ਹੋ ਗਈ ਹੈ। ਅਸੀਂ ਜਲਦੀ ਹੀ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਾਂਗੇ।');
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Geolocation functionality
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude.toFixed(6);
+                        const lng = position.coords.longitude.toFixed(6);
+                        const gpsInput = document.getElementById('gps');
+                        if (gpsInput) {
+                            gpsInput.value = `${lat}, ${lng}`;
+                        }
+                        
+                        alert(currentLanguage === 'english' ? 
+                            'Location captured successfully!' : 
+                            'ਸਥਾਨ ਸਫਲਤਾਪੂਰਵਕ ਕੈਪਚਰ ਹੋਇਆ!');
+                    },
+                    function(error) {
+                        console.error('[v0] Geolocation error:', error);
+                        alert(currentLanguage === 'english' ? 
+                            'Unable to get your location. Please enter manually.' : 
+                            'ਤੁਹਾਡਾ ਸਥਾਨ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਮਰੱਥ। ਕਿਰਪਾ ਕਰਕੇ ਹੱਥੀਂ ਦਾਖਲ ਕਰੋ।');
+                    }
+                );
+            } else {
+                alert(currentLanguage === 'english' ? 
+                    'Geolocation is not supported by this browser.' : 
+                    'ਇਸ ਬ੍ਰਾਊਜ਼ਰ ਦੁਆਰਾ ਜੀਓਲੋਕੇਸ਼ਨ ਸਮਰਥਿਤ ਨਹੀਂ ਹੈ।');
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLanguage();
+            
+            // Add keyboard navigation for technique cards
+            document.querySelectorAll('.technique-card').forEach(card => {
+                card.setAttribute('tabindex', '0');
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+            });
+            
+            // Add focus indicators for better accessibility
+            document.querySelectorAll('button, a, input, textarea, select').forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.style.outline = '2px solid var(--primary)';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.style.outline = '';
+                    this.style.outlineOffset = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

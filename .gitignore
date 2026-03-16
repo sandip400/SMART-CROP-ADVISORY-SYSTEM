@@ -1,0 +1,26 @@
+# Python caches
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.env
+
+# Large datasets & zips
+*.zip
+archive/
+Plant_leaf_diseases_dataset_with_augmentation/
+soil_recommendations.csv
+
+# DB and logs
+db.sqlite3
+*.log
+
+# Models (optional but recommended to exclude if pushing to simple repos)
+# soil_model.pth
+# plant_disease_model.keras
+
+# DeepFace caches (if any)
+.deepface/
+~/.deepface/

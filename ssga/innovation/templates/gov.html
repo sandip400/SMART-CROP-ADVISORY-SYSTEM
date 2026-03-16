@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Government Schemes Dashboard</title>
+  <meta name="description" content="Browse government schemes, check eligibility, estimate subsidies, and find helplines." />
+
+  <style>
+    :root{
+      --primary: #059669;   /* emerald-600 */
+      --accent:  #0284c7;   /* sky-600 */
+      --bg:      #ffffff;   /* neutral 0 */
+      --muted:   #f3f4f6;   /* gray-100 */
+      --fg:      #1f2937;   /* gray-800 */
+      --radius:  10px;
+      --shadow:  0 1px 2px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    /* Reset-ish */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--fg);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid var(--muted);
+    }
+    .site-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: white;
+      font-size: 18px;
+      box-shadow: var(--shadow);
+    }
+    nav .nav-link { font-weight: 600; color: var(--fg); }
+    nav .nav-link:hover { color: var(--primary); text-decoration: none; }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: 24px 0;
+    }
+    .hero-card {
+      background: var(--muted);
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { color: #4b5563; }
+
+    .controls {
+      display: grid;
+      gap: 10px;
+    }
+    .row {
+      display: grid;
+      gap: 8px;
+    }
+    .row-2 { grid-template-columns: 1fr; }
+    .row-3 { grid-template-columns: 1fr; }
+    @media (min-width: 720px) {
+      .row-2 { grid-template-columns: 1fr 1fr; }
+      .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .input, .select, .button, .chip {
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      color: var(--fg);
+      height: 40px;
+      padding: 8px 12px;
+      font: inherit;
+    }
+    .input::placeholder { color: #9ca3af; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.02s ease, background-color 0.2s ease, color 0.2s ease;
+      user-select: none;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button:active { transform: translateY(0); }
+
+    .button-primary { background: var(--primary); color: white; border-color: var(--primary); }
+    .button-secondary { background: var(--accent); color: white; border-color: var(--accent); }
+    .button-ghost { background: white; color: var(--fg); }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      height: auto;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      background: white;
+      border-color: #e5e7eb;
+      cursor: pointer;
+    }
+    .chip[aria-pressed="true"] {
+      background: #ecfdf5;
+      color: var(--primary);
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+    .section h2 {
+      font-size: 20px;
+      margin: 0 0 8px 0;
+    }
+    .section .sub {
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    @media (min-width: 860px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .card-header { display: flex; align-items: center; gap: 12px; }
+    .card img.thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #e5e7eb;
+      background: var(--muted);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      border: 1px solid #d1fae5;
+      color: var(--primary);
+      background: #ecfdf5;
+    }
+    .muted { color: #6b7280; }
+
+    .list { display: grid; gap: 10px; }
+    .list-item { display: grid; gap: 8px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; }
+    @media (min-width: 700px){
+      .list-item { grid-template-columns: 1fr auto; align-items: center; }
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .kpi {
+      background: var(--muted);
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .kpi .num { font-size: 18px; font-weight: 800; color: var(--primary); }
+
+    .tools { display: grid; gap: 12px; }
+    @media (min-width: 900px){
+      .tools { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .tool { padding: 12px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: var(--shadow); display: grid; gap: 10px; }
+
+    .faq details {
+      border: 1px solid #e5e7eb; border-radius: 10px; background: white; padding: 10px;
+    }
+    .faq details summary { cursor: pointer; font-weight: 600; outline: none; }
+    .faq details + details { margin-top: 8px; }
+
+    .downloads, .helplines { display: grid; gap: 10px; }
+    @media (min-width: 800px){
+      .helplines { grid-template-columns: 1fr 1fr 1fr; }
+      .downloads { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0;
+      display: none;
+      align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.45);
+      padding: 16px;
+      z-index: 50;
+    }
+    .modal[open] { display: flex; }
+    .modal-card {
+      width: 100%;
+      max-width: 680px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+      padding: 16px;
+    }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; }
+    .close-x {
+      border: none; background: transparent; cursor: pointer; font-size: 20px; line-height: 1; padding: 8px; color: #6b7280;
+    }
+    .close-x:hover { color: var(--fg); }
+
+    footer {
+      margin-top: 28px;
+      padding: 16px 0 28px;
+      color: #6b7280;
+      border-top: 1px solid var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="container site-header-inner">
+      <div class="brand" aria-label="Site">
+        <div class="brand-badge" aria-hidden="true">GS</div>
+        <div>
+          <div>Government Schemes Dashboard</div>
+          <div class="muted" style="font-size: 12px;">Discover, check eligibility, and apply</div>
+        </div>
+      </div>
+      <nav aria-label="Primary">
+        <a class="nav-link" href="#browse">Browse</a>
+        <span aria-hidden="true"> · </span>
+        <a class="nav-link" href="#tools">Tools</a>
+        <span aria-hidden="true"> · </span>
+        <a class="nav-link" href="#help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="content" role="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-card">
+        <h1 id="hero-title" class="title text-balance">Find schemes and subsidies you can benefit from</h1>
+        <p class="subtitle">Search by name, filter by state and category, then apply directly.</p>
+        <div class="controls">
+          <div class="row row-2" role="search">
+            <label class="sr-only" for="search">Search schemes</label>
+            <input id="search" class="input" placeholder="Search by scheme name or keywords (e.g., farmer, education, loan)" />
+            <select id="state" class="select" aria-label="Filter by state">
+              <option value="">All States/UTs</option>
+              <option>Andhra Pradesh</option>
+              <option>Delhi</option>
+              <option>Gujarat</option>
+              <option>Karnataka</option>
+              <option>Maharashtra</option>
+              <option>Tamil Nadu</option>
+              <option>Uttar Pradesh</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+
+          <div class="chips" aria-label="Filter by category" id="categoryChips">
+            <button class="chip" data-cat="Agriculture" aria-pressed="false">Agriculture</button>
+            <button class="chip" data-cat="Education" aria-pressed="false">Education</button>
+            <button class="chip" data-cat="Health" aria-pressed="false">Health</button>
+            <button class="chip" data-cat="Business" aria-pressed="false">Business</button>
+            <button class="chip" data-cat="Women" aria-pressed="false">Women</button>
+            <button class="chip" data-cat="Rural Development" aria-pressed="false">Rural Development</button>
+          </div>
+
+          <div class="row row-3">
+            <button id="resetFilters" class="button button-ghost" type="button">Reset Filters</button>
+            <button id="exportResults" class="button button-ghost" type="button">Export Results (CSV)</button>
+            <a class="button button-secondary" href="#tools">Try Eligibility & Calculator</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+    <section class="section" aria-label="Highlights">
+      <div class="kpis">
+        <div class="kpi" aria-live="polite"><div class="num" id="kpiTotal">0</div><div class="muted">Total Schemes</div></div>
+        <div class="kpi" aria-live="polite"><div class="num" id="kpiFeatured">0</div><div class="muted">Featured</div></div>
+      </div>
+    </section>
+
+   
+    <section class="section" aria-labelledby="featured-title">
+      <h2 id="featured-title">Featured schemes</h2>
+      <p class="sub">Handpicked opportunities with high impact and simpler processes.</p>
+
+      <div class="grid grid-3" id="featuredGrid" role="list"></div>
+    </section>
+
+
+    <section id="browse" class="section" aria-labelledby="browse-title">
+      <h2 id="browse-title">Browse results</h2>
+      <p class="sub">Filtered by your search, state and categories.</p>
+      <div class="list" id="resultsList" role="list"></div>
+    </section>
+
+  
+    <section id="tools" class="section" aria-labelledby="tools-title">
+      <h2 id="tools-title">Tools</h2>
+      <p class="sub">Check eligibility, estimate subsidy, and set reminders.</p>
+      <div class="tools">
+
+        <div class="tool" aria-labelledby="elig-title">
+          <h3 id="elig-title" style="margin:0;">Eligibility checker</h3>
+          <div class="row row-2" style="margin-top:8px;">
+            <input class="input" id="eligAge" type="number" min="0" placeholder="Age (years)" />
+            <input class="input" id="eligIncome" type="number" min="0" placeholder="Annual Household Income (₹)" />
+          </div>
+          <div class="row row-2">
+            <select class="select" id="eligOccupation" aria-label="Occupation">
+              <option value="">Occupation</option>
+              <option>Farmer</option>
+              <option>Student</option>
+              <option>Entrepreneur</option>
+              <option>Health Worker</option>
+            </select>
+            <select class="select" id="eligState" aria-label="State">
+              <option value="">State/UT</option>
+              <option>Andhra Pradesh</option>
+              <option>Delhi</option>
+              <option>Gujarat</option>
+              <option>Karnataka</option>
+              <option>Maharashtra</option>
+              <option>Tamil Nadu</option>
+              <option>Uttar Pradesh</option>
+              <option>West Bengal</option>
+            </select>
+          </div>
+          <button class="button button-primary" id="runEligibility" type="button">Check eligibility</button>
+          <div id="eligOutput" class="muted" aria-live="polite"></div>
+        </div>
+
+      
+        <div class="tool" aria-labelledby="calc-title">
+          <h3 id="calc-title" style="margin:0;">Subsidy calculator</h3>
+          <div class="row row-2" style="margin-top:8px;">
+            <select class="select" id="calcType" aria-label="Subsidy type">
+              <option value="loan">Loan Interest Subsidy</option>
+              <option value="equipment">Equipment Purchase Subsidy</option>
+              <option value="education">Education Grant</option>
+            </select>
+            <input class="input" id="calcAmount" type="number" min="0" placeholder="Amount (₹)" />
+          </div>
+          <div class="row row-2">
+            <input class="input" id="calcRate" type="number" min="0" max="100" placeholder="Subsidy % (e.g., 35)" />
+            <input class="input" id="calcYears" type="number" min="1" placeholder="Years (for loan only)" />
+          </div>
+          <button class="button button-primary" id="runCalc" type="button">Calculate</button>
+          <div id="calcOutput" class="muted" aria-live="polite"></div>
+        </div>
+
+        
+      </div>
+    </section>
+
+    <section id="help" class="section" aria-labelledby="help-title">
+      <h2 id="help-title">Help & FAQs</h2>
+      <div class="faq">
+        <details>
+          <summary>How do I know if I’m eligible?</summary>
+          <p>Use the Eligibility checker above and review the details on each scheme. Always verify on the official portal before applying.</p>
+        </details>
+        <details>
+          <summary>Where do I apply?</summary>
+          <p>Click “Apply Now” on the scheme card or result to visit the official portal. Never share OTPs or passwords with anyone.</p>
+        </details>
+        <details>
+          <summary>Are these schemes updated?</summary>
+          <p>We regularly refresh data, but official portals are the final authority for dates, documents, and criteria.</p>
+        </details>
+      </div>
+    </section>
+
+
+    <section class="section" aria-labelledby="dl-title">
+      <h2 id="dl-title">Downloads</h2>
+      <div class="downloads">
+        <div class="card">
+          <div class="card-header">
+            <img class="thumb" src="/placeholder.svg?height=64&width=64" alt="PDF icon" />
+            <div>
+              <div><strong>Scheme Handbook (2025)</strong></div>
+              <div class="muted">PDF • 2.4 MB</div>
+            </div>
+          </div>
+          <div>
+            <a class="button button-secondary" href="#" download>Download PDF</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <img class="thumb" src="/placeholder.svg?height=64&width=64" alt="Checklist icon" />
+            <div>
+              <div><strong>Application Checklist</strong></div>
+              <div class="muted">PDF • 0.8 MB</div>
+            </div>
+          </div>
+          <div>
+            <a class="button button-secondary" href="#" download>Download PDF</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" aria-labelledby="help-lines-title">
+      <h2 id="help-lines-title">Helplines</h2>
+      <div class="helplines">
+        <div class="card">
+          <div><strong>National Helpline</strong></div>
+          <div class="muted">1800-000-000 (Toll-free)</div>
+          <a class="button button-ghost" href="tel:1800000000" aria-label="Call National Helpline">Call</a>
+        </div>
+        <div class="card">
+          <div><strong>Agriculture Support</strong></div>
+          <div class="muted">1800-111-222</div>
+          <a class="button button-ghost" href="tel:1800111222" aria-label="Call Agriculture Support">Call</a>
+        </div>
+        <div class="card">
+          <div><strong>Education Grants</strong></div>
+          <div class="muted">1800-333-444</div>
+          <a class="button button-ghost" href="tel:1800333444" aria-label="Call Education Grants">Call</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div>© 2025 Government Schemes Dashboard</div>
+      <div class="muted">Primary color: emerald-600 · Accent: sky-600 · Neutrals: white, gray-100, gray-800</div>
+    </div>
+  </footer>
+
+  <div class="modal" id="detailsModal" aria-hidden="true" aria-labelledby="modalTitle" aria-describedby="modalBody">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modalTitle" style="margin:0;">Scheme Details</h3>
+        <button class="close-x" id="modalClose" aria-label="Close">×</button>
+      </div>
+      <div id="modalBody" class="muted" style="margin-top:8px;"></div>
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+        <a class="button button-secondary" id="modalApply" href="#" target="_blank" rel="noopener noreferrer">Apply Now</a>
+        <button class="button button-ghost" id="modalClose2" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data (sample)
+    const SCHEMES = [
+      {
+        id: "pm-kisan",
+        title: "PM-KISAN Income Support",
+        desc: "Income support to all farmer families across the country.",
+        categories: ["Agriculture"],
+        states: ["All"],
+        featured: true,
+        portal: "#",
+        minAge: 18,
+        maxIncome: 1200000,
+        occupation: "Farmer",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "mudra",
+        title: "MUDRA Loan (Shishu/Kishor/Tarun)",
+        desc: "Collateral-free loans for micro and small businesses.",
+        categories: ["Business", "Women"],
+        states: ["All"],
+        featured: true,
+        portal: "#",
+        minAge: 18,
+        maxIncome: 2400000,
+        occupation: "Entrepreneur",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "ayushman",
+        title: "Ayushman Bharat - PM-JAY",
+        desc: "Health insurance coverage for secondary and tertiary care.",
+        categories: ["Health"],
+        states: ["All"],
+        featured: false,
+        portal: "#",
+        minAge: 0,
+        maxIncome: 1000000,
+        occupation: "",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "scholarship",
+        title: "National Scholarship Portal",
+        desc: "Scholarships for students from various categories.",
+        categories: ["Education"],
+        states: ["All"],
+        featured: false,
+        portal: "#",
+        minAge: 10,
+        maxIncome: 800000,
+        occupation: "Student",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "pmay-urban",
+        title: "PMAY (Urban) - Housing",
+        desc: "Subsidy on home loans for urban poor for housing.",
+        categories: ["Rural Development","Business"],
+        states: ["All"],
+        featured: true,
+        portal: "#",
+        minAge: 18,
+        maxIncome: 1800000,
+        occupation: "",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "karnataka-farmer",
+        title: "Karnataka Farm Equipment Subsidy",
+        desc: "Subsidy on modern farm equipment purchases in Karnataka.",
+        categories: ["Agriculture"],
+        states: ["Karnataka"],
+        featured: false,
+        portal: "#",
+        minAge: 18,
+        maxIncome: 1500000,
+        occupation: "Farmer",
+        img: "/placeholder.svg?height=64&width=64"
+      },
+      {
+        id: "tn-girl-education",
+        title: "TN Girl Child Education Support",
+        desc: "State initiative to support girl education with grants.",
+        categories: ["Women","Education"],
+        states: ["Tamil Nadu"],
+        featured: false,
+        portal: "#",
+        minAge: 6,
+        maxIncome: 600000,
+        occupation: "Student",
+        img: "/placeholder.svg?height=64&width=64"
+      }
+    ];
+
+    // Utility
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    function toCSV(rows) {
+      if (!rows.length) return "";
+      const headers = Object.keys(rows[0]);
+      const escape = v => `"${String(v ?? "").replaceAll('"','""')}"`;
+      return [headers.map(escape).join(","), ...rows.map(r => headers.map(h => escape(r[h])).join(","))].join("\n");
+    }
+
+    // DOM
+    const featuredGrid = $("#featuredGrid");
+    const resultsList = $("#resultsList");
+    const kpiTotal = $("#kpiTotal");
+    const kpiFeatured = $("#kpiFeatured");
+
+    const searchInput = $("#search");
+    const stateSelect = $("#state");
+    const resetBtn = $("#resetFilters");
+    const exportBtn = $("#exportResults");
+
+    const chips = $$("#categoryChips .chip");
+
+    // Modal elements
+    const modal = $("#detailsModal");
+    const modalTitle = $("#modalTitle");
+    const modalBody = $("#modalBody");
+    const modalApply = $("#modalApply");
+    const modalClose = $("#modalClose");
+    const modalClose2 = $("#modalClose2");
+
+    // Renderers
+    function renderFeatured() {
+      const featured = SCHEMES.filter(s => s.featured);
+      kpiFeatured.textContent = featured.length.toString();
+      featuredGrid.innerHTML = featured.map(s => `
+        <article class="card" role="listitem" aria-labelledby="${s.id}-title">
+          <div class="card-header">
+            <img class="thumb" src="${s.img}" alt="${s.title} thumbnail" />
+            <div>
+              <div id="${s.id}-title"><strong>${s.title}</strong></div>
+              <div class="muted">${s.categories.join(", ")} ${s.states.includes("All") ? "• All India" : "• " + s.states.join(", ")}</div>
+            </div>
+            <span class="badge" title="Featured">FEATURED</span>
+          </div>
+          <p class="muted">${s.desc}</p>
+          <div style="display:flex; gap:8px; flex-wrap: wrap;">
+            <button class="button button-primary" data-apply="${s.portal}" aria-label="Apply to ${s.title}">Apply Now</button>
+            <button class="button button-ghost" data-details="${s.id}" aria-label="View details for ${s.title}">Details</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function matchesFilters(s) {
+      const q = searchInput.value.trim().toLowerCase();
+      const st = stateSelect.value.trim();
+      const activeCats = chips.filter(c => c.getAttribute("aria-pressed") === "true").map(c => c.dataset.cat);
+
+      let ok = true;
+      if (q) {
+        const block = (s.title + " " + s.desc + " " + s.categories.join(" ") + " " + s.states.join(" ")).toLowerCase();
+        ok = ok && block.includes(q);
+      }
+      if (st) {
+        ok = ok && (s.states.includes("All") || s.states.includes(st));
+      }
+      if (activeCats.length) {
+        ok = ok && activeCats.some(cat => s.categories.includes(cat));
+      }
+      return ok;
+    }
+
+    function renderResults() {
+      const rows = SCHEMES.filter(matchesFilters);
+      kpiTotal.textContent = rows.length.toString();
+      if (!rows.length) {
+        resultsList.innerHTML = `<div class="list-item"><div class="muted">No schemes found. Try removing filters.</div></div>`;
+        return;
+      }
+      resultsList.innerHTML = rows.map(s => `
+        <article class="list-item" role="listitem" aria-labelledby="${s.id}-r-title">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <img class="thumb" src="${s.img}" alt="${s.title} thumbnail" />
+              <div>
+                <div id="${s.id}-r-title"><strong>${s.title}</strong></div>
+                <div class="muted">${s.desc}</div>
+                <div class="muted">Categories: ${s.categories.join(", ")} · ${s.states.includes("All") ? "All India" : s.states.join(", ")}</div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+            <button class="button button-ghost" data-details="${s.id}" aria-label="View details for ${s.title}">Details</button>
+            <a class="button button-primary" href="${s.portal}" target="_blank" rel="noopener noreferrer" aria-label="Apply to ${s.title}">Apply Now</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function openModal(scheme) {
+      modalTitle.textContent = scheme.title;
+      modalBody.innerHTML = `
+        <p>${scheme.desc}</p>
+        <ul style="margin:0; padding-left:18px;">
+          <li><strong>Categories:</strong> ${scheme.categories.join(", ")}</li>
+          <li><strong>Coverage:</strong> ${scheme.states.includes("All") ? "All India" : scheme.states.join(", ")}</li>
+          <li><strong>Minimum Age:</strong> ${scheme.minAge}+</li>
+          <li><strong>Max Household Income:</strong> ₹${(scheme.maxIncome).toLocaleString()}</li>
+          <li><strong>Preferred Occupation:</strong> ${scheme.occupation || "Any"}</li>
+        </ul>
+      `;
+      modalApply.href = scheme.portal || "#";
+      modal.setAttribute("open", "");
+      modal.setAttribute("aria-hidden", "false");
+    }
+    function closeModal() {
+      modal.removeAttribute("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    // Handlers
+    function onRootClick(e) {
+      const t = e.target;
+      // Apply button in featured
+      if (t.matches("button[data-apply]")) {
+        const href = t.getAttribute("data-apply");
+        if (href && href !== "#") {
+          window.open(href, "_blank", "noopener");
+        }
+      }
+      // Details (featured or results)
+      if (t.matches("button[data-details]")) {
+        const id = t.getAttribute("data-details");
+        const s = SCHEMES.find(x => x.id === id);
+        if (s) openModal(s);
+      }
+      // Chip toggle
+      if (t.matches(".chip")) {
+        const current = t.getAttribute("aria-pressed") === "true";
+        t.setAttribute("aria-pressed", current ? "false" : "true");
+        renderResults();
+      }
+      // Modal close
+      if (t === modal || t === modalClose || t === modalClose2) {
+        closeModal();
+      }
+    }
+    function onInputChange() {
+      renderResults();
+    }
+    function onReset() {
+      searchInput.value = "";
+      stateSelect.value = "";
+      chips.forEach(c => c.setAttribute("aria-pressed","false"));
+      renderResults();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function onExport() {
+      const rows = SCHEMES.filter(matchesFilters).map(s => ({
+        id: s.id, title: s.title, categories: s.categories.join("|"),
+        states: s.states.join("|"), featured: s.featured, portal: s.portal
+      }));
+      const csv = toCSV(rows);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "schemes-export.csv";
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Tools: Eligibility
+    function runEligibility() {
+      const age = parseInt($("#eligAge").value || "0", 10);
+      const income = parseInt($("#eligIncome").value || "0", 10);
+      const occ = $("#eligOccupation").value.trim();
+      const state = $("#eligState").value.trim();
+      const matches = SCHEMES.filter(s => {
+        const okAge = age >= (s.minAge || 0);
+        const okIncome = !s.maxIncome || income <= s.maxIncome;
+        const okOcc = !s.occupation || !occ || s.occupation.toLowerCase() === occ.toLowerCase();
+        const okState = !state || s.states.includes("All") || s.states.includes(state);
+        return okAge && okIncome && okOcc && okState;
+      });
+      $("#eligOutput").innerHTML = matches.length
+        ? `Likely eligible for <strong>${matches.length}</strong> scheme(s). See results below.`
+        : `No likely matches. Try adjusting your info.`;
+      // Optionally highlight matches in results
+      renderResults();
+    }
+
+    // Tools: Calculator
+    function runCalc() {
+      const type = $("#calcType").value;
+      const amount = parseFloat($("#calcAmount").value || "0");
+      const rate = parseFloat($("#calcRate").value || "0");
+      const years = parseInt($("#calcYears").value || "0", 10);
+
+      let resultText = "";
+      if (type === "loan") {
+        // Simple interest subsidy estimate
+        const subsidy = (amount * (rate/100)) * Math.max(1, years || 1);
+        resultText = `Estimated interest subsidy over ${Math.max(1, years || 1)} year(s): <strong>₹${subsidy.toLocaleString()}</strong>`;
+      } else if (type === "equipment") {
+        const subsidy = amount * (rate/100);
+        resultText = `Estimated equipment subsidy: <strong>₹${subsidy.toLocaleString()}</strong>`;
+      } else if (type === "education") {
+        const grant = amount * (rate/100);
+        resultText = `Estimated education grant: <strong>₹${grant.toLocaleString()}</strong>`;
+      }
+      $("#calcOutput").innerHTML = resultText || "Enter values to calculate.";
+    }
+
+    // Tools: Reminders
+    function loadReminders() {
+      const list = JSON.parse(localStorage.getItem("gs_reminders") || "[]");
+      const ul = $("#remList");
+      ul.innerHTML = list.map((r, idx) => `
+        <li>
+          ${r.title} — <span class="muted">${r.date}</span>
+          <button class="button" style="height:28px; padding:0 8px; margin-left:6px;" data-del-rem="${idx}" aria-label="Delete reminder ${r.title}">×</button>
+        </li>
+      `).join("");
+    }
+    function saveReminder() {
+      const title = $("#remTitle").value.trim();
+      const date = $("#remDate").value;
+      if (!title || !date) {
+        $("#remOutput").textContent = "Please enter a title and date.";
+        return;
+      }
+      const list = JSON.parse(localStorage.getItem("gs_reminders") || "[]");
+      list.push({ title, date });
+      localStorage.setItem("gs_reminders", JSON.stringify(list));
+      $("#remOutput").textContent = "Reminder saved locally.";
+      $("#remTitle").value = "";
+      $("#remDate").value = "";
+      loadReminders();
+    }
+    function onReminderClick(e) {
+      const btn = e.target.closest("button[data-del-rem]");
+      if (!btn) return;
+      const idx = parseInt(btn.getAttribute("data-del-rem"), 10);
+      const list = JSON.parse(localStorage.getItem("gs_reminders") || "[]");
+      list.splice(idx, 1);
+      localStorage.setItem("gs_reminders", JSON.stringify(list));
+      loadReminders();
+    }
+
+    // Init
+    function init() {
+      renderFeatured();
+      renderResults();
+      kpiTotal.textContent = SCHEMES.length.toString();
+
+      document.addEventListener("click", onRootClick);
+      searchInput.addEventListener("input", onInputChange);
+      stateSelect.addEventListener("change", onInputChange);
+      resetBtn.addEventListener("click", onReset);
+      exportBtn.addEventListener("click", onExport);
+
+      $("#runEligibility").addEventListener("click", runEligibility);
+      $("#runCalc").addEventListener("click", runCalc);
+      $("#saveReminder").addEventListener("click", saveReminder);
+      $("#remList").addEventListener("click", onReminderClick);
+
+      // Escape to close modal
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

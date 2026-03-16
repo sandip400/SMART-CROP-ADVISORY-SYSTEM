@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farm Calendar - Routine Tracker</title>
+</head>
+
+<style>
+  /* Basic styling for the farm calendar tracker */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  .nav {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover,
+  .nav-btn.active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* Main Content */
+  .main {
+    padding: 2rem 0;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* Dashboard */
+  .dashboard-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4caf50;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: #4caf50;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+  }
+
+  .btn-secondary:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+  }
+
+  .btn-danger {
+    background: #f44336;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #da190b;
+    transform: translateY(-2px);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* Weather Widget */
+  .weather-card {
+    background: linear-gradient(135deg, #87ceeb, #4682b4);
+    color: white;
+  }
+
+  .weather-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .weather-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .weather-icon {
+    font-size: 3rem;
+  }
+
+  .weather-temp {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  .weather-desc {
+    opacity: 0.9;
+  }
+
+  .weather-details {
+    text-align: right;
+    opacity: 0.9;
+  }
+
+  /* Tasks */
+  .task-list {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    background: #fafafa;
+  }
+
+  .task-item.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: #666;
+    padding: 2rem;
+    font-style: italic;
+  }
+
+  /* Calendar */
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .calendar-day {
+    background: white;
+    padding: 1rem;
+    min-height: 100px;
+    position: relative;
+  }
+
+  .calendar-day.other-month {
+    background: #f5f5f5;
+    color: #999;
+  }
+
+  .calendar-day.today {
+    background: #e8f5e8;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+  }
+
+  .close-btn:hover {
+    color: #333;
+  }
+
+  /* Form */
+  .form-group {
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
+  }
+
+  /* Progress */
+  .progress-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .badge {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f0f0f0;
+  }
+
+  .badge.earned {
+    background: #e8f5e8;
+    color: #4caf50;
+  }
+
+  .progress-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .progress-bar {
+    width: 200px;
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #4caf50;
+    transition: width 0.3s ease;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header .container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .nav {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .calendar-header {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .weather-info {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <h1 class="logo">🌱 Farm Calendar</h1>
+        <nav class="nav">
+          <button class="nav-btn active" data-tab="dashboard">
+            Dashboard
+          </button>
+          <button class="nav-btn" data-tab="calendar">Calendar</button>
+          <button class="nav-btn" data-tab="tasks">Tasks</button>
+          <button class="nav-btn" data-tab="progress">Progress</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="container">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+          <div class="dashboard-grid">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" id="active-crops">0</div>
+                <div class="stat-label">Active Crops</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="today-tasks">0</div>
+                <div class="stat-label">Today's Tasks</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="completion-rate">0%</div>
+                <div class="stat-label">Completion Rate</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="streak-days">0</div>
+                <div class="stat-label">Day Streak</div>
+              </div>
+            </div>
+
+            <!-- Weather Widget -->
+            <div class="card weather-card">
+              <h3>Weather Today</h3>
+              <div class="weather-info">
+                <div class="weather-main">
+                  <span class="weather-icon" id="weather-icon">🌤️</span>
+                  <div>
+                    <div class="weather-temp" id="weather-temp">
+                      Loading...
+                    </div>
+                    <div class="weather-desc" id="weather-desc">
+                      Getting weather data...
+                    </div>
+                  </div>
+                </div>
+                <div class="weather-details" id="weather-details">
+                  <div id="weather-location">Getting location...</div>
+                  <div id="weather-extra">Please allow location access</div>
+                </div>
+              </div>
+              <!-- Added track weather button -->
+              <div style="margin-top: 1rem">
+                <button class="btn btn-primary" onclick="trackWeather()" id="track-weather-btn">
+                  📍 Track Weather
+                </button>
+              </div>
+            </div>
+
+            <!-- Today's Tasks -->
+            <div class="card">
+              <h3>Today's Tasks</h3>
+              <div id="today-task-list" class="task-list">
+                <div class="empty-state">No tasks for today</div>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+              <h3>Quick Actions</h3>
+              <div class="action-buttons">
+                <button class="btn btn-primary" onclick="showAddCropModal()">
+                  Add Crop
+                </button>
+                <button class="btn btn-secondary" onclick="showTab('calendar')">
+                  View Calendar
+                </button>
+                <button class="btn btn-danger" onclick="resetStats()">
+                  Reset All Data
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendar Tab -->
+        <div id="calendar" class="tab-content">
+          <div class="calendar-header">
+            <button class="btn btn-secondary" onclick="changeMonth(-1)">
+              ← Previous
+            </button>
+            <h2 id="current-month">January 2024</h2>
+            <button class="btn btn-secondary" onclick="changeMonth(1)">
+              Next →
+            </button>
+          </div>
+          <div class="calendar-grid" id="calendar-grid">
+            <!-- Calendar will be generated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Tasks Tab -->
+        <div id="tasks" class="tab-content">
+          <div class="tasks-header">
+            <h2>All Tasks</h2>
+            <div class="task-filters">
+              <select id="task-filter">
+                <option value="all">All Tasks</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+          </div>
+          <div id="all-tasks-list" class="task-list">
+            <!-- Tasks will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Progress Tab -->
+        <div id="progress" class="tab-content">
+          <div class="progress-grid">
+            <!-- Achievement Badges -->
+            <div class="card">
+              <h3>Achievements</h3>
+              <div class="badges-grid" id="badges-container">
+                <!-- Badges will be populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Crop Progress -->
+            <div class="card">
+              <h3>Crop Progress</h3>
+              <div id="crop-progress-list" class="progress-list">
+                <!-- Progress bars will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Crop Modal -->
+    <div id="add-crop-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add New Crop</h3>
+          <button class="close-btn" onclick="hideAddCropModal()">
+            &times;
+          </button>
+        </div>
+        <form id="add-crop-form">
+          <div class="form-group">
+            <label for="crop-select">Select Crop:</label>
+            <select id="crop-select" required>
+              <option value="">Choose a crop...</option>
+              <option value="tomato">Tomato</option>
+              <option value="rose">Rose</option>
+              <option value="paddy">Paddy (Rice)</option>
+              <option value="mango">Mango</option>
+              <option value="lettuce">Lettuce</option>
+              <option value="basil">Basil</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="planting-date">Planting Date:</label>
+            <input type="date" id="planting-date" required />
+          </div>
+          <div class="form-group">
+            <label for="farm-size">Farm Size (sq ft):</label>
+            <input type="number" id="farm-size" min="1" required />
+          </div>
+          <div class="form-group">
+            <label for="water-source">Water Source:</label>
+            <select id="water-source" required>
+              <option value="manual">Manual Watering</option>
+              <option value="sprinkler">Sprinkler System</option>
+              <option value="drip">Drip Irrigation</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="hideAddCropModal()">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">Add Crop</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Farm Calendar - Routine Tracker JavaScript
+
+    // Global variables
+    const currentDate = new Date()
+    const crops = JSON.parse(localStorage.getItem("crops")) || []
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || []
+    const stats = JSON.parse(localStorage.getItem("stats")) || {
+      activeCrops: 0,
+      completionRate: 0,
+      streakDays: 0,
+    }
+
+    // Crop data with growth stages and care instructions
+    const cropData = {
+      tomato: {
+        name: "Tomato",
+        icon: "🍅",
+        growthDays: 80,
+        stages: [
+          { name: "Seedling", days: 14, tasks: ["Water daily", "Provide light"] },
+          { name: "Vegetative", days: 35, tasks: ["Water every 2 days", "Add fertilizer"] },
+          { name: "Flowering", days: 21, tasks: ["Water carefully", "Support stems"] },
+          { name: "Fruiting", days: 10, tasks: ["Harvest ripe fruits", "Continue watering"] },
+        ],
+      },
+      rose: {
+        name: "Rose",
+        icon: "🌹",
+        growthDays: 120,
+        stages: [
+          { name: "Planting", days: 21, tasks: ["Water regularly", "Mulch around base"] },
+          { name: "Growth", days: 60, tasks: ["Prune dead branches", "Apply fertilizer"] },
+          { name: "Budding", days: 21, tasks: ["Water at base", "Remove suckers"] },
+          { name: "Blooming", days: 18, tasks: ["Deadhead spent flowers", "Monitor for pests"] },
+        ],
+      },
+      paddy: {
+        name: "Paddy (Rice)",
+        icon: "🌾",
+        growthDays: 120,
+        stages: [
+          { name: "Nursery", days: 25, tasks: ["Maintain water level", "Weed control"] },
+          { name: "Transplanting", days: 10, tasks: ["Transplant seedlings", "Flood field"] },
+          { name: "Vegetative", days: 55, tasks: ["Maintain water", "Apply fertilizer"] },
+          { name: "Reproductive", days: 30, tasks: ["Monitor water", "Pest control"] },
+        ],
+      },
+      mango: {
+        name: "Mango",
+        icon: "🥭",
+        growthDays: 365,
+        stages: [
+          { name: "Planting", days: 90, tasks: ["Water regularly", "Protect from wind"] },
+          { name: "Establishment", days: 180, tasks: ["Prune for shape", "Apply organic matter"] },
+          { name: "Growth", days: 90, tasks: ["Deep watering", "Fertilize quarterly"] },
+          { name: "Maintenance", days: 5, tasks: ["Monitor growth", "Pest management"] },
+        ],
+      },
+      lettuce: {
+        name: "Lettuce",
+        icon: "🥬",
+        growthDays: 45,
+        stages: [
+          { name: "Seedling", days: 10, tasks: ["Keep soil moist", "Provide shade"] },
+          { name: "Growth", days: 25, tasks: ["Water regularly", "Thin plants"] },
+          { name: "Maturation", days: 10, tasks: ["Harvest outer leaves", "Continue watering"] },
+        ],
+      },
+      basil: {
+        name: "Basil",
+        icon: "🌿",
+        growthDays: 60,
+        stages: [
+          { name: "Seedling", days: 14, tasks: ["Keep warm", "Water lightly"] },
+          { name: "Growth", days: 30, tasks: ["Pinch flowers", "Water regularly"] },
+          { name: "Harvest", days: 16, tasks: ["Harvest leaves", "Maintain plant"] },
+        ],
+      },
+    }
+
+    // Weather functions integrated from track.html
+    function getWeather(lat, lon) {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relative_humidity_2m,wind_speed_10m&timezone=auto&forecast_days=1`
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          const weatherCode = data.current_weather.weathercode
+          const temp = Math.round(data.current_weather.temperature)
+          const windSpeed = Math.round(data.current_weather.windspeed)
+          const humidity = data.hourly.relative_humidity_2m[0]
+
+          const weatherDesc = mapWeatherCode(weatherCode)
+          const weatherIcon = getWeatherIcon(weatherCode)
+
+          // Update weather display
+          document.getElementById("weather-temp").textContent = `${temp}°C`
+          document.getElementById("weather-desc").textContent = weatherDesc
+          document.getElementById("weather-icon").textContent = weatherIcon
+          document.getElementById("weather-extra").textContent = `Wind: ${windSpeed} km/h`
+
+          // Update humidity in details
+          const detailsElement = document.getElementById("weather-details")
+          if (detailsElement.children.length > 1) {
+            detailsElement.children[0].textContent = `Humidity: ${humidity}%`
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching weather data:", error)
+          document.getElementById("weather-temp").textContent = "N/A"
+          document.getElementById("weather-desc").textContent = "Weather unavailable"
+          document.getElementById("weather-extra").textContent = "Check connection"
+        })
+    }
+
+    function mapWeatherCode(code) {
+      const weatherMapping = {
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Depositing rime fog",
+        51: "Light drizzle",
+        53: "Moderate drizzle",
+        55: "Dense drizzle",
+        61: "Slight rain",
+        63: "Moderate rain",
+        65: "Heavy rain",
+        71: "Slight snow",
+        73: "Moderate snow",
+        75: "Heavy snow",
+        80: "Light showers",
+        81: "Moderate showers",
+        82: "Violent showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with hail",
+        99: "Heavy thunderstorm",
+      }
+      return weatherMapping[code] || "Unknown weather"
+    }
+
+    function getWeatherIcon(code) {
+      const iconMapping = {
+        0: "☀️",
+        1: "🌤️",
+        2: "⛅",
+        3: "☁️",
+        45: "🌫️",
+        48: "🌫️",
+        51: "🌦️",
+        53: "🌦️",
+        55: "🌧️",
+        61: "🌧️",
+        63: "🌧️",
+        65: "⛈️",
+        71: "🌨️",
+        73: "❄️",
+        75: "❄️",
+        80: "🌦️",
+        81: "🌧️",
+        82: "⛈️",
+        95: "⛈️",
+        96: "⛈️",
+        99: "⛈️",
+      }
+      return iconMapping[code] || "🌤️"
+    }
+
+    async function getAddress(lat, lon) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+        const data = await response.json()
+        const locationParts = data.display_name.split(",")
+        const shortLocation = `${locationParts[0]}, ${locationParts[locationParts.length - 2]}`.trim()
+        document.getElementById("weather-location").textContent = shortLocation || "Location unavailable"
+      } catch (error) {
+        console.error("Error fetching address:", error)
+        document.getElementById("weather-location").textContent = "Location unavailable"
+      }
+    }
+
+    function updateWeatherPosition(position) {
+      const lat = position.coords.latitude
+      const lon = position.coords.longitude
+
+      getWeather(lat, lon)
+      getAddress(lat, lon)
+    }
+
+    function initializeWeather() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(updateWeatherPosition, (error) => {
+          console.error("Geolocation error:", error)
+          document.getElementById("weather-temp").textContent = "N/A"
+          document.getElementById("weather-desc").textContent = "Location access denied"
+          document.getElementById("weather-location").textContent = "Enable location for weather"
+          document.getElementById("weather-extra").textContent = "Weather unavailable"
+        })
+      } else {
+        document.getElementById("weather-temp").textContent = "N/A"
+        document.getElementById("weather-desc").textContent = "Geolocation not supported"
+        document.getElementById("weather-extra").textContent = "Weather unavailable"
+      }
+    }
+
+    // Initialize app
+    document.addEventListener("DOMContentLoaded", () => {
+      initializeApp()
+      initializeWeather()
+    })
+
+    function initializeApp() {
+      setupEventListeners()
+      updateDashboard()
+      generateCalendar()
+      updateTasksList()
+      updateProgressTab()
+    }
+
+    function setupEventListeners() {
+      // Tab navigation
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const tabName = this.dataset.tab
+          showTab(tabName)
+        })
+      })
+
+      // Add crop form
+      document.getElementById("add-crop-form").addEventListener("submit", handleAddCrop)
+
+      // Task filter
+      document.getElementById("task-filter").addEventListener("change", filterTasks)
+
+      // Modal close on outside click
+      document.getElementById("add-crop-modal").addEventListener("click", function (e) {
+        if (e.target === this) {
+          hideAddCropModal()
+        }
+      })
+
+      // Reset stats button
+      document.getElementById("reset-stats-btn").addEventListener("click", resetStats)
+
+      // Track weather button
+      document.getElementById("track-weather-btn").addEventListener("click", trackWeather)
+    }
+
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll(".tab-content").forEach((tab) => {
+        tab.classList.remove("active")
+      })
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add("active")
+
+      // Update nav buttons
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.remove("active")
+      })
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add("active")
+    }
+
+    function updateDashboard() {
+      // Update stats
+      document.getElementById("active-crops").textContent = stats.activeCrops
+      document.getElementById("completion-rate").textContent = stats.completionRate + "%"
+      document.getElementById("streak-days").textContent = stats.streakDays
+
+      // Update today's tasks count
+      const todayTasks = getTodayTasks()
+      document.getElementById("today-tasks").textContent = todayTasks.length
+
+      // Update today's task list
+      updateTodayTasksList(todayTasks)
+    }
+
+    function getTodayTasks() {
+      const today = new Date().toDateString()
+      return tasks.filter((task) => new Date(task.date).toDateString() === today)
+    }
+
+    function updateTodayTasksList(todayTasks) {
+      const container = document.getElementById("today-task-list")
+
+      if (todayTasks.length === 0) {
+        container.innerHTML = '<div class="empty-state">No tasks for today</div>'
+        return
+      }
+
+      container.innerHTML = todayTasks
+        .map(
+          (task) => `
+        <div class="task-item ${task.completed ? "completed" : ""}">
+            <div>
+                <strong>${task.crop}</strong> - ${task.task}
+            </div>
+            <button class="btn btn-sm ${task.completed ? "btn-secondary" : "btn-primary"}" 
+                    onclick="toggleTask('${task.id}')">
+                ${task.completed ? "Undo" : "Complete"}
+            </button>
+        </div>
+    `,
+        )
+        .join("")
+    }
+
+    function showAddCropModal() {
+      document.getElementById("add-crop-modal").style.display = "block"
+      // Set default planting date to today
+      document.getElementById("planting-date").value = new Date().toISOString().split("T")[0]
+    }
+
+    function hideAddCropModal() {
+      document.getElementById("add-crop-modal").style.display = "none"
+      document.getElementById("add-crop-form").reset()
+    }
+
+    function handleAddCrop(e) {
+      e.preventDefault()
+
+      const formData = new FormData(e.target)
+      const cropType = formData.get("crop-select") || document.getElementById("crop-select").value
+      const plantingDate = formData.get("planting-date") || document.getElementById("planting-date").value
+      const farmSize = formData.get("farm-size") || document.getElementById("farm-size").value
+      const waterSource = formData.get("water-source") || document.getElementById("water-source").value
+
+      const crop = {
+        id: Date.now().toString(),
+        type: cropType,
+        plantingDate: plantingDate,
+        farmSize: Number.parseInt(farmSize),
+        waterSource: waterSource,
+        progress: 0,
+      }
+
+      crops.push(crop)
+      generateTasksForCrop(crop)
+
+      // Update stats
+      stats.activeCrops = crops.length
+
+      // Save to localStorage
+      localStorage.setItem("crops", JSON.stringify(crops))
+      localStorage.setItem("tasks", JSON.stringify(tasks))
+      localStorage.setItem("stats", JSON.stringify(stats))
+
+      hideAddCropModal()
+      updateDashboard()
+      updateTasksList()
+      updateProgressTab()
+    }
+
+    function generateTasksForCrop(crop) {
+      const cropInfo = cropData[crop.type]
+      if (!cropInfo) return
+
+      const plantingDate = new Date(crop.plantingDate)
+      const currentDate = new Date(plantingDate)
+
+      cropInfo.stages.forEach((stage) => {
+        stage.tasks.forEach((taskName) => {
+          // Generate tasks throughout the stage period
+          const tasksInStage = Math.ceil(stage.days / 7) // Weekly tasks
+          for (let i = 0; i < tasksInStage; i++) {
+            const taskDate = new Date(currentDate)
+            taskDate.setDate(taskDate.getDate() + i * 7)
+
+            tasks.push({
+              id: Date.now().toString() + Math.random(),
+              crop: cropInfo.name,
+              cropId: crop.id,
+              task: taskName,
+              stage: stage.name,
+              date: taskDate.toISOString(),
+              completed: false,
+            })
+          }
+        })
+        currentDate.setDate(currentDate.getDate() + stage.days)
+      })
+    }
+
+    function toggleTask(taskId) {
+      const task = tasks.find((t) => t.id === taskId)
+      if (task) {
+        task.completed = !task.completed
+        updateCompletionRate()
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+        localStorage.setItem("stats", JSON.stringify(stats))
+        updateDashboard()
+        updateTasksList()
+      }
+    }
+
+    function updateCompletionRate() {
+      const totalTasks = tasks.length
+      const completedTasks = tasks.filter((t) => t.completed).length
+      stats.completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+    }
+
+    function generateCalendar() {
+      const calendar = document.getElementById("calendar-grid")
+      const monthYear = document.getElementById("current-month")
+
+      const year = currentDate.getFullYear()
+      const month = currentDate.getMonth()
+
+      monthYear.textContent = new Date(year, month).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      })
+
+      // Clear calendar
+      calendar.innerHTML = ""
+
+      // Add day headers
+      const dayHeaders = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      dayHeaders.forEach((day) => {
+        const dayHeader = document.createElement("div")
+        dayHeader.className = "calendar-day-header"
+        dayHeader.textContent = day
+        dayHeader.style.cssText =
+          "background: #4CAF50; color: white; padding: 0.5rem; text-align: center; font-weight: bold;"
+        calendar.appendChild(dayHeader)
+      })
+
+      // Get first day of month and number of days
+      const firstDay = new Date(year, month, 1).getDay()
+      const daysInMonth = new Date(year, month + 1, 0).getDate()
+      const today = new Date()
+
+      // Add empty cells for days before month starts
+      for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement("div")
+        emptyDay.className = "calendar-day other-month"
+        calendar.appendChild(emptyDay)
+      }
+
+      // Add days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement("div")
+        dayElement.className = "calendar-day"
+
+        const currentDay = new Date(year, month, day)
+        if (currentDay.toDateString() === today.toDateString()) {
+          dayElement.classList.add("today")
+        }
+
+        // Get tasks for this day
+        const dayTasks = tasks.filter((task) => {
+          const taskDate = new Date(task.date)
+          return taskDate.toDateString() === currentDay.toDateString()
+        })
+
+        dayElement.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 0.5rem;">${day}</div>
+            ${dayTasks
+            .slice(0, 2)
+            .map(
+              (task) => `
+                <div style="font-size: 0.7rem; background: ${task.completed ? "#e8f5e8" : "#fff3cd"}; 
+                           padding: 2px 4px; margin: 1px 0; border-radius: 3px; overflow: hidden; text-overflow: ellipsis;">
+                    ${task.task}
+                </div>
+            `,
+            )
+            .join("")}
+            ${dayTasks.length > 2 ? `<div style="font-size: 0.6rem; color: #666;">+${dayTasks.length - 2} more</div>` : ""}
+        `
+
+        calendar.appendChild(dayElement)
+      }
+    }
+
+    function changeMonth(direction) {
+      currentDate.setMonth(currentDate.getMonth() + direction)
+      generateCalendar()
+    }
+
+    function updateTasksList() {
+      const container = document.getElementById("all-tasks-list")
+      const filter = document.getElementById("task-filter").value
+
+      let filteredTasks = tasks
+      const now = new Date()
+
+      switch (filter) {
+        case "pending":
+          filteredTasks = tasks.filter((t) => !t.completed)
+          break
+        case "completed":
+          filteredTasks = tasks.filter((t) => t.completed)
+          break
+        case "overdue":
+          filteredTasks = tasks.filter((t) => !t.completed && new Date(t.date) < now)
+          break
+      }
+
+      if (filteredTasks.length === 0) {
+        container.innerHTML = '<div class="empty-state">No tasks found</div>'
+        return
+      }
+
+      // Sort by date
+      filteredTasks.sort((a, b) => new Date(a.date) - new Date(b.date))
+
+      container.innerHTML = filteredTasks
+        .map((task) => {
+          const taskDate = new Date(task.date)
+          const isOverdue = !task.completed && taskDate < now
+
+          return `
+            <div class="task-item ${task.completed ? "completed" : ""} ${isOverdue ? "overdue" : ""}">
+                <div>
+                    <strong>${task.crop}</strong> - ${task.task}
+                    <div style="font-size: 0.8rem; color: #666;">
+                        ${taskDate.toLocaleDateString()} - ${task.stage}
+                    </div>
+                </div>
+                <button class="btn btn-sm ${task.completed ? "btn-secondary" : "btn-primary"}" 
+                        onclick="toggleTask('${task.id}')">
+                    ${task.completed ? "Undo" : "Complete"}
+                </button>
+            </div>
+        `
+        })
+        .join("")
+    }
+
+    function filterTasks() {
+      updateTasksList()
+    }
+
+    function updateProgressTab() {
+      updateBadges()
+      updateCropProgress()
+    }
+
+    function updateBadges() {
+      const container = document.getElementById("badges-container")
+
+      const badges = [
+        { name: "First Crop", icon: "🌱", condition: crops.length >= 1 },
+        { name: "Green Thumb", icon: "👍", condition: stats.completionRate >= 80 },
+        { name: "Consistent", icon: "📅", condition: stats.streakDays >= 7 },
+        { name: "Productive", icon: "🚀", condition: crops.length >= 3 },
+        { name: "Expert", icon: "🏆", condition: stats.completionRate >= 95 && crops.length >= 5 },
+      ]
+
+      container.innerHTML = badges
+        .map(
+          (badge) => `
+        <div class="badge ${badge.condition ? "earned" : ""}">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${badge.icon}</div>
+            <div style="font-weight: bold;">${badge.name}</div>
+        </div>
+    `,
+        )
+        .join("")
+    }
+
+    function updateCropProgress() {
+      const container = document.getElementById("crop-progress-list")
+
+      if (crops.length === 0) {
+        container.innerHTML = '<div class="empty-state">No crops planted yet</div>'
+        return
+      }
+
+      container.innerHTML = crops
+        .map((crop) => {
+          const cropInfo = cropData[crop.type]
+          const plantingDate = new Date(crop.plantingDate)
+          const now = new Date()
+          const daysPassed = Math.floor((now - plantingDate) / (1000 * 60 * 60 * 24))
+          const progress = Math.min((daysPassed / cropInfo.growthDays) * 100, 100)
+
+          return `
+            <div class="progress-item">
+                <div>
+                    <strong>${cropInfo.icon} ${cropInfo.name}</strong>
+                    <div style="font-size: 0.8rem; color: #666;">
+                        Day ${daysPassed} of ${cropInfo.growthDays}
+                    </div>
+                </div>
+                <div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div style="font-size: 0.8rem; margin-top: 0.25rem; text-align: center;">
+                        ${Math.round(progress)}%
+                    </div>
+                </div>
+            </div>
+        `
+        })
+        .join("")
+    }
+
+    function resetStats() {
+      if (
+        confirm(
+          "Are you sure you want to reset all data? This will clear all crops, tasks, progress, and reset all stats to 0. This action cannot be undone.",
+        )
+      ) {
+        // Clear all crops
+        crops.length = 0
+
+        // Clear all tasks
+        tasks.length = 0
+
+        // Reset the stats object
+        stats.activeCrops = 0
+        stats.completionRate = 0
+        stats.streakDays = 0
+
+        // Save all cleared data to localStorage
+        localStorage.setItem("crops", JSON.stringify(crops))
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+        localStorage.setItem("stats", JSON.stringify(stats))
+
+        // Update all displays
+        updateDashboard()
+        updateTasksList()
+        updateProgressTab()
+        generateCalendar()
+
+        // Show confirmation
+        alert("All data has been reset successfully!")
+      }
+    }
+
+    // Auto-update streak (this would typically run daily)
+    function updateStreak() {
+      const today = new Date().toDateString()
+      const todayTasks = tasks.filter((task) => new Date(task.date).toDateString() === today && task.completed)
+
+      if (todayTasks.length > 0) {
+        stats.streakDays++
+      } else {
+        stats.streakDays = 0
+      }
+
+      localStorage.setItem("stats", JSON.stringify(stats))
+    }
+
+    function trackWeather() {
+      const button = document.getElementById("track-weather-btn")
+
+      // Update button state to show loading
+      button.textContent = "🔄 Getting Location..."
+      button.disabled = true
+
+      // Update weather display to show loading state
+      document.getElementById("weather-temp").textContent = "Loading..."
+      document.getElementById("weather-desc").textContent = "Getting weather data..."
+      document.getElementById("weather-location").textContent = "Getting location..."
+      document.getElementById("weather-extra").textContent = "Please wait..."
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            updateWeatherPosition(position)
+            // Reset button state
+            button.textContent = "📍 Track Weather"
+            button.disabled = false
+          },
+          (error) => {
+            console.error("Geolocation error:", error)
+            document.getElementById("weather-temp").textContent = "N/A"
+            document.getElementById("weather-desc").textContent = "Location access denied"
+            document.getElementById("weather-location").textContent = "Enable location for weather"
+            document.getElementById("weather-extra").textContent = "Weather unavailable"
+
+            // Reset button state
+            button.textContent = "📍 Track Weather"
+            button.disabled = false
+
+            // Show user-friendly error message
+            alert("Please enable location access to get weather data for your current location.")
+          },
+        )
+      } else {
+        document.getElementById("weather-temp").textContent = "N/A"
+        document.getElementById("weather-desc").textContent = "Geolocation not supported"
+        document.getElementById("weather-extra").textContent = "Weather unavailable"
+
+        // Reset button state
+        button.textContent = "📍 Track Weather"
+        button.disabled = false
+
+        alert("Your browser doesn't support geolocation.")
+      }
+    }
+
+    // Initialize completion rate on load
+    updateCompletionRate()
+
+  </script>
+</body>
+
+</html>

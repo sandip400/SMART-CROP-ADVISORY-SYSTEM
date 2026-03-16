@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgriLearn — Educational Gamified Section</title>
+
+  {% comment %} Google Font (Headings/Body: Inter) {% endcomment %}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  {% comment %} Bootstrap CSS {% endcomment %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+  {% comment %} Bootstrap Icons {% endcomment %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --brand-primary: #16a34a;
+      /* green */
+      --brand-accent: #0ea5e9;
+      /* blue */
+      --brand-bg: #ffffff;
+      /* white */
+      --brand-ink: #111827;
+      /* slate-900 */
+      --radius: 12px;
+    }
+
+    html,
+    body {
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      color: var(--brand-ink);
+      background: var(--brand-bg);
+    }
+
+    .navbar-brand strong {
+      color: var(--brand-primary);
+    }
+
+    .btn-brand {
+      background: var(--brand-primary);
+      color: #fff;
+      border: none;
+    }
+
+    .btn-brand:hover,
+    .btn-brand:focus {
+      background: #148d41;
+      color: #fff;
+    }
+
+    .btn-accent {
+      background: var(--brand-accent);
+      color: #0b1220;
+      border: none;
+    }
+
+    .btn-accent:hover,
+    .btn-accent:focus {
+      background: #0b9bd7;
+      color: #0b1220;
+    }
+
+    .text-brand {
+      color: var(--brand-primary);
+    }
+
+    .bg-soft-brand {
+      background: rgba(22, 163, 74, 0.08);
+    }
+
+    .bg-soft-accent {
+      background: rgba(14, 165, 233, 0.08);
+    }
+
+    .hero {
+      background: #f9fafb;
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .4rem .75rem;
+      border-radius: 999px;
+      font-size: .9rem;
+      font-weight: 500;
+      background: #f4f7fb;
+      color: #233043;
+      border: 1px solid #e6edf5;
+    }
+
+    .card {
+      border-radius: var(--radius);
+      border: 1px solid #eef2f7;
+    }
+
+    .section-title {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .subtle {
+      color: #5b6472;
+    }
+
+    .progress-thin .progress {
+      height: 8px;
+      border-radius: 999px;
+    }
+
+    .badge-pill {
+      border-radius: 999px;
+      padding: .5rem .75rem;
+      font-weight: 600;
+    }
+
+    .level-pill {
+      background: var(--brand-primary);
+      color: #fff;
+      border-radius: 999px;
+      padding: .25rem .6rem;
+      font-size: .85rem;
+    }
+
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 24, 39, .6);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+
+    .locked .lock-overlay {
+      opacity: 1;
+    }
+
+    .plant-card.locked img {
+      filter: blur(2px) grayscale(60%);
+    }
+
+    .sim-plant {
+      width: 100%;
+      height: 140px;
+      border-radius: var(--radius);
+      background: linear-gradient(to top, #e1f5e8 0 45%, #f1f8ff 45% 100%);
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      padding-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .sim-plant .stem {
+      width: 8px;
+      background: #2f7f49;
+      border-radius: 999px;
+      transition: height .3s ease, background .3s ease;
+    }
+
+    .sim-plant .leaf {
+      width: 18px;
+      height: 10px;
+      background: #3bbd6f;
+      border-radius: 999px 999px 999px 0;
+      transform: rotate(-20deg);
+      position: absolute;
+      left: 50%;
+      translate: -50% 0;
+      transition: background .3s ease;
+    }
+
+    .drag-source,
+    .drop-target {
+      border: 1px dashed #cfd6df;
+      border-radius: 8px;
+      padding: .5rem .75rem;
+    }
+
+    .drop-target {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fcfdff;
+    }
+
+    .drag-source {
+      background: #f6f9ff;
+      cursor: grab;
+    }
+
+    .sticky-subnav {
+      position: sticky;
+      top: -1px;
+      z-index: 10;
+      background: #fff;
+      border-bottom: 1px solid #eef2f7;
+    }
+
+    .sticky-subnav .nav-link.active {
+      color: var(--brand-primary) !important;
+      font-weight: 600;
+      border-bottom: 2px solid var(--brand-primary);
+      border-radius: 0;
+    }
+
+    .mini-muted {
+      font-size: .9rem;
+      color: #6b7280;
+    }
+
+    .kpi {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        Agri<strong>Learn</strong>
+      </a>
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <span class="chip">
+          <i class="bi bi-trophy-fill text-brand"></i>
+          <span id="pointsDisplay">0 pts</span>
+        </span>
+        <span class="chip">
+          <i class="bi bi-star-fill text-warning"></i>
+          <span id="levelDisplay">Level 1</span>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sticky Section Nav -->
+  <div class="sticky-subnav d-none d-md-block">
+    <div class="container">
+      <ul class="nav nav-underline py-2">
+        <li class="nav-item"><a class="nav-link active" href="#setup">Setup</a></li>
+        <li class="nav-item"><a class="nav-link" href="#quizzes">Quizzes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#simulator">Simulator</a></li>
+        <li class="nav-item"><a class="nav-link" href="#modules">Learning</a></li>
+        <li class="nav-item"><a class="nav-link" href="#challenges">Challenges</a></li>
+        <li class="nav-item"><a class="nav-link" href="#rewards">Rewards</a></li>
+        <li class="nav-item"><a class="nav-link" href="#encyclopedia">Encyclopedia</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hero / Setup -->
+  <header id="setup" class="hero py-5">
+    <div class="container">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold text-balance">Learn Farming & Gardening the Fun Way</h1>
+          <p class="lead subtle">
+            Interactive quizzes, simulators, micro-courses, challenges, and a gamified plant library designed for
+            students and growers.
+          </p>
+          <div class="d-flex flex-wrap gap-2 my-3">
+            <span class="chip"><i class="bi bi-patch-check-fill text-brand"></i> Quizzes</span>
+            <span class="chip"><i class="bi bi-controller text-brand"></i> Simulators</span>
+            <span class="chip"><i class="bi bi-book-half text-brand"></i> Micro-courses</span>
+            <span class="chip"><i class="bi bi-gem text-brand"></i> Badges</span>
+          </div>
+          <div class="mt-4">
+            <button class="btn btn-brand btn-lg" id="startLearningBtn">
+              <i class="bi bi-play-fill me-1"></i> Start Learning
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Tell us about you</h5>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label fw-semibold">User type</label>
+                  <div class="d-flex flex-wrap gap-2" id="userTypeGroup" role="group" aria-label="User type selection">
+                    <button class="btn btn-outline-secondary" data-role="student">
+                      <i class="bi bi-mortarboard me-1"></i> Student
+                    </button>
+                    <button class="btn btn-outline-secondary" data-role="farmer">
+                      <i class="bi bi-person-workspace me-1"></i> Farmer
+                    </button>
+                    <button class="btn btn-outline-secondary" data-role="gardener">
+                      <i class="bi bi-flower1 me-1"></i> Gardener
+                    </button>
+                    <button class="btn btn-outline-secondary" data-role="nursery">
+                      <i class="bi bi-shop-window me-1"></i> Nursery Worker
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Your goals</label>
+                  <div class="row g-2">
+                    <div class="col-12 col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="plants_soil" id="goal1" />
+                        <label class="form-check-label" for="goal1">Learn plants & soil basics</label>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="improve_farming" id="goal2" />
+                        <label class="form-check-label" for="goal2">Improve farming practices</label>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="eco_gardening" id="goal3" />
+                        <label class="form-check-label" for="goal3">Eco-friendly gardening</label>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="agri_tech" id="goal4" />
+                        <label class="form-check-label" for="goal4">Learn AI & IoT in agriculture</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button id="saveProfileBtn" class="btn btn-accent">
+                    <i class="bi bi-save2 me-1"></i> Save Profile
+                  </button>
+                  <span class="mini-muted ms-2" id="profileSavedHint" aria-live="polite"></span>
+                </div>
+              </div>
+              <hr class="my-4" />
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div class="kpi">
+                    <div class="fw-semibold">Progress</div>
+                    <div class="text-end fw-semibold" id="progressPct">0%</div>
+                    <div class="progress-thin col-12">
+                      <div class="progress">
+                        <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mini-muted">Complete quizzes and modules to level up.</div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="kpi">
+                    <div class="fw-semibold">Badges</div>
+                    <div class="text-end fw-semibold"><span id="badgeCount">0</span></div>
+                    <div class="mini-muted col-12">Earn badges as you learn.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> card
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="py-5">
+    <div class="container">
+      Quizzes Section
+      <section id="quizzes" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">Interactive Quizzes & Games</h2>
+          <span class="mini-muted">Earn 10 points per correct quiz</span>
+        </div>
+        <div class="row g-4">
+          Soil Type from Photo
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0">Soil Quiz</h5>
+                  <span class="badge text-bg-success badge-pill">Soil Basics</span>
+                </div>
+                <p class="subtle mt-2">Identify the soil type in this image.</p>
+                <img src="https://picsum.photos/seed/soil/640/360" alt="Soil sample" class="img-fluid rounded mb-3" />
+                <div class="vstack gap-2" id="soilOptions">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="soilType" id="soil1" value="sandy" />
+                    <label class="form-check-label" for="soil1">Sandy</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="soilType" id="soil2" value="clay" />
+                    <label class="form-check-label" for="soil2">Clay</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="soilType" id="soil3" value="loam" />
+                    <label class="form-check-label" for="soil3">Loam</label>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-brand" id="soilSubmitBtn">Submit</button>
+                  <button class="btn btn-outline-secondary" id="soilResetBtn">Reset</button>
+                </div>
+                <div class="mt-2" id="soilFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+
+          Plant Health Quiz
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0">Plant Health Quiz</h5>
+                  <span class="badge text-bg-success badge-pill">Pest & Disease</span>
+                </div>
+                <p class="subtle mt-2">What is wrong with this leaf?</p>
+                <img src="https://picsum.photos/seed/leaf/640/360" alt="Plant leaf close-up"
+                  class="img-fluid rounded mb-3" />
+                <div class="vstack gap-2" id="leafOptions">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="leafIssue" id="leaf1" value="fungal" />
+                    <label class="form-check-label" for="leaf1">Fungal infection</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="leafIssue" id="leaf2" value="nutrient" />
+                    <label class="form-check-label" for="leaf2">Nutrient deficiency</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="leafIssue" id="leaf3" value="pest" />
+                    <label class="form-check-label" for="leaf3">Pest damage</label>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-brand" id="leafSubmitBtn">Submit</button>
+                  <button class="btn btn-outline-secondary" id="leafResetBtn">Reset</button>
+                </div>
+                <div class="mt-2" id="leafFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+
+          True / False
+          <div class="col-12 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">True or False</h5>
+                <p class="subtle">“Adding compost improves soil fertility.”</p>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-success" data-tf="true">True</button>
+                  <button class="btn btn-outline-danger" data-tf="false">False</button>
+                </div>
+                <div class="mt-2" id="tfFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+
+          Matching game: Crop -> Soil
+          <div class="col-12 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Matching: Crops & Soil</h5>
+                <p class="subtle">Drag a crop to the matching soil type.</p>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="drag-source" draggable="true" data-crop="rice">Rice</div>
+                    <div class="drag-source mt-2" draggable="true" data-crop="tomato">Tomato</div>
+                    <div class="drag-source mt-2" draggable="true" data-crop="cotton">Cotton</div>
+                  </div>
+                  <div class="col-6 vstack gap-2">
+                    <div class="drop-target" data-accept="clay">Clay</div>
+                    <div class="drop-target" data-accept="loam">Loam</div>
+                    <div class="drop-target" data-accept="sandy">Sandy</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-brand" id="matchCheckBtn">Check</button>
+                  <button class="btn btn-outline-secondary" id="matchResetBtn">Reset</button>
+                </div>
+                <div class="mt-2" id="matchFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+
+          Regional Crops (Kharif)
+          <div class="col-12 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Regional Crops: Kharif</h5>
+                <p class="subtle">Which crops are best for the Kharif season?</p>
+                <div class="vstack gap-2" id="kharifOptions">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="k1" value="rice" />
+                    <label class="form-check-label" for="k1">Rice</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="k2" value="wheat" />
+                    <label class="form-check-label" for="k2">Wheat</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="k3" value="maize" />
+                    <label class="form-check-label" for="k3">Maize</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="k4" value="cotton" />
+                    <label class="form-check-label" for="k4">Cotton</label>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-brand" id="kharifSubmitBtn">Submit</button>
+                  <button class="btn btn-outline-secondary" id="kharifResetBtn">Reset</button>
+                </div>
+                <div class="mt-2" id="kharifFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      Simulator
+      <section id="simulator" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">Virtual Farming / Gardening Simulator</h2>
+          <span class="mini-muted">Reach healthy plant to earn 20 points</span>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-lg-5">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Plant Growth</h5>
+                <div class="sim-plant position-relative mb-3" id="plantStage">
+                  <div class="leaf" id="leaf" style="bottom: 55px;"></div>
+                  <div class="stem" id="stem" style="height: 40px;"></div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="mini-muted mb-1">Water</div>
+                    <div class="progress">
+                      <div id="waterBar" class="progress-bar bg-info" role="progressbar" style="width: 30%"></div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mini-muted mb-1">Nutrients</div>
+                    <div class="progress">
+                      <div id="nutrientBar" class="progress-bar bg-success" role="progressbar" style="width: 20%"></div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="mini-muted mb-1">Health</div>
+                    <div class="progress">
+                      <div id="healthBar" class="progress-bar bg-success" role="progressbar" style="width: 40%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                  <button class="btn btn-brand" id="seedBtn"><i class="bi bi-egg-fill me-1"></i> Plant Seed</button>
+                  <button class="btn btn-outline-primary" id="waterBtn"><i class="bi bi-droplet-fill me-1"></i>
+                    Water</button>
+                  <button class="btn btn-outline-success" id="fertBtn"><i class="bi bi-flower3 me-1"></i>
+                    Fertilize</button>
+                  <button class="btn btn-outline-secondary" id="advanceDayBtn"><i class="bi bi-sunrise me-1"></i>
+                    Advance Day</button>
+                  <button class="btn btn-outline-danger" id="resetSimBtn"><i
+                      class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
+                </div>
+                <div class="mt-2" id="simFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Seasonal Planting</h5>
+                <p class="subtle">Choose crops suitable for Rabi season in Bengal.</p>
+                <div class="row row-cols-2 row-cols-md-3 g-3">
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="wheat">Wheat</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="mustard">Mustard</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="potato">Potato</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="rice">Rice</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="maize">Maize</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn w-100 btn-outline-secondary season-pick" data-crop="cotton">Cotton</button>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-brand" id="seasonSubmitBtn">Submit</button>
+                  <button class="btn btn-outline-secondary" id="seasonResetBtn">Reset</button>
+                </div>
+                <div class="mt-2" id="seasonFeedback" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      Learning Modules
+      <section id="modules" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">Learning Modules (Micro-Courses)</h2>
+          <span class="mini-muted">Complete module + quiz for badge</span>
+        </div>
+        <div class="row g-4">
+          Soil Health Basics
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Soil Health Basics</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Soil types, fertility, organic matter.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="soil">Start Module</button>
+              </div>
+            </div>
+          </div>
+          Water Conservation
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Water Conservation</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Drip irrigation, mulching, rainwater harvesting.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="water">Start Module</button>
+              </div>
+            </div>
+          </div>
+          Pest & Disease
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Pest & Disease</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Identify and control naturally.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="pest">Start Module</button>
+              </div>
+            </div>
+          </div>
+          Sustainable Farming
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Sustainable Farming</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Crop rotation, organic methods, carbon footprint.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="sustain">Start Module</button>
+              </div>
+            </div>
+          </div>
+          Gardening Basics
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Gardening Basics</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Care for flowers & indoor plants.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="garden">Start Module</button>
+              </div>
+            </div>
+          </div>
+          Smart Farming
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="card-title mb-0">Smart Farming (AI & IoT)</h5>
+                  <span class="badge text-bg-success">Module</span>
+                </div>
+                <p class="subtle">Sensors, automation, data-driven decisions.</p>
+                <button class="btn btn-accent w-100 module-start" data-module="smart">Start Module</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      Challenges & Rewards
+      <section id="challenges" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">Challenges & Competitions</h2>
+          <span class="mini-muted">Complete streaks for bonus points</span>
+        </div>
+        <div class="row g-4">
+          <div class="col-12 col-lg-7">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Daily/Weekly Challenges</h5>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="fw-semibold">Water your plants 7 days in a row</div>
+                      <div class="mini-muted">Earn +30 bonus points</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="mini-muted" id="streakDays">0/7</span>
+                      <button class="btn btn-outline-success btn-sm" id="markWateredBtn">Mark Today</button>
+                      <button class="btn btn-brand btn-sm" id="claimStreakBtn" disabled>Claim</button>
+                    </div>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="fw-semibold">Identify 5 plant diseases correctly</div>
+                      <div class="mini-muted">Earn +25 bonus points</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="mini-muted" id="diseaseProgress">0/5</span>
+                      <button class="btn btn-brand btn-sm" id="claimDiseaseBtn" disabled>Claim</button>
+                    </div>
+                  </li>
+                </ul>
+                <div class="mt-3">
+                  <h6 class="fw-semibold">Community Leaderboard</h6>
+                  <div class="table-responsive">
+                    <table class="table align-middle">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Points</th>
+                        </tr>
+                      </thead>
+                      <tbody id="leaderboardBody">
+                        Populated by JS
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          Rewards / Badges
+          <div class="col-12 col-lg-5">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Your Rewards</h5>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <span class="level-pill" id="levelPill">Level 1</span>
+                  <span class="badge text-bg-secondary" id="totalPointsBadge">0 pts</span>
+                </div>
+                <div class="row g-2" id="badgesGrid">
+                  Badges
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-brand rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-bezier2 text-brand"></i>
+                      <div>
+                        <div class="fw-semibold small">Soil Scientist</div>
+                        <div class="mini-muted">Complete Soil module</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-accent rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-droplet-fill text-primary"></i>
+                      <div>
+                        <div class="fw-semibold small">Water Warrior</div>
+                        <div class="mini-muted">Finish Water module</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-brand rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-shield-check text-brand"></i>
+                      <div>
+                        <div class="fw-semibold small">Pest Protector</div>
+                        <div class="mini-muted">Finish Pest module</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-accent rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-globe2 text-primary"></i>
+                      <div>
+                        <div class="fw-semibold small">Climate Hero</div>
+                        <div class="mini-muted">Finish Sustainable</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-brand rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-flower1 text-brand"></i>
+                      <div>
+                        <div class="fw-semibold small">Garden Guru</div>
+                        <div class="mini-muted">Finish Gardening</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="p-2 bg-soft-accent rounded d-flex align-items-center gap-2">
+                      <i class="bi bi-cpu-fill text-primary"></i>
+                      <div>
+                        <div class="fw-semibold small">Tech Explorer</div>
+                        <div class="mini-muted">Finish Smart Farming</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mini-muted mt-2">Badges unlock as you complete modules and challenges.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      Encyclopedia
+      <section id="encyclopedia" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="section-title h3 mb-0">Visual Plant Encyclopedia</h2>
+          <span class="mini-muted">Unlock cards by reaching new levels</span>
+        </div>
+        <div class="row g-4">
+          Tomato
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card plant-card position-relative h-100" data-unlock="1">
+              <img src="https://picsum.photos/seed/tomato/480/320" class="card-img-top" alt="Tomato plant" />
+              <div class="lock-overlay"><i class="bi bi-lock-fill me-1"></i> Locked</div>
+              <div class="card-body">
+                <h5 class="card-title mb-2">Tomato</h5>
+                <ul class="list-unstyled mini-muted mb-0">
+                  <li><i class="bi bi-moisture me-1"></i> Soil: Loam</li>
+                  <li><i class="bi bi-cloud-sun me-1"></i> Season: Warm</li>
+                  <li><i class="bi bi-droplet-half me-1"></i> Care: Moderate water</li>
+                  <li><i class="bi bi-bug me-1"></i> Pest: Aphids</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          Wheat
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card plant-card position-relative h-100" data-unlock="2">
+              <img src="https://picsum.photos/seed/wheat/480/320" class="card-img-top" alt="Wheat crop" />
+              <div class="lock-overlay"><i class="bi bi-lock-fill me-1"></i> Locked</div>
+              <div class="card-body">
+                <h5 class="card-title mb-2">Wheat</h5>
+                <ul class="list-unstyled mini-muted mb-0">
+                  <li><i class="bi bi-moisture me-1"></i> Soil: Clay loam</li>
+                  <li><i class="bi bi-cloud-sun me-1"></i> Season: Rabi</li>
+                  <li><i class="bi bi-droplet-half me-1"></i> Care: Low water</li>
+                  <li><i class="bi bi-bug me-1"></i> Pest: Rust</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          Rice
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card plant-card position-relative h-100" data-unlock="3">
+              <img src="https://picsum.photos/seed/rice/480/320" class="card-img-top" alt="Rice field" />
+              <div class="lock-overlay"><i class="bi bi-lock-fill me-1"></i> Locked</div>
+              <div class="card-body">
+                <h5 class="card-title mb-2">Rice</h5>
+                <ul class="list-unstyled mini-muted mb-0">
+                  <li><i class="bi bi-moisture me-1"></i> Soil: Clay</li>
+                  <li><i class="bi bi-cloud-sun me-1"></i> Season: Kharif</li>
+                  <li><i class="bi bi-droplet-half me-1"></i> Care: High water</li>
+                  <li><i class="bi bi-bug me-1"></i> Pest: Stem borer</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          Cotton
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="card plant-card position-relative h-100" data-unlock="4">
+              <img src="https://picsum.photos/seed/cotton/480/320" class="card-img-top" alt="Cotton plant" />
+              <div class="lock-overlay"><i class="bi bi-lock-fill me-1"></i> Locked</div>
+              <div class="card-body">
+                <h5 class="card-title mb-2">Cotton</h5>
+                <ul class="list-unstyled mini-muted mb-0">
+                  <li><i class="bi bi-moisture me-1"></i> Soil: Sandy</li>
+                  <li><i class="bi bi-cloud-sun me-1"></i> Season: Kharif</li>
+                  <li><i class="bi bi-droplet-half me-1"></i> Care: Moderate water</li>
+                  <li><i class="bi bi-bug me-1"></i> Pest: Bollworm</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  Module Modal
+  <div class="modal fade" id="moduleModal" tabindex="-1" aria-labelledby="moduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="moduleModalLabel">Module</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="moduleContent" class="vstack gap-3">
+            Filled by JS
+          </div>
+          <hr />
+          <div>
+            <h6 class="fw-semibold mb-2">Mini-quiz</h6>
+            <div id="moduleQuiz" class="vstack gap-2">
+              Filled by JS
+            </div>
+            <div class="mt-2" id="moduleQuizFeedback" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="moduleSubmitBtn" type="button" class="btn btn-brand">Submit Quiz</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  Toast
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="appToast" class="toast align-items-center text-bg-success border-0" role="status" aria-live="polite"
+      aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMsg">Saved</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+          aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  Bootstrap JS
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <script>
+    // State & Persistence
+    const store = {
+      get() {
+        try {
+          return JSON.parse(localStorage.getItem("agriLearn") || "{}");
+        } catch { return {}; }
+      },
+      set(data) {
+        localStorage.setItem("agriLearn", JSON.stringify(data));
+      },
+      update(patch) {
+        const s = this.get();
+        this.set({ ...s, ...patch });
+      }
+    };
+
+    function toast(msg, success = true) {
+      const el = document.getElementById("appToast");
+      el.classList.toggle("text-bg-success", success);
+      el.classList.toggle("text-bg-danger", !success);
+      document.getElementById("toastMsg").textContent = msg;
+      bootstrap.Toast.getOrCreateInstance(el).show();
+    }
+
+    // Points & Level
+    function getPoints() { return store.get().points || 0; }
+    function setPoints(v) { store.update({ points: v }); updateHeader(); }
+    function addPoints(v) { setPoints(getPoints() + v); }
+    function getLevel() {
+      const pts = getPoints();
+      return Math.max(1, Math.floor(pts / 100) + 1);
+    }
+    function updateHeader() {
+      document.getElementById("pointsDisplay").textContent = getPoints() + " pts";
+      document.getElementById("totalPointsBadge").textContent = getPoints() + " pts";
+      document.getElementById("levelDisplay").textContent = "Level " + getLevel();
+      document.getElementById("levelPill").textContent = "Level " + getLevel();
+      updateProgress();
+      refreshLocks();
+      refreshBadgeCount();
+    }
+
+    // Profile
+    const roleButtons = Array.from(document.querySelectorAll("#userTypeGroup button"));
+    let selectedRole = store.get().role || null;
+    roleButtons.forEach(btn => {
+      if (btn.dataset.role === selectedRole) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        roleButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedRole = btn.dataset.role;
+      });
+    });
+
+    function getGoals() {
+      return Array.from(document.querySelectorAll("#setup input[type='checkbox']:checked")).map(i => i.value);
+    }
+
+    document.getElementById("saveProfileBtn").addEventListener("click", () => {
+      store.update({ role: selectedRole, goals: getGoals() });
+      document.getElementById("profileSavedHint").textContent = "Profile saved.";
+      toast("Profile saved");
+    });
+
+    document.getElementById("startLearningBtn").addEventListener("click", () => {
+      document.querySelector(".sticky-subnav .nav-link[href='#quizzes']").click();
+      document.getElementById("quizzes").scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Subnav active state
+    document.querySelectorAll(".sticky-subnav .nav-link").forEach(link => {
+      link.addEventListener("click", (e) => {
+        document.querySelectorAll(".sticky-subnav .nav-link").forEach(l => l.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+      });
+    });
+
+    // Progress: simple proxy based on achievements
+    function updateProgress() {
+      const s = store.get();
+      const completedModules = s.modules ? Object.values(s.modules).filter(Boolean).length : 0;
+      const quizzesDone = (s.quizSoil ? 1 : 0) + (s.quizLeaf ? 1 : 0) + (s.quizTF ? 1 : 0) + (s.quizMatch ? 1 : 0) + (s.quizKharif ? 1 : 0);
+      const simWin = s.simHealthy ? 1 : 0;
+      const total = 1 + 5 + 6 + 1; // profile + quizzes (5) + modules (6) + simulator
+      const done = (s.role ? 1 : 0) + quizzesDone + completedModules + simWin;
+      const pct = Math.min(100, Math.round((done / total) * 100));
+      document.getElementById("progressBar").style.width = pct + "%";
+      document.getElementById("progressPct").textContent = pct + "%";
+    }
+
+    // Badges
+    function grantBadge(b) {
+      const s = store.get();
+      const badges = s.badges || {};
+      if (!badges[b]) {
+        badges[b] = true;
+        store.update({ badges });
+        refreshBadgeCount();
+        toast("Badge unlocked: " + b);
+      }
+    }
+    function refreshBadgeCount() {
+      const s = store.get();
+      const badges = s.badges || {};
+      const count = Object.values(badges).filter(Boolean).length;
+      document.getElementById("badgeCount").textContent = count;
+    }
+
+    // Leaderboard
+    const leaderboardSeed = [
+      { name: "Ananya", points: 240 },
+      { name: "Ravi", points: 210 },
+      { name: "Meera", points: 180 },
+      { name: "Vikram", points: 150 },
+      { name: "Aarav", points: 120 },
+    ];
+    function refreshLeaderboard() {
+      const userPts = getPoints();
+      const entries = [...leaderboardSeed, { name: "You", points: userPts }].sort((a, b) => b.points - a.points).slice(0, 10);
+      const body = document.getElementById("leaderboardBody");
+      body.innerHTML = "";
+      entries.forEach((e, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${i + 1}</td><td>${e.name}</td><td>${e.points}</td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    // Quizzes
+    document.getElementById("soilSubmitBtn").addEventListener("click", () => {
+      const val = (document.querySelector("input[name='soilType']:checked") || {}).value;
+      const feedback = document.getElementById("soilFeedback");
+      if (!val) { feedback.textContent = "Please choose an option."; return; }
+      if (val === "loam") {
+        feedback.innerHTML = '<span class="text-success fw-semibold">Correct!</span> Loam offers balanced texture and drainage.';
+        if (!store.get().quizSoil) { addPoints(10); store.update({ quizSoil: true }); }
+        incrementDiseaseProgress(); // reward towards disease challenge via any quiz
+      } else {
+        feedback.innerHTML = '<span class="text-danger fw-semibold">Not quite.</span> Try again.';
+      }
+      updateHeader(); refreshLeaderboard();
+    });
+    document.getElementById("soilResetBtn").addEventListener("click", () => {
+      document.querySelectorAll("input[name='soilType']").forEach(i => i.checked = false);
+      document.getElementById("soilFeedback").textContent = "";
+    });
+
+    document.getElementById("leafSubmitBtn").addEventListener("click", () => {
+      const val = (document.querySelector("input[name='leafIssue']:checked") || {}).value;
+      const feedback = document.getElementById("leafFeedback");
+      if (!val) { feedback.textContent = "Please choose an option."; return; }
+      if (val === "pest") {
+        feedback.innerHTML = '<span class="text-success fw-semibold">Correct!</span> Chewed edges often indicate pests.';
+        if (!store.get().quizLeaf) { addPoints(10); store.update({ quizLeaf: true }); }
+        incrementDiseaseProgress(true); // counts specifically for disease challenge
+      } else {
+        feedback.innerHTML = '<span class="text-danger fw-semibold">Not quite.</span> Look for chewing patterns.';
+      }
+      updateHeader(); refreshLeaderboard();
+    });
+    document.getElementById("leafResetBtn").addEventListener("click", () => {
+      document.querySelectorAll("input[name='leafIssue']").forEach(i => i.checked = false);
+      document.getElementById("leafFeedback").textContent = "";
+    });
+
+    document.querySelectorAll("[data-tf]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const val = e.currentTarget.dataset.tf === "true";
+        const feedback = document.getElementById("tfFeedback");
+        if (val) {
+          feedback.innerHTML = '<span class="text-success fw-semibold">Correct!</span> Compost improves soil fertility.';
+          if (!store.get().quizTF) { addPoints(10); store.update({ quizTF: true }); }
+          incrementDiseaseProgress();
+        } else {
+          feedback.innerHTML = '<span class="text-danger fw-semibold">Incorrect.</span>';
+        }
+        updateHeader(); refreshLeaderboard();
+      });
+    });
+
+    // Matching game
+    let currentMatches = {};
+    document.querySelectorAll(".drag-source").forEach(el => {
+      el.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/plain", e.target.dataset.crop);
+      });
+    });
+    document.querySelectorAll(".drop-target").forEach(el => {
+      el.addEventListener("dragover", (e) => e.preventDefault());
+      el.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const crop = e.dataTransfer.getData("text/plain");
+        e.currentTarget.textContent = e.currentTarget.dataset.accept + " ← " + crop;
+        currentMatches[crop] = e.currentTarget.dataset.accept;
+      });
+    });
+    document.getElementById("matchResetBtn").addEventListener("click", () => {
+      currentMatches = {};
+      document.querySelectorAll(".drop-target").forEach(el => el.textContent = el.dataset.accept);
+      document.getElementById("matchFeedback").textContent = "";
+    });
+    document.getElementById("matchCheckBtn").addEventListener("click", () => {
+      const correct = { rice: "clay", tomato: "loam", cotton: "sandy" };
+      const ok = Object.keys(correct).every(k => currentMatches[k] === correct[k]);
+      const fb = document.getElementById("matchFeedback");
+      if (ok) {
+        fb.innerHTML = '<span class="text-success fw-semibold">Great!</span> All matches are correct.';
+        if (!store.get().quizMatch) { addPoints(10); store.update({ quizMatch: true }); }
+        incrementDiseaseProgress();
+      } else {
+        fb.innerHTML = '<span class="text-danger fw-semibold">Keep trying.</span> Check each match.';
+      }
+      updateHeader(); refreshLeaderboard();
+    });
+
+    // Kharif selection
+    const kharifCorrect = ["rice", "maize", "cotton"];
+    document.getElementById("kharifSubmitBtn").addEventListener("click", () => {
+      const chosen = Array.from(document.querySelectorAll("#kharifOptions input:checked")).map(i => i.value);
+      const good = kharifCorrect.every(x => chosen.includes(x)) && chosen.every(x => kharifCorrect.includes(x));
+      const fb = document.getElementById("kharifFeedback");
+      if (good) {
+        fb.innerHTML = '<span class="text-success fw-semibold">Correct selection!</span>';
+        if (!store.get().quizKharif) { addPoints(10); store.update({ quizKharif: true }); }
+        incrementDiseaseProgress();
+      } else {
+        fb.innerHTML = '<span class="text-danger fw-semibold">Not quite.</span> Revisit Kharif crops.';
+      }
+      updateHeader(); refreshLeaderboard();
+    });
+    document.getElementById("kharifResetBtn").addEventListener("click", () => {
+      document.querySelectorAll("#kharifOptions input").forEach(i => i.checked = false);
+      document.getElementById("kharifFeedback").textContent = "";
+    });
+
+    // Simulator
+    const stemEl = document.getElementById("stem");
+    const leafEl = document.getElementById("leaf");
+    const waterBar = document.getElementById("waterBar");
+    const nutrientBar = document.getElementById("nutrientBar");
+    const healthBar = document.getElementById("healthBar");
+    let sim = { planted: false, water: 30, nutr: 20, health: 40, day: 0, healthyAwarded: false };
+
+    function refreshSimBars() {
+      waterBar.style.width = Math.max(0, Math.min(100, sim.water)) + "%";
+      nutrientBar.style.width = Math.max(0, Math.min(100, sim.nutr)) + "%";
+      healthBar.style.width = Math.max(0, Math.min(100, sim.health)) + "%";
+      stemEl.style.height = (40 + sim.day * 12) + "px";
+      const leafColor = sim.health >= 60 ? "#3bbd6f" : sim.health >= 35 ? "#93d6a9" : "#cfd8d3";
+      const stemColor = sim.health >= 60 ? "#2f7f49" : sim.health >= 35 ? "#6aa584" : "#9aa9a1";
+      leafEl.style.background = leafColor;
+      stemEl.style.background = stemColor;
+
+      if (sim.health >= 80 && sim.day >= 3 && !sim.healthyAwarded) {
+        sim.healthyAwarded = true;
+        store.update({ simHealthy: true });
+        addPoints(20);
+        toast("Healthy plant! +20 points");
+        updateHeader(); refreshLeaderboard();
+      }
+    }
+
+    document.getElementById("seedBtn").addEventListener("click", () => {
+      sim = { planted: true, water: 30, nutr: 20, health: 40, day: 0, healthyAwarded: false };
+      document.getElementById("simFeedback").textContent = "Seed planted. Keep it watered and nourished.";
+      refreshSimBars();
+    });
+    document.getElementById("waterBtn").addEventListener("click", () => {
+      if (!sim.planted) return;
+      sim.water = Math.min(100, sim.water + 20);
+      sim.health = Math.min(100, sim.health + 5);
+      refreshSimBars();
+    });
+    document.getElementById("fertBtn").addEventListener("click", () => {
+      if (!sim.planted) return;
+      sim.nutr = Math.min(100, sim.nutr + 25);
+      sim.health = Math.min(100, sim.health + 8);
+      refreshSimBars();
+    });
+    document.getElementById("advanceDayBtn").addEventListener("click", () => {
+      if (!sim.planted) return;
+      sim.day += 1;
+      // daily decay
+      sim.water -= 15; sim.nutr -= 10;
+      if (sim.water < 20 || sim.nutr < 15) sim.health -= 10;
+      else sim.health += 5;
+      document.getElementById("simFeedback").textContent = "Day " + sim.day + ": " + (sim.health >= 60 ? "Plant looks healthy." : sim.health >= 35 ? "Plant is okay." : "Plant is stressed."));
+    refreshSimBars();
+      });
+    document.getElementById("resetSimBtn").addEventListener("click", () => {
+      sim = { planted: false, water: 30, nutr: 20, health: 40, day: 0, healthyAwarded: false };
+      document.getElementById("simFeedback").textContent = "";
+      refreshSimBars();
+    });
+
+    // Seasonal picks
+    const seasonPicks = new Set();
+    document.querySelectorAll(".season-pick").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const crop = btn.dataset.crop;
+        if (seasonPicks.has(crop)) {
+          seasonPicks.delete(crop); btn.classList.remove("btn-brand"); btn.classList.add("btn-outline-secondary");
+        } else {
+          seasonPicks.add(crop); btn.classList.add("btn-brand"); btn.classList.remove("btn-outline-secondary");
+        }
+      });
+    });
+    document.getElementById("seasonSubmitBtn").addEventListener("click", () => {
+      const correct = ["wheat", "mustard", "potato"];
+      const chosen = Array.from(seasonPicks);
+      const good = chosen.length && chosen.every(c => correct.includes(c)) && correct.every(c => chosen.includes(c));
+      const fb = document.getElementById("seasonFeedback");
+      if (good) { fb.innerHTML = '<span class="text-success fw-semibold">Great seasonal planning!</span>'; addPoints(10); }
+      else { fb.innerHTML = '<span class="text-danger fw-semibold">Try again.</span>'; }
+      updateHeader(); refreshLeaderboard();
+    });
+    document.getElementById("seasonResetBtn").addEventListener("click", () => {
+      seasonPicks.clear();
+      document.getElementById("seasonFeedback").textContent = "";
+      document.querySelectorAll(".season-pick").forEach(btn => {
+        btn.classList.remove("btn-brand"); btn.classList.add("btn-outline-secondary");
+      });
+    });
+
+    // Modules (content + mini-quiz)
+    const moduleContentMap = {
+      soil: {
+        title: "Soil Health Basics",
+        points: 25,
+        badge: "Soil Scientist",
+        content: [
+          "Loam soil balances sand, silt, and clay for good drainage and nutrient retention.",
+          "Organic matter improves structure and supports microbes.",
+          "Avoid compacting wet soil; use mulch to protect topsoil."
+        ],
+        quiz: {
+          q: "Which soil is best for balanced growth?",
+          choices: ["Sandy", "Loam", "Clay"],
+          answer: "Loam"
+        }
+      },
+      water: {
+        title: "Water Conservation",
+        points: 25,
+        badge: "Water Warrior",
+        content: [
+          "Use drip irrigation to deliver water efficiently to roots.",
+          "Mulch reduces evaporation and represses weeds.",
+          "Harvest rainwater to reduce groundwater dependency."
+        ],
+        quiz: {
+          q: "Which method saves most water?",
+          choices: ["Sprinkler", "Drip", "Flooding"],
+          answer: "Drip"
+        }
+      },
+      pest: {
+        title: "Pest & Disease Management",
+        points: 25,
+        badge: "Pest Protector",
+        content: [
+          "Scout regularly; early detection prevents outbreaks.",
+          "Encourage beneficial insects; avoid overusing chemicals.",
+          "Rotate crops to break pest life cycles."
+        ],
+        quiz: {
+          q: "A natural control strategy is:",
+          choices: ["Monocropping", "Excess pesticides", "Beneficial insects"],
+          answer: "Beneficial insects"
+        }
+      },
+      sustain: {
+        title: "Sustainable Farming",
+        points: 25,
+        badge: "Climate Hero",
+        content: [
+          "Rotate crops and use cover crops to enrich soil.",
+          "Compost organic waste to reduce emissions.",
+          "Reduce tillage to protect soil carbon."
+        ],
+        quiz: {
+          q: "Which practice best builds soil health?",
+          choices: ["Intensive tillage", "Crop rotation", "Bare fallow"],
+          answer: "Crop rotation"
+        }
+      },
+      garden: {
+        title: "Gardening Basics",
+        points: 25,
+        badge: "Garden Guru",
+        content: [
+          "Right plant, right place: match light and water needs.",
+          "Feed with compost and prune for shape and health.",
+          "Check soil moisture before watering."
+        ],
+        quiz: {
+          q: "Before watering, first:",
+          choices: ["Add fertilizer", "Check soil moisture", "Prune leaves"],
+          answer: "Check soil moisture"
+        }
+      },
+      smart: {
+        title: "Smart Farming (AI & IoT)",
+        points: 25,
+        badge: "Tech Explorer",
+        content: [
+          "Sensors track soil moisture and microclimate.",
+          "AI forecasts disease risk for timely action.",
+          "Automations optimize irrigation and fertigation."
+        ],
+        quiz: {
+          q: "An IoT device commonly used in fields:",
+          choices: ["Soil moisture sensor", "VR headset", "Microwave"],
+          answer: "Soil moisture sensor"
+        }
+      }
+    };
+
+    let activeModuleKey = null;
+    const moduleModal = new bootstrap.Modal(document.getElementById("moduleModal"));
+    document.querySelectorAll(".module-start").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeModuleKey = btn.dataset.module;
+        const data = moduleContentMap[activeModuleKey];
+        document.getElementById("moduleModalLabel").textContent = data.title;
+        const contentEl = document.getElementById("moduleContent");
+        contentEl.innerHTML = "";
+        data.content.forEach(p => {
+          const d = document.createElement("div");
+          d.innerHTML = `<div class="p-3 bg-body-tertiary rounded">${p}</div>`;
+          contentEl.appendChild(d);
+        });
+        const quizEl = document.getElementById("moduleQuiz");
+        quizEl.innerHTML = `
+            <div class="fw-semibold">${data.quiz.q}</div>
+            ${data.quiz.choices.map((c, i) => `
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="moduleChoice" id="mq${i}" value="${c}">
+                <label class="form-check-label" for="mq${i}">${c}</label>
+              </div>
+            `).join("")}
+          `;
+        document.getElementById("moduleQuizFeedback").textContent = "";
+        moduleModal.show();
+      });
+    });
+
+    document.getElementById("moduleSubmitBtn").addEventListener("click", () => {
+      if (!activeModuleKey) return;
+      const picked = (document.querySelector("input[name='moduleChoice']:checked") || {}).value;
+      const data = moduleContentMap[activeModuleKey];
+      const fb = document.getElementById("moduleQuizFeedback");
+      if (!picked) { fb.textContent = "Please select an answer."; return; }
+      if (picked === data.quiz.answer) {
+        fb.innerHTML = '<span class="text-success fw-semibold">Correct!</span> Module completed.';
+        const s = store.get();
+        const modules = s.modules || {};
+        if (!modules[activeModuleKey]) {
+          modules[activeModuleKey] = true;
+          store.update({ modules });
+          addPoints(data.points);
+          grantBadge(data.badge);
+          updateHeader(); refreshLeaderboard();
+        }
+      } else {
+        fb.innerHTML = '<span class="text-danger fw-semibold">Not quite.</span> Review the content above.';
+      }
+    });
+
+    // Challenges
+    function getChallenge() {
+      const s = store.get();
+      return {
+        streak: s.streak || 0,
+        claimedStreak: s.claimedStreak || false,
+        disease: s.disease || 0,
+        claimedDisease: s.claimedDisease || false
+      };
+    }
+    function setChallenge(ch) { store.update(ch); refreshChallenges(); }
+
+    function incrementDiseaseProgress(strict = false) {
+      const ch = getChallenge();
+      ch.disease = Math.min(5, ch.disease + 1);
+      setChallenge(ch);
+    }
+
+    function refreshChallenges() {
+      const ch = getChallenge();
+      document.getElementById("streakDays").textContent = ch.streak + "/7";
+      document.getElementById("diseaseProgress").textContent = ch.disease + "/5";
+      document.getElementById("claimStreakBtn").disabled = !(ch.streak >= 7) || ch.claimedStreak;
+      document.getElementById("claimDiseaseBtn").disabled = !(ch.disease >= 5) || ch.claimedDisease;
+    }
+
+    document.getElementById("markWateredBtn").addEventListener("click", () => {
+      const ch = getChallenge();
+      ch.streak = Math.min(7, ch.streak + 1);
+      setChallenge(ch);
+      toast("Progress marked");
+    });
+    document.getElementById("claimStreakBtn").addEventListener("click", () => {
+      const ch = getChallenge();
+      if (ch.streak >= 7 && !ch.claimedStreak) {
+        ch.claimedStreak = true;
+        setChallenge(ch);
+        addPoints(30);
+        toast("Streak challenge claimed! +30 points");
+        updateHeader(); refreshLeaderboard();
+      }
+    });
+    document.getElementById("claimDiseaseBtn").addEventListener("click", () => {
+      const ch = getChallenge();
+      if (ch.disease >= 5 && !ch.claimedDisease) {
+        ch.claimedDisease = true;
+        setChallenge(ch);
+        addPoints(25);
+        toast("Disease challenge claimed! +25 points");
+        updateHeader(); refreshLeaderboard();
+      }
+    });
+
+    // Encyclopedia locking by level
+    function refreshLocks() {
+      const level = getLevel();
+      document.querySelectorAll(".plant-card").forEach(card => {
+        const need = Number(card.dataset.unlock || "1");
+        if (level >= need) {
+          card.classList.remove("locked");
+        } else {
+          card.classList.add("locked");
+        }
+      });
+    }
+
+    // On load: hydrate UI from store
+    function hydrateProfile() {
+      const s = store.get();
+      if (s.role) {
+        roleButtons.forEach(b => b.classList.toggle("active", b.dataset.role === s.role));
+      }
+      (s.goals || []).forEach(g => {
+        const cb = document.querySelector(`#setup input[type='checkbox'][value='${g}']`);
+        if (cb) cb.checked = true;
+      });
+    }
+
+    // Initial
+    hydrateProfile();
+    refreshChallenges();
+    refreshSimBars();
+    updateHeader();
+    refreshLeaderboard();
+    refreshLocks();
+  </script>
+</body>
+
+</html>

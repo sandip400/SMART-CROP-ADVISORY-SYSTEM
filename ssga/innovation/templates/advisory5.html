@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Farming Weather Advisory</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+</head>
+<style>
+  /* Reset and Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #f0fdf4;
+    color: #374151;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Header Styles */
+  .header {
+    background: white;
+    border-bottom: 1px solid #d1d5db;
+    padding: 1rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #15803d;
+  }
+
+  .location-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .location-icon {
+    font-size: 1.2rem;
+  }
+
+  .location-dropdown {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background: white;
+    color: #374151;
+    font-size: 0.9rem;
+  }
+
+  /* Alert Banner */
+  .alert-banner {
+    background: #fef3c7;
+    border-bottom: 1px solid #f59e0b;
+    padding: 0.75rem 0;
+  }
+
+  .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .alert-icon {
+    font-size: 1.2rem;
+  }
+
+  .alert-text {
+    flex: 1;
+    font-weight: 500;
+    color: #92400e;
+  }
+
+  .alert-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #92400e;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  /* Main Content */
+  .main-content {
+    padding: 2rem 0;
+  }
+
+  /* Input Section */
+  .input-section {
+    margin-bottom: 2rem;
+  }
+
+  .input-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .input-card h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #15803d;
+    margin-bottom: 1rem;
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .input-group label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9rem;
+  }
+
+  .input-field {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background: white;
+    color: #374151;
+    font-size: 0.9rem;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: #84cc16;
+    box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.1);
+  }
+
+  /* Weather Section */
+  .weather-section {
+    margin-bottom: 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .section-header h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #15803d;
+  }
+
+  .risk-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border-radius: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .risk-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+  }
+
+  .risk-safe {
+    background: #22c55e;
+  }
+
+  .risk-caution {
+    background: #f59e0b;
+  }
+
+  .risk-danger {
+    background: #ef4444;
+  }
+
+  .risk-text {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .weather-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+  }
+
+  /* Weather Cards */
+  .weather-card,
+  .forecast-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .weather-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .weather-header h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .weather-icon {
+    font-size: 2rem;
+  }
+
+  .temperature {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #15803d;
+    margin-bottom: 1rem;
+  }
+
+  .weather-params {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .param {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .param-icon {
+    font-size: 1.2rem;
+    width: 1.5rem;
+  }
+
+  .param-label {
+    flex: 1;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  .param-value {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  /* Forecast */
+  .forecast-scroll {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .forecast-item {
+    flex: 0 0 auto;
+    text-align: center;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    min-width: 100px;
+  }
+
+  .forecast-day {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .forecast-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .forecast-temp {
+    font-weight: 600;
+    color: #15803d;
+    font-size: 0.9rem;
+  }
+
+  .forecast-rain {
+    color: #6b7280;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+
+  /* Advisory Section */
+  .advisory-section,
+  .alerts-section {
+    margin-bottom: 2rem;
+  }
+
+  .advisory-section h2,
+  .alerts-section h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #15803d;
+    margin-bottom: 1rem;
+  }
+
+  .advisory-grid,
+  .alerts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .advisory-card,
+  .alert-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #84cc16;
+  }
+
+  .advisory-header,
+  .alert-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .advisory-icon,
+  .alert-icon {
+    font-size: 1.5rem;
+  }
+
+  .advisory-title,
+  .alert-title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .advisory-message,
+  .alert-message {
+    color: #6b7280;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .advisory-action,
+  .alert-action {
+    background: #15803d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .advisory-action:hover,
+  .alert-action:hover {
+    background: #166534;
+  }
+
+  .alert-card.danger {
+    border-left-color: #ef4444;
+  }
+
+  .alert-card.warning {
+    border-left-color: #f59e0b;
+  }
+
+  /* Seasonal Section */
+  .seasonal-section {
+    margin-bottom: 2rem;
+  }
+
+  .seasonal-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .seasonal-card h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #15803d;
+    margin-bottom: 1.5rem;
+  }
+
+  .seasonal-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .season-info h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+
+  .season-info p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+  }
+
+  .season-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tip {
+    font-size: 0.9rem;
+    color: #15803d;
+    font-weight: 500;
+  }
+
+  /* Notification Toast */
+  .notification-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #15803d;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 350px;
+    z-index: 1000;
+  }
+
+  .notification-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .toast-icon {
+    font-size: 1.2rem;
+  }
+
+  .toast-message {
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Track Location Button Styles */
+  .track-location-btn {
+    background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-width: 200px;
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .track-location-btn:hover {
+    background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+    box-shadow: 0 6px 20px rgba(21, 128, 61, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Enhance button emphasis: add shine effect and stronger focus outline */
+  .track-location-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+  }
+
+  .track-location-btn:hover::after {
+    left: 150%;
+  }
+
+  .track-location-btn:focus-visible {
+    outline: 3px solid #f59e0b;
+    /* amber focus ring for accessibility */
+    outline-offset: 3px;
+  }
+
+  /* Make controls nicely spaced */
+  .tracking-controls {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  /* Style the stop button to complement the primary one */
+  .stop-btn {
+    background: #ffffff;
+    color: #ef4444;
+    border: 2px solid #ef4444;
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+  }
+
+  .stop-btn:hover {
+    background: #fee2e2;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .stop-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Location Display Styles */
+  .location-display {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #15803d;
+    margin-bottom: 1rem;
+  }
+
+  .location-display h3 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    color: #15803d;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .location-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .location-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .location-label {
+    font-weight: 500;
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+
+  .location-value {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  /* Button Container */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .weather-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .input-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .seasonal-content {
+      grid-template-columns: 1fr;
+    }
+
+    .notification-toast {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      max-width: none;
+    }
+
+    .track-location-btn {
+      width: 100%;
+      min-width: auto;
+      padding: 1rem 1.5rem;
+    }
+
+    .button-container {
+      margin: 1.5rem 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 0.5rem;
+    }
+
+    .main-content {
+      padding: 1rem 0;
+    }
+
+    .input-card,
+    .weather-card,
+    .forecast-card,
+    .advisory-card,
+    .alert-card,
+    .seasonal-card {
+      padding: 1rem;
+    }
+
+    .temperature {
+      font-size: 2.5rem;
+    }
+
+    .track-location-btn {
+      font-size: 0.9rem;
+      padding: 0.875rem 1.25rem;
+    }
+
+    .location-info {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="logo">🌱 Smart Farm Assistant</h1>
+      </div>
+    </div>
+  </header>
+
+  <div id="alertBanner" class="alert-banner">
+    <div class="container">
+      <div class="alert-content">
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-text">High humidity detected - Spray neem oil to prevent fungal diseases</span>
+        <button class="alert-close" onclick="closeAlert()">×</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container">
+      <section class="input-section">
+        <div class="input-card">
+          <h2>Your Farm Settings</h2>
+          <div class="input-grid">
+            <div class="input-group">
+              <label for="cropSelect">Crop/Plant Type</label>
+              <select id="cropSelect" class="input-field">
+                <option value="tomato">🍅 Tomato</option>
+                <option value="rice">🌾 Rice (Paddy)</option>
+                <option value="rose">🌹 Rose</option>
+                <option value="mango">🥭 Mango</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="waterAvailability">Water Availability</label>
+              <select id="waterAvailability" class="input-field">
+                <option value="high">High</option>
+                <option value="moderate">Moderate</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="farmingStyle">Farming Style</label>
+              <select id="farmingStyle" class="input-field">
+                <option value="organic">Organic</option>
+                <option value="conventional">Conventional</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="location-tracking">
+            <h3>Real-Time Location & Weather</h3>
+            <div class="tracking-controls button-container">
+              <button id="trackLocationBtn" class="track-location-btn">📍 Track Location & Weather</button>
+              <button id="stopTrackingBtn" class="stop-btn" style="display: none;" disabled>⏹️ Stop Tracking</button>
+            </div>
+            <div class="location-info" id="locationInfo" style="display: none;">
+              <div class="location-detail">
+                <span class="detail-label">Current Location:</span>
+                <span id="currentLocation">Getting location...</span>
+              </div>
+              <div class="location-coords">
+                <div class="coord-item">
+                  <span class="coord-label">Latitude:</span>
+                  <span id="latitude">--</span>
+                </div>
+                <div class="coord-item">
+                  <span class="coord-label">Longitude:</span>
+                  <span id="longitude">--</span>
+                </div>
+                <div class="coord-item">
+                  <span class="coord-label">Accuracy:</span>
+                  <span id="accuracy">--</span>
+                </div>
+                <div class="coord-item">
+                  <span class="coord-label">Last Updated:</span>
+                  <span id="timestamp">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="weather-section">
+        <div class="section-header">
+          <h2>Today's Weather</h2>
+          <div class="risk-indicator" id="riskIndicator">
+            <span class="risk-dot risk-safe"></span>
+            <span class="risk-text">Safe Conditions</span>
+          </div>
+        </div>
+
+        <div class="weather-grid">
+
+          <div class="weather-card current-weather">
+            <div class="weather-header">
+              <h3>Current Conditions</h3>
+              <span class="weather-icon">🌞</span>
+            </div>
+            <div class="weather-details">
+              <div class="temperature weather-temp">---</div>
+              <div class="weather-params">
+                <div class="param">
+                  <span class="param-icon">💧</span>
+                  <span class="param-label">Humidity</span>
+                  Humidity
+                  <span class="param-value humidity-value">78%</span>
+                </div>
+                <div class="param">
+                  <span class="param-icon">🌬️</span>
+                  <span class="param-label">Wind</span>
+                  Wind
+                  <span class="param-value wind-value">12 km/h</span>
+                </div>
+                <div class="param">
+                  <span class="param-icon">☀️</span>
+                  <span class="param-label">UV Index</span>
+                  UV
+                  <span class="param-value uv-value">8 (High)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="forecast-card">
+            <h3>7-Day Forecast</h3>
+            <div class="forecast-scroll" id="forecastContainer">
+              Forecast items will be populated by JavaScript
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advisory-section">
+        <h2>Personalized Advisory</h2>
+        <div class="advisory-grid" id="advisoryGrid">
+          Advisory cards will be populated by JavaScript
+        </div>
+      </section>
+
+
+      <section class="alerts-section">
+        <h2>Risk Alerts & Recommendations</h2>
+        <div class="alerts-grid" id="alertsGrid">
+
+        </div>
+      </section>
+
+      <section class="seasonal-section">
+        <div class="seasonal-card">
+          <h2>Seasonal Planning Guide</h2>
+          <div class="seasonal-content">
+            <div class="season-info">
+              <h3>🌾 Kharif Season (June - October)</h3>
+              <p>Recommended crops: Rice, Maize, Groundnut, Cotton</p>
+              <div class="season-tips">
+                <span class="tip">💡 High rainfall expected</span>
+                <span class="tip">💡 Monitor for pest outbreaks</span>
+              </div>
+            </div>
+            <div class="season-info">
+              <h3>❄️ Rabi Season (November - April)</h3>
+              <p>Recommended crops: Wheat, Peas, Mustard, Carrots</p>
+              <div class="season-tips">
+                <span class="tip">💡 Prepare for frost protection</span>
+                <span class="tip">💡 Optimal irrigation timing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="notificationToast" class="notification-toast">
+    <div class="toast-content">
+      <span class="toast-icon">🌧️</span>
+      <span class="toast-message">Rain expected tomorrow - Skip irrigation to save 50L water</span>
+    </div>
+  </div>
+
+  <script>
+    // Mock weather data and functionality
+    let watchId
+    const currentLocationData = {
+      latitude: null,
+      longitude: null,
+      address: "Location not available",
+    }
+
+    const weatherData = {
+      current: {
+        temp: 34,
+        humidity: 78,
+        windSpeed: 12,
+        uvIndex: 8,
+        icon: "🌞",
+      },
+      forecast: [
+        { day: "Today", icon: "🌞", temp: "34°", rain: "0%" },
+        { day: "Tomorrow", icon: "🌧️", temp: "28°", rain: "80%" },
+        { day: "Wed", icon: "⛅", temp: "30°", rain: "20%" },
+        { day: "Thu", icon: "🌞", temp: "32°", rain: "5%" },
+        { day: "Fri", icon: "🌧️", temp: "26°", rain: "90%" },
+        { day: "Sat", icon: "⛅", temp: "29°", rain: "30%" },
+        { day: "Sun", icon: "🌞", temp: "33°", rain: "10%" },
+      ],
+    }
+
+    const advisoryData = {
+      tomato: [
+        {
+          icon: "💧",
+          title: "Irrigation Advisory",
+          message: "Water early morning (6-8 AM) to avoid heat stress. Skip watering tomorrow due to expected rainfall.",
+        },
+        {
+          icon: "🌿",
+          title: "Pest Management",
+          message: "High humidity increases risk of blight. Apply copper-based fungicide as preventive measure.",
+        },
+      ],
+      rice: [
+        {
+          icon: "🌾",
+          title: "Field Preparation",
+          message: "Monsoon approaching. Prepare fields for transplanting. Ensure proper drainage channels.",
+        },
+        {
+          icon: "💧",
+          title: "Water Management",
+          message: "Maintain 2-3 cm water level in fields. Expected rain will help maintain levels.",
+        },
+      ],
+    }
+
+    const alertsData = [
+      {
+        type: "warning",
+        icon: "⚠️",
+        title: "High Humidity Alert",
+        message: "Humidity levels at 78% increase fungal disease risk. Apply preventive treatments.",
+      },
+      {
+        type: "info",
+        icon: "🌧️",
+        title: "Rain Forecast",
+        message: "Heavy rainfall expected tomorrow. Skip irrigation and secure loose materials.",
+      },
+      {
+        type: "success",
+        icon: "💰",
+        title: "Water Savings",
+        message: "Tomorrow's rain will save approximately 50 liters of irrigation water.",
+      },
+    ]
+
+    // Initialize the dashboard
+    document.addEventListener("DOMContentLoaded", () => {
+      initializeForecast()
+      initializeAdvisory()
+      initializeAlerts()
+      setupEventListeners()
+      showNotification()
+    })
+
+    function initializeForecast() {
+      updateForecastDisplay()
+    }
+
+    function initializeAdvisory() {
+      const advisoryGrid = document.getElementById("advisoryGrid")
+      const currentCrop = document.getElementById("cropSelect").value
+      const advisories = advisoryData[currentCrop] || advisoryData.tomato
+
+      advisoryGrid.innerHTML = ""
+      advisories.forEach((advisory) => {
+        const advisoryCard = document.createElement("div")
+        advisoryCard.className = "advisory-card"
+        advisoryCard.innerHTML = `
+            <div class="advisory-header">
+                <span class="advisory-icon">${advisory.icon}</span>
+                <h3 class="advisory-title">${advisory.title}</h3>
+            </div>
+            <p class="advisory-message">${advisory.message}</p>
+        `
+        advisoryGrid.appendChild(advisoryCard)
+      })
+    }
+
+    function initializeAlerts() {
+      const alertsGrid = document.getElementById("alertsGrid")
+
+      alertsData.forEach((alert) => {
+        const alertCard = document.createElement("div")
+        alertCard.className = `alert-card ${alert.type}`
+        alertCard.innerHTML = `
+            <div class="alert-header">
+                <span class="alert-icon">${alert.icon}</span>
+                <h3 class="alert-title">${alert.title}</h3>
+            </div>
+            <p class="alert-message">${alert.message}</p>
+        `
+        alertsGrid.appendChild(alertCard)
+      })
+    }
+
+    function setupEventListeners() {
+      // Crop selection change
+      document.getElementById("cropSelect").addEventListener("change", () => {
+        initializeAdvisory()
+        updateRiskIndicator()
+      })
+
+      // Location change
+      document.getElementById("locationSelect").addEventListener("change", () => {
+        updateWeatherData()
+      })
+
+      // Water availability change
+      document.getElementById("waterAvailability").addEventListener("change", () => {
+        updateAdvisoryMessages()
+      })
+
+      // Location tracking button event listeners
+      const trackBtn = document.getElementById("trackLocationBtn")
+      const stopBtn = document.getElementById("stopTrackingBtn")
+
+      if (trackBtn) {
+        trackBtn.addEventListener("click", startLocationTracking)
+      }
+      if (stopBtn) {
+        stopBtn.addEventListener("click", stopLocationTracking)
+      }
+    }
+
+    function updateRiskIndicator() {
+      const riskIndicator = document.getElementById("riskIndicator")
+      const riskDot = riskIndicator.querySelector(".risk-dot")
+      const riskText = riskIndicator.querySelector(".risk-text")
+
+      // Calculate risk based on real weather conditions
+      const humidity = weatherData.current.humidity
+      const temp = weatherData.current.temp
+
+      if (humidity > 85 || temp > 40) {
+        riskDot.className = "risk-dot risk-danger"
+        riskText.textContent = "High Risk"
+      } else if (humidity > 75 || temp > 35) {
+        riskDot.className = "risk-dot risk-caution"
+        riskText.textContent = "Caution Required"
+      } else {
+        riskDot.className = "risk-dot risk-safe"
+        riskText.textContent = "Safe Conditions"
+      }
+    }
+
+    function updateWeatherData() {
+      if (currentLocationData.latitude && currentLocationData.longitude) {
+        getWeather(currentLocationData.latitude, currentLocationData.longitude)
+      } else {
+        console.log("[v0] No location data available for weather update")
+      }
+    }
+
+    function updateAdvisoryMessages() {
+      // Update advisory messages based on water availability
+      console.log("[v0] Updating advisory messages based on water availability")
+      initializeAdvisory()
+    }
+
+    function closeAlert() {
+      const alertBanner = document.getElementById("alertBanner")
+      alertBanner.style.display = "none"
+    }
+
+    function showNotification() {
+      // Show notification after 3 seconds
+      setTimeout(() => {
+        const toast = document.getElementById("notificationToast")
+        toast.classList.add("show")
+
+        // Hide after 5 seconds
+        setTimeout(() => {
+          toast.classList.remove("show")
+        }, 5000)
+      }, 3000)
+    }
+
+    function showToast(message, icon = "🌱") {
+      const toast = document.getElementById("notificationToast")
+      const toastIcon = toast.querySelector(".toast-icon")
+      const toastMessage = toast.querySelector(".toast-message")
+
+      toastIcon.textContent = icon
+      toastMessage.textContent = message
+
+      toast.classList.add("show")
+
+      setTimeout(() => {
+        toast.classList.remove("show")
+      }, 3000)
+    }
+
+    function getWeather(lat, lon) {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=auto`
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("[v0] Weather data received:", data)
+
+          const current = data.current_weather
+          const daily = data.daily
+          const hourly = data.hourly
+
+          // Update current weather
+          weatherData.current = {
+            temp: Math.round(current.temperature),
+            humidity: hourly.relative_humidity_2m[0] || 78,
+            windSpeed: Math.round(current.windspeed),
+            uvIndex: 8, // UV index not available in free API
+            icon: getWeatherIcon(current.weathercode),
+          }
+
+          // Update forecast
+          weatherData.forecast = daily.time.slice(0, 7).map((date, index) => ({
+            day:
+              index === 0
+                ? "Today"
+                : index === 1
+                  ? "Tomorrow"
+                  : new Date(date).toLocaleDateString("en", { weekday: "short" }),
+            icon: getWeatherIcon(daily.weather_code[index]),
+            temp: `${Math.round(daily.temperature_2m_max[index])}°`,
+            rain: `${daily.precipitation_probability_max[index] || 0}%`,
+          }))
+
+          // Update UI with real data
+          updateCurrentWeatherDisplay()
+          updateForecastDisplay()
+          updateRiskIndicator()
+
+          showToast("Weather data updated with real-time information!", "🌤️")
+        })
+        .catch((error) => {
+          console.error("Error fetching weather data:", error)
+          showToast("Failed to fetch weather data. Using default values.", "⚠️")
+        })
+    }
+
+    function getWeatherIcon(code) {
+      const weatherMapping = {
+        0: "☀️",
+        1: "🌤️",
+        2: "⛅",
+        3: "☁️",
+        45: "🌫️",
+        48: "🌫️",
+        51: "🌦️",
+        53: "🌦️",
+        55: "🌧️",
+        61: "🌧️",
+        63: "🌧️",
+        65: "⛈️",
+        71: "🌨️",
+        73: "❄️",
+        75: "❄️",
+        80: "🌦️",
+        81: "🌧️",
+        82: "⛈️",
+        95: "⛈️",
+        96: "⛈️",
+        99: "⛈️",
+      }
+      return weatherMapping[code] || "🌤️"
+    }
+
+    async function getAddress(lat, lon) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+        const data = await response.json()
+        const address = data.display_name || "Address not available"
+        currentLocationData.address = address
+
+        // Update location display
+        const locationElement = document.getElementById("currentLocation")
+        if (locationElement) {
+          locationElement.textContent = address.split(",").slice(0, 3).join(", ")
+        }
+
+        console.log("[v0] Address updated:", address)
+      } catch (error) {
+        console.error("Error fetching address:", error)
+        currentLocationData.address = "Unable to fetch address"
+      }
+    }
+
+    function updatePosition(position) {
+      const lat = position.coords.latitude
+      const lon = position.coords.longitude
+      const accuracy = position.coords.accuracy
+      const timestamp = new Date(position.timestamp).toLocaleString()
+
+      currentLocationData.latitude = lat
+      currentLocationData.longitude = lon
+
+      console.log("[v0] Position updated:", { lat, lon, accuracy })
+
+      // Update location display elements if they exist
+      const latElement = document.getElementById("latitude")
+      const lonElement = document.getElementById("longitude")
+      const accuracyElement = document.getElementById("accuracy")
+      const timestampElement = document.getElementById("timestamp")
+
+      if (latElement) latElement.textContent = lat.toFixed(6)
+      if (lonElement) lonElement.textContent = lon.toFixed(6)
+      if (accuracyElement) accuracyElement.textContent = `${accuracy.toFixed(1)} meters`
+      if (timestampElement) timestampElement.textContent = timestamp
+
+      // Fetch weather and address for this location
+      getWeather(lat, lon)
+      getAddress(lat, lon)
+    }
+
+    function startLocationTracking() {
+      if (navigator.geolocation) {
+        console.log("[v0] Starting location tracking")
+
+        // Update button states
+        const trackBtn = document.getElementById("trackLocationBtn")
+        const stopBtn = document.getElementById("stopTrackingBtn")
+
+        if (trackBtn) {
+          trackBtn.disabled = true
+          trackBtn.textContent = "Tracking..."
+        }
+        if (stopBtn) {
+          stopBtn.disabled = false
+          stopBtn.style.display = "inline-block"
+        }
+
+        // Get current position and start watching
+        navigator.geolocation.getCurrentPosition(updatePosition, handleLocationError)
+        watchId = navigator.geolocation.watchPosition(updatePosition, handleLocationError)
+
+        showToast("Location tracking started!", "📍")
+      } else {
+        alert("Geolocation is not supported by this browser.")
+      }
+    }
+
+    function stopLocationTracking() {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId)
+        console.log("[v0] Location tracking stopped")
+
+        // Update button states
+        const trackBtn = document.getElementById("trackLocationBtn")
+        const stopBtn = document.getElementById("stopTrackingBtn")
+
+        if (trackBtn) {
+          trackBtn.disabled = false
+          trackBtn.textContent = "Track Location & Weather"
+        }
+        if (stopBtn) {
+          stopBtn.disabled = true
+          stopBtn.style.display = "none"
+        }
+
+        showToast("Location tracking stopped", "⏹️")
+      }
+    }
+
+    function handleLocationError(error) {
+      console.error("Location error:", error)
+      let message = "Location access denied"
+
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          message = "Location access denied by user"
+          break
+        case error.POSITION_UNAVAILABLE:
+          message = "Location information unavailable"
+          break
+        case error.TIMEOUT:
+          message = "Location request timed out"
+          break
+      }
+
+      showToast(message, "❌")
+
+      // Reset button states
+      const trackBtn = document.getElementById("trackLocationBtn")
+      const stopBtn = document.getElementById("stopTrackingBtn")
+
+      if (trackBtn) {
+        trackBtn.disabled = false
+        trackBtn.textContent = "Track Location & Weather"
+      }
+      if (stopBtn) {
+        stopBtn.disabled = true
+        stopBtn.style.display = "none"
+      }
+    }
+
+    function updateCurrentWeatherDisplay() {
+      const tempElement = document.querySelector(".weather-temp")
+      const humidityElement = document.querySelector(".humidity-value")
+      const windElement = document.querySelector(".wind-value")
+      const uvElement = document.querySelector(".uv-value")
+
+      if (tempElement) tempElement.textContent = `${weatherData.current.temp}°C`
+      if (humidityElement) humidityElement.textContent = `${weatherData.current.humidity}%`
+      if (windElement) windElement.textContent = `${weatherData.current.windSpeed} km/h`
+      if (uvElement) uvElement.textContent = weatherData.current.uvIndex
+    }
+
+    function updateForecastDisplay() {
+      const forecastContainer = document.getElementById("forecastContainer")
+      if (forecastContainer) {
+        forecastContainer.innerHTML = ""
+        weatherData.forecast.forEach((day) => {
+          const forecastItem = document.createElement("div")
+          forecastItem.className = "forecast-item"
+          forecastItem.innerHTML = `
+        <div class="forecast-day">${day.day}</div>
+        <div class="forecast-icon">${day.icon}</div>
+        <div class="forecast-temp">${day.temp}</div>
+        <div class="forecast-rain">${day.rain}</div>
+      `
+          forecastContainer.appendChild(forecastItem)
+        })
+      }
+    }
+
+    // Simulate real-time updates
+    setInterval(() => {
+      // Update weather data every 5 minutes (in real app)
+      console.log("[v0] Simulating real-time weather update")
+    }, 300000)
+
+  </script>
+
+
+  <script>
+      (function () {
+        let watchId = null;
+
+        const el = {
+          trackBtn: document.getElementById("trackLocationBtn"),
+          stopBtn: document.getElementById("stopTrackingBtn"),
+          infoWrap: document.getElementById("locationInfo"),
+          address: document.getElementById("currentLocation"),
+          lat: document.getElementById("latitude"),
+          lon: document.getElementById("longitude"),
+          acc: document.getElementById("accuracy"),
+          time: document.getElementById("timestamp"),
+
+          temp: document.querySelector(".current-weather .weather-temp"),
+          wind: document.querySelector(".current-weather .wind-value"),
+          humidity: document.querySelector(".current-weather .humidity-value"),
+          uv: document.querySelector(".current-weather .uv-value"),
+          icon: document.querySelector(".current-weather .weather-icon"),
+        };
+
+        function mapWeatherCodeToTextAndEmoji(code) {
+          const mapping = {
+            0: ["Clear sky", "☀️"],
+            1: ["Mainly clear", "🌤️"],
+            2: ["Partly cloudy", "⛅"],
+            3: ["Overcast", "☁️"],
+            45: ["Fog", "🌫️"],
+            48: ["Depositing rime fog", "🌫️"],
+            51: ["Drizzle: Light", "🌦️"],
+            53: ["Drizzle: Moderate", "🌦️"],
+            55: ["Drizzle: Dense", "🌧️"],
+            61: ["Rain: Slight", "🌧️"],
+            63: ["Rain: Moderate", "🌧️"],
+            65: ["Rain: Heavy", "🌧️"],
+            71: ["Snow fall: Slight", "🌨️"],
+            73: ["Snow fall: Moderate", "🌨️"],
+            75: ["Snow fall: Heavy", "❄️"],
+            80: ["Rain showers: Slight", "🌦️"],
+            81: ["Rain showers: Moderate", "🌦️"],
+            82: ["Rain showers: Violent", "⛈️"],
+            95: ["Thunderstorm: Slight", "⛈️"],
+            96: ["Thunderstorm: Moderate", "⛈️"],
+            99: ["Thunderstorm: Heavy hail", "⛈️"],
+          };
+          return mapping[code] || ["Unknown weather", "❓"];
+        }
+
+        async function getWeather(lat, lon) {
+          try {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(
+              lat
+            )}&longitude=${encodeURIComponent(
+              lon
+            )}&current_weather=true&hourly=relativehumidity_2m,uv_index&timezone=auto`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const cw = data.current_weather;
+            if (cw && el.temp && el.wind) {
+              const [desc, emoji] = mapWeatherCodeToTextAndEmoji(cw.weathercode);
+              el.temp.textContent = `${Math.round(cw.temperature)}°C`;
+              el.wind.textContent = `${Math.round(cw.windspeed)} km/h`;
+              if (el.icon) el.icon.textContent = emoji;
+
+              // Try to update humidity and UV based on hourly arrays nearest to "now"
+              if (data.hourly && data.hourly.time) {
+                const times = data.hourly.time;
+                const now = new Date();
+                const nowHourIso = new Date(
+                  Date.UTC(
+                    now.getUTCFullYear(),
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    now.getUTCHours(),
+                    0,
+                    0,
+                    0
+                  )
+                )
+                  .toISOString()
+                  .slice(0, 16); // 'YYYY-MM-DDTHH:MM'
+
+                let idx = times.indexOf(nowHourIso);
+                if (idx === -1) {
+                  // Fallback: pick the last hour available
+                  idx = times.length - 1;
+                }
+
+                if (el.humidity && Array.isArray(data.hourly.relativehumidity_2m)) {
+                  const h = data.hourly.relativehumidity_2m[idx];
+                  if (typeof h === "number") el.humidity.textContent = `${Math.round(h)}%`;
+                }
+                if (el.uv && Array.isArray(data.hourly.uv_index)) {
+                  const uv = data.hourly.uv_index[idx];
+                  if (typeof uv === "number") el.uv.textContent = `${uv.toFixed(1)}`;
+                }
+              }
+            }
+          } catch (error) {
+            console.error("Error fetching weather data:", error);
+          }
+        }
+
+        async function getAddress(lat, lon) {
+          try {
+            // Using Nominatim reverse geocoding
+            const res = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(
+                lat
+              )}&lon=${encodeURIComponent(lon)}&format=json`,
+              { headers: { "accept-language": "en" } }
+            );
+            const data = await res.json();
+            if (el.address) {
+              el.address.textContent =
+                data?.display_name || "Address not available";
+            }
+          } catch (err) {
+            console.error("Error fetching address:", err);
+            if (el.address) el.address.textContent = "Unable to fetch address";
+          }
+        }
+
+        function updatePosition(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const accuracy = position.coords.accuracy;
+          const timestamp = new Date(position.timestamp).toLocaleString();
+
+          if (el.lat) el.lat.textContent = lat.toFixed(6);
+          if (el.lon) el.lon.textContent = lon.toFixed(6);
+          if (el.acc) el.acc.textContent = `${accuracy.toFixed(1)} meters`;
+          if (el.time) el.time.textContent = timestamp;
+
+          getWeather(lat, lon);
+          getAddress(lat, lon);
+        }
+
+        function onGeoError(error) {
+          console.error("Geolocation error:", error);
+          alert("Unable to get location. Please allow location permission and try again.");
+          if (el.trackBtn) el.trackBtn.disabled = false;
+          if (el.stopBtn) {
+            el.stopBtn.disabled = true;
+            el.stopBtn.style.display = "none";
+          }
+        }
+
+        function startTracking() {
+          if (!navigator.geolocation) {
+            alert("Geolocation is not supported by this browser.");
+            return;
+          }
+
+          if (el.infoWrap) {
+            el.infoWrap.style.display = "block";
+          }
+          if (el.address) el.address.textContent = "Getting location...";
+
+          const options = {
+            enableHighAccuracy: true,
+            maximumAge: 5000,
+            timeout: 15000,
+          };
+
+          navigator.geolocation.getCurrentPosition(updatePosition, onGeoError, options);
+          watchId = navigator.geolocation.watchPosition(updatePosition, onGeoError, options);
+
+          if (el.stopBtn) {
+            el.stopBtn.disabled = false;
+            el.stopBtn.style.display = "inline-block";
+          }
+          if (el.trackBtn) {
+            el.trackBtn.disabled = true;
+          }
+        }
+
+        function stopTracking() {
+          if (watchId) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+          }
+          if (el.stopBtn) {
+            el.stopBtn.disabled = true;
+            el.stopBtn.style.display = "none";
+          }
+          if (el.trackBtn) {
+            el.trackBtn.disabled = false;
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          if (el.trackBtn) el.trackBtn.addEventListener("click", startTracking);
+          if (el.stopBtn) el.stopBtn.addEventListener("click", stopTracking);
+        });
+      })();
+  </script>
+</body>
+
+</html>
