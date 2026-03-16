@@ -11,6 +11,11 @@ from django.http import JsonResponse, HttpRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from dotenv import load_dotenv
+
+# Load .env file from project root
+# BASE_DIR is Path(__file__).resolve().parent.parent.parent (d:\projects\soil)
+load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
 
 # PyTorch image model deps
 import torch
@@ -45,11 +50,12 @@ TORCH_WEIGHTS_PATH = resolve_path(os.environ.get("TORCH_WEIGHTS_PATH", "soil_mod
 CLASS_NAMES = ["Alluvial", "Black", "Red", "Laterite"]  # must match your training order
 
 # Gemini configuration (server-side only)
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or "AIzaSyCX5qGOmVgrMEZKl_ZncOnOhkKujW7rdbU"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-pro")
 GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
-genai.configure(api_key="AIzaSyCX5qGOmVgrMEZKl_ZncOnOhkKujW7rdbU")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
 chatbot_model = genai.GenerativeModel(model_name="gemini-2.5-pro")
 
 # -------------------------

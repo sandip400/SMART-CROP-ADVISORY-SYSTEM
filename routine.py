@@ -1,6 +1,11 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-API_KEY = "sk-FCGh68ac7c0bc7bf312038"
+# Load .env file
+load_dotenv()
+
+API_KEY = os.environ.get("PERENUAL_API_KEY")
 BASE_URL = "https://perenual.com/api/v2"
 
 def fetch_plant_care(common_name):

@@ -12,3 +12,4 @@ google-generativeai
 h5py
 gunicorn
 matplotlib
+python-dotenv
